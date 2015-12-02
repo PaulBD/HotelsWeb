@@ -1,0 +1,8 @@
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\bin\Release\dtos.laterooms.co.uk.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\bin\Release\dtos.laterooms.co.uk.pdb
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\bin\Release\Newtonsoft.Json.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\bin\Release\ServiceStack.Text.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\bin\Release\Newtonsoft.Json.xml
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\bin\Release\ServiceStack.Text.xml
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\obj\Release\dtos.laterooms.co.uk.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\obj\Release\dtos.laterooms.co.uk.pdb

@@ -1,0 +1,9 @@
+C:\Personal\TriperooCore\laterooms.api.triperoo.co.uk\bin\Release\laterooms.api.triperoo.co.uk.dll
+C:\Personal\TriperooCore\laterooms.api.triperoo.co.uk\bin\Release\laterooms.api.triperoo.co.uk.pdb
+C:\Personal\TriperooCore\laterooms.api.triperoo.co.uk\bin\Release\laterooms.dtos.triperoo.co.uk.dll
+C:\Personal\TriperooCore\laterooms.api.triperoo.co.uk\bin\Release\Newtonsoft.Json.dll
+C:\Personal\TriperooCore\laterooms.api.triperoo.co.uk\bin\Release\laterooms.dtos.triperoo.co.uk.pdb
+C:\Personal\TriperooCore\laterooms.api.triperoo.co.uk\bin\Release\Newtonsoft.Json.xml
+C:\Personal\TriperooCore\laterooms.api.triperoo.co.uk\obj\Release\laterooms.api.triperoo.co.uk.csprojResolveAssemblyReference.cache
+C:\Personal\TriperooCore\laterooms.api.triperoo.co.uk\obj\Release\laterooms.api.triperoo.co.uk.dll
+C:\Personal\TriperooCore\laterooms.api.triperoo.co.uk\obj\Release\laterooms.api.triperoo.co.uk.pdb

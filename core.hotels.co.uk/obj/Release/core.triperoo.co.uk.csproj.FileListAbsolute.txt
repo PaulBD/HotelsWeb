@@ -1,0 +1,5 @@
+C:\Personal\TriperooCore\core.triperoo.co.uk\bin\Release\core.triperoo.co.uk.dll
+C:\Personal\TriperooCore\core.triperoo.co.uk\bin\Release\core.triperoo.co.uk.pdb
+C:\Personal\TriperooCore\core.triperoo.co.uk\obj\Release\core.triperoo.co.uk.csprojResolveAssemblyReference.cache
+C:\Personal\TriperooCore\core.triperoo.co.uk\obj\Release\core.triperoo.co.uk.dll
+C:\Personal\TriperooCore\core.triperoo.co.uk\obj\Release\core.triperoo.co.uk.pdb

@@ -1,0 +1,12 @@
+C:\Personal\Triperoo\Triperoo\core.triperoo.co.uk\bin\Debug\core.triperoo.co.uk.dll
+C:\Personal\Triperoo\Triperoo\core.triperoo.co.uk\bin\Debug\core.triperoo.co.uk.pdb
+C:\Personal\Triperoo\Triperoo\core.triperoo.co.uk\obj\Debug\core.triperoo.co.uk.dll
+C:\Personal\Triperoo\Triperoo\core.triperoo.co.uk\obj\Debug\core.triperoo.co.uk.pdb
+C:\Personal\TriperooCore\core.triperoo.co.uk\bin\Debug\core.triperoo.co.uk.dll
+C:\Personal\TriperooCore\core.triperoo.co.uk\bin\Debug\core.triperoo.co.uk.pdb
+C:\Personal\TriperooCore\core.triperoo.co.uk\obj\Debug\core.triperoo.co.uk.dll
+C:\Personal\TriperooCore\core.triperoo.co.uk\obj\Debug\core.triperoo.co.uk.pdb
+C:\Users\dykespaul\Desktop\Personal\Apps\City&BeachHotels\TriperooCore\core.triperoo.co.uk\bin\Debug\core.triperoo.co.uk.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\City&BeachHotels\TriperooCore\core.triperoo.co.uk\bin\Debug\core.triperoo.co.uk.pdb
+C:\Users\dykespaul\Desktop\Personal\Apps\City&BeachHotels\TriperooCore\core.triperoo.co.uk\obj\Debug\core.triperoo.co.uk.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\City&BeachHotels\TriperooCore\core.triperoo.co.uk\obj\Debug\core.triperoo.co.uk.pdb

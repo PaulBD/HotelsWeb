@@ -1,0 +1,5 @@
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\core.hotels.co.uk\bin\Release\core.hotels.co.uk.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\core.hotels.co.uk\bin\Release\core.hotels.co.uk.pdb
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\core.hotels.co.uk\obj\Release\core.hotels.co.uk.csprojResolveAssemblyReference.cache
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\core.hotels.co.uk\obj\Release\core.hotels.co.uk.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\core.hotels.co.uk\obj\Release\core.hotels.co.uk.pdb
