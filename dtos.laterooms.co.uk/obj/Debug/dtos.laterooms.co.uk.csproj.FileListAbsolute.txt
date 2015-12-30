@@ -7,3 +7,12 @@ C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\bin\Debug\S
 C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\obj\Debug\dtos.laterooms.co.uk.dll
 C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\obj\Debug\dtos.laterooms.co.uk.pdb
 C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\dtos.laterooms.co.uk\obj\Debug\dtos.laterooms.co.uk.csprojResolveAssemblyReference.cache
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\dtos.laterooms.co.uk\bin\Debug\dtos.laterooms.co.uk.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\dtos.laterooms.co.uk\bin\Debug\dtos.laterooms.co.uk.pdb
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\dtos.laterooms.co.uk\bin\Debug\Newtonsoft.Json.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\dtos.laterooms.co.uk\bin\Debug\ServiceStack.Text.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\dtos.laterooms.co.uk\bin\Debug\Newtonsoft.Json.xml
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\dtos.laterooms.co.uk\bin\Debug\ServiceStack.Text.xml
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\dtos.laterooms.co.uk\obj\Debug\dtos.laterooms.co.uk.csprojResolveAssemblyReference.cache
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\dtos.laterooms.co.uk\obj\Debug\dtos.laterooms.co.uk.dll
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\dtos.laterooms.co.uk\obj\Debug\dtos.laterooms.co.uk.pdb

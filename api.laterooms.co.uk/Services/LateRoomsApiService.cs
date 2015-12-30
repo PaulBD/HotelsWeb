@@ -64,14 +64,22 @@ namespace api.laterooms.co.uk.Services
         /// <returns></returns>
         private string ReturnCurrency(LateroomsCurrency currency)
         {
-            /*switch (currency)
+            if (currency == LateroomsCurrency.Aud)
             {
-                case currency.Eur:
-                    return "EUR";
-                case currency.Usd:
-                    return "USD";
+                return "AUD";
             }
-             * */
+            if (currency == LateroomsCurrency.Eur)
+            {
+                return "EUR";
+            }
+            if (currency == LateroomsCurrency.Usd)
+            {
+                return "USD";
+            }
+            if (currency == LateroomsCurrency.Cad)
+            {
+                return "CAD";
+            }
 
             return "GBP";
         }

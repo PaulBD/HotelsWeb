@@ -4,6 +4,8 @@
     {
         Eur     = 1,
         Gbp     = 2,
-        Usd     = 3
+        Usd     = 3,
+        Aud     = 4,
+        Cad     = 5
     }
 }

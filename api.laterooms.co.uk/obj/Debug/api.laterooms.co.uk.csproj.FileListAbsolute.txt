@@ -7,3 +7,5 @@ C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\api.laterooms.co.uk\bin\Debug\dt
 C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\api.laterooms.co.uk\bin\Debug\Newtonsoft.Json.xml
 C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\api.laterooms.co.uk\obj\Debug\api.laterooms.co.uk.dll
 C:\Users\dykespaul\Desktop\Personal\Apps\Hotels\api.laterooms.co.uk\obj\Debug\api.laterooms.co.uk.pdb
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\api.laterooms.co.uk\obj\Debug\api.laterooms.co.uk.csprojResolveAssemblyReference.cache
+C:\Users\dykespaul\Desktop\Personal\Apps\HotelsWeb\api.laterooms.co.uk\obj\Debug\api.laterooms.co.uk.dll
