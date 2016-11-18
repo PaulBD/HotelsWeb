@@ -1,7 +1,0 @@
-C:\Personal\Triperoo\Triperoo\laterooms.triperoo.co.uk\bin\Debug\laterooms.triperoo.co.uk.dll
-C:\Personal\Triperoo\Triperoo\laterooms.triperoo.co.uk\bin\Debug\laterooms.triperoo.co.uk.pdb
-C:\Personal\Triperoo\Triperoo\laterooms.triperoo.co.uk\bin\Debug\Newtonsoft.Json.dll
-C:\Personal\Triperoo\Triperoo\laterooms.triperoo.co.uk\bin\Debug\Newtonsoft.Json.xml
-C:\Personal\Triperoo\Triperoo\laterooms.triperoo.co.uk\obj\Debug\laterooms.triperoo.co.uk.dll
-C:\Personal\Triperoo\Triperoo\laterooms.triperoo.co.uk\obj\Debug\laterooms.triperoo.co.uk.pdb
-C:\Personal\Triperoo\Triperoo\laterooms.triperoo.co.uk\obj\Debug\laterooms.triperoo.co.uk.csprojResolveAssemblyReference.cache
