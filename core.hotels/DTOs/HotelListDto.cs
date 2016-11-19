@@ -67,4 +67,5 @@ namespace core.hotels.dtos
         public List<HotelDto> HotelList { get; set; }
         public int Count { get { return HotelList.Count;  } }
     }
+
 }

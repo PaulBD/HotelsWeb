@@ -1,4 +1,6 @@
 ﻿using Couchbase;
+using Couchbase.Views;
+using System.Collections.Generic;
 using System.Configuration;
 
 namespace library.couchbase
@@ -36,7 +38,7 @@ namespace library.couchbase
         /// <summary>
         /// Return Dynamic Query
         /// </summary>
-        public dynamic ReturnQuery<T>(string query)
+        public List<T> ReturnQuery<T>(string query)
         {
             using (var cluster = new Cluster(CouchbaseConfig.Initialize()))
             {
@@ -44,7 +46,7 @@ namespace library.couchbase
                 {
                     var queryRequest = new Couchbase.N1QL.QueryRequest().Statement(query);
 
-                    return bucket.Query<T>(queryRequest);
+                    return bucket.Query<T>(queryRequest).Rows;
                 }
             }
         }

@@ -176,7 +176,7 @@ namespace triperoo.apis.endpoints.places
         /// </summary>
         public object Get(PlaceRequest request)
         {
-            PlaceDto response;
+            DataDto response;
             try
             {
                 response = _placeService.ReturnPlaceById(request.FactualId);

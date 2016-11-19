@@ -101,6 +101,7 @@
     <Compile Include="Configuration\Repositories.cs" />
     <Compile Include="Configuration\Serialiser.cs" />
     <Compile Include="Configuration\Services.cs" />
+    <Compile Include="endpoints\flights\Flights.cs" />
     <Compile Include="endpoints\places\Places.cs" />
     <Compile Include="endpoints\hotels\Hotels.cs" />
     <Compile Include="Global.asax.cs">
@@ -113,6 +114,10 @@
     <Folder Include="endpoints\customer\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\core.flights\core.flights.csproj">
+      <Project>{f4df4801-9778-46dd-a450-ef2bc02b9ed6}</Project>
+      <Name>core.flights</Name>
+    </ProjectReference>
     <ProjectReference Include="..\core.places\core.places.csproj">
       <Project>{c84790f7-37b6-459e-b2d9-57cf8281e171}</Project>
       <Name>core.places</Name>

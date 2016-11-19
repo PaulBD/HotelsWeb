@@ -14,10 +14,13 @@ namespace triperoo.apis.endpoints.hotels
     /// Request
     /// </summary>
     [Route("/v1/hotels/{Country}/{Town}")]
+    [Route("/v1/hotels/{Country}/{Town}/{Offset}/{Limit}")]
     public class HotelsByTownRequest
     {
         public string Town { get; set; }
         public string Country { get; set; }
+        public int Limit { get; set; }
+        public int Offset { get; set; }
     }
 
     /// <summary>
@@ -126,7 +129,7 @@ namespace triperoo.apis.endpoints.hotels
 
             try
             {
-                response = _hotelService.ReturnHotelByTown(request.Town, request.Country, 0, 0);
+                response = _hotelService.ReturnHotelByTown(request.Town, request.Country, request.Limit, request.Offset);
             }
             catch (Exception ex)
             {

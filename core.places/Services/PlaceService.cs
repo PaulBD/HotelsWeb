@@ -57,24 +57,26 @@ namespace core.places.services
         /// <summary>
         /// Return a place by factual id
         /// </summary>
-        public PlaceDto ReturnPlaceById(string factualId)
+        public DataDto ReturnPlaceById(string placeId)
         {
-            var result = "";
-
-            // TODO: Return Cached Response
-
-            var dbResult = _couchbaseHelper.CheckRecordExistsInDB("Place:" + factualId);
+            PlaceDto place;
+            var dbResult = _couchbaseHelper.CheckRecordExistsInDB("Place:" + placeId);
 
             if (dbResult == null)
             {
-                result = _factual.FetchRow("places", factualId);
-                _couchbaseHelper.AddRecordToCouchbase("Place:" + factualId, result, factualId);
+                var result = _factual.FetchRow("places", placeId);
+                place = JsonSerializer.DeserializeFromString<PlaceDto>(result);
+
+                _couchbaseHelper.AddRecordToCouchbase("Place:" + placeId, JsonSerializer.SerializeToString(place.Response.Data[0]), placeId);
+
+                return place.Response.Data[0];
             }
-            else { result = dbResult; ; }
+            else
+            {
+                return JsonSerializer.DeserializeFromString<DataDto>(dbResult);
+            }
 
             // TODO: Add result to cache for next time
-
-            return JsonSerializer.DeserializeFromString<PlaceDto>(result);
         }
 
 

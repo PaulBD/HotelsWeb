@@ -1,6 +1,7 @@
 ﻿using Funq;
 using core.places.services;
 using core.hotels.services;
+using core.flights.services;
 
 namespace triperoo.apis.Configuration
 {
@@ -11,6 +12,7 @@ namespace triperoo.apis.Configuration
             container.RegisterAutoWiredAs<PlaceService, IPlaceService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<HotelService, IHotelService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<HotelPriceService, IHotelPriceService>().ReusedWithin(ReuseScope.Container);
+            container.RegisterAutoWiredAs<FlightService, IFlightService>().ReusedWithin(ReuseScope.Container);
         }
     }
 }

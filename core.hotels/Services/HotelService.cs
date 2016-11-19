@@ -18,20 +18,9 @@ namespace core.hotels.services
         /// </summary>
         public HotelListDto ReturnHotelByTown(string town, string country, int limit, int offset)
         {
-            var list = new HotelListDto();
             var q = "SELECT * FROM " + CouchbaseConfigHelper.Instance.BucketName + " WHERE HotelCity = '" + town + "' AND HotelCountry = '" + country + "'";
-
-            //TODO: Add limit & Offset to query
-
-            var item = _couchbaseHelper.ReturnQuery<HotelListDto>(q);
             
-            //TODO: Fix this
-            if (item.Success)
-            {
-                list.HotelList.AddRange(item.Rows);
-            }
-
-            return list;
+            return ProcessQuery(q, limit, offset);
         }
 
         /// <summary>
@@ -40,18 +29,27 @@ namespace core.hotels.services
         public HotelListDto ReturnHotelsByProximity(double longitude, double latitude, int radius, int offset, int limit)
         {
             //TODO: Change query so its based upon latitude & longitude
+            var q = "SELECT * FROM " + CouchbaseConfigHelper.Instance.BucketName + " WHERE LIMIT " + limit + " OFFSET " + offset;
+
+            return ProcessQuery(q, limit, offset);
+        }
+
+
+        /// <summary>
+        /// Process Query
+        /// </summary>
+        private HotelListDto ProcessQuery(string q, int limit, int offset)
+        {
             var list = new HotelListDto();
-            var q = "SELECT * FROM " + CouchbaseConfigHelper.Instance.BucketName + " WHERE ";
 
-            //TODO: Add limit & Offset to query
-
-            var item = _couchbaseHelper.ReturnQuery<HotelListDto>(q);
-
-            //TODO: Fix this
-            if (item.Success)
+            if (limit > 0)
             {
-                list.HotelList.AddRange(item.Rows);
+                q += " LIMIT " + limit + " OFFSET " + offset;
             }
+
+            var item = _couchbaseHelper.ReturnQuery<HotelDto>(q);
+
+            list.HotelList.AddRange(item);
 
             return list;
         }

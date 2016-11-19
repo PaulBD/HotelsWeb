@@ -15,6 +15,7 @@ namespace core.places.dtos
     
     public class DataDto
     {
+        public string Type { get { return "Place"; } }
         public string Factual_Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
@@ -52,7 +53,6 @@ namespace core.places.dtos
 
     public class PlaceDto
     {
-        public string Type { get { return "Place"; } }
         public int Version { get; set; }
         public string Status { get; set; }
         public ResponseDto Response { get; set; }

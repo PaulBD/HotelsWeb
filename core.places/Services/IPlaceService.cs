@@ -8,6 +8,6 @@ namespace core.places.services
 
         PlaceDto ReturnPlacesByProximity(double longitude, double latitude, int radius, string type, int offset, int limit);
 
-        PlaceDto ReturnPlaceById(string factualId);
+        DataDto ReturnPlaceById(string factualId);
     }
 }
