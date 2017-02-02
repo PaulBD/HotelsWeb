@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Net;
-using ServiceStack;
 using ServiceStack.FluentValidation;
 using core.hotels.services;
 using core.hotels.dtos;
 using core.hotels.enums;
+using ServiceStack;
+using System.Collections.Generic;
 
 namespace triperoo.apis.endpoints.hotels
 {
@@ -38,6 +39,40 @@ namespace triperoo.apis.endpoints.hotels
             {
                 RuleFor(r => r.Town).NotNull().WithMessage("Please supply a valid town");
                 RuleFor(r => r.Country).NotNull().WithMessage("Please supply a valid country");
+            });
+        }
+    }
+
+    #endregion
+
+    #region Return hotel by town & country
+
+    /// <summary>
+    /// Request
+    /// </summary>
+    [Route("/v1/hotels/{PlaceId}")]
+    [Route("/v1/hotels/{PlaceId}/{Offset}/{Limit}")]
+    public class HotelsByTownIdRequest
+    {
+        public int PlaceId { get; set; }
+        public int Limit { get; set; }
+        public int Offset { get; set; }
+    }
+
+    /// <summary>
+    /// Validator
+    /// </summary>
+    public class HotelsByTownIdRequestValidator : AbstractValidator<HotelsByTownIdRequest>
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public HotelsByTownIdRequestValidator()
+        {
+            // Get
+            RuleSet(ApplyTo.Get, () =>
+            {
+                RuleFor(r => r.PlaceId).NotNull().WithMessage("Please supply a valid place id");
             });
         }
     }
@@ -125,15 +160,48 @@ namespace triperoo.apis.endpoints.hotels
         /// </summary>
         public object Get(HotelsByTownRequest request)
         {
-            HotelListDto response = null;
+            List<HotelDto> response = null;
+            string cacheName = request.Town + "-" + request.Country;
 
             try
             {
-                response = _hotelService.ReturnHotelByTown(request.Town, request.Country, request.Limit, request.Offset);
+                response = Cache.Get<List<HotelDto>>(cacheName);
+
+                if (response == null)
+                {
+                    response = _hotelService.ReturnHotelsByTown(request.Town, request.Country, request.Limit, request.Offset);
+                    base.Cache.Add(cacheName, response);
+                }
             }
             catch (Exception ex)
             {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message, ex.InnerException);
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+            }
+
+            return new HttpResult(response, HttpStatusCode.OK);
+        }
+
+        /// <summary>
+        /// Return all hotels by town id
+        /// </summary>
+        public object Get(HotelsByTownIdRequest request)
+        {
+            List<HotelDto> response = null;
+            string cacheName = "hotel:city:" + request.PlaceId;
+
+            try
+            {
+                response = Cache.Get<List<HotelDto>>(cacheName);
+
+                if (response == null)
+                {
+                    response = _hotelService.ReturnHotelsByPlaceId(request.PlaceId, request.Limit, request.Offset);
+                    base.Cache.Add(cacheName, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
             return new HttpResult(response, HttpStatusCode.OK);
@@ -144,15 +212,23 @@ namespace triperoo.apis.endpoints.hotels
         /// </summary>
         public object Get(HotelByIdRequest request)
         {
-            HotelDetailsDto response = null;
+            HotelDetailDto response = null;
+            string cacheName = "hotel:" + request.Id;
 
             try
             {
-                response = _hotelService.ReturnHotelById(request.Id);
+                response = Cache.Get<HotelDetailDto>(cacheName);
+
+                if (response == null)
+                {
+                    response = _hotelService.ReturnHotelById(request.Id);
+                    base.Cache.Add(cacheName, response);
+                }
             }
+
             catch (Exception ex)
             {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message, ex.InnerException);
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
             return new HttpResult(response, HttpStatusCode.OK);
@@ -171,7 +247,7 @@ namespace triperoo.apis.endpoints.hotels
             }
             catch (Exception ex)
             {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message, ex.InnerException);
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
             return new HttpResult(response, HttpStatusCode.OK);

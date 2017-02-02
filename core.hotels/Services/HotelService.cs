@@ -1,6 +1,7 @@
 ﻿using library.couchbase;
 using core.hotels.dtos;
 using ServiceStack.Text;
+using System.Collections.Generic;
 
 namespace core.hotels.services
 {
@@ -16,20 +17,30 @@ namespace core.hotels.services
         /// <summary>
         /// Return a list of hotels by town & country
         /// </summary>
-        public HotelListDto ReturnHotelByTown(string town, string country, int limit, int offset)
+        public List<HotelDto> ReturnHotelsByTown(string town, string country, int limit, int offset)
         {
-            var q = "SELECT * FROM " + CouchbaseConfigHelper.Instance.BucketName + " WHERE HotelCity = '" + town + "' AND HotelCountry = '" + country + "'";
+            var q = "SELECT * FROM TriperooHotels WHERE LOWER(HotelCity) = '" + town.ToLower() + "' AND LOWER(HotelCountry) = '" + country.ToLower() + "'";
             
+            return ProcessQuery(q, limit, offset);
+        }
+
+        /// <summary>
+        /// Return a list of hotels by place id
+        /// </summary>
+        public List<HotelDto> ReturnHotelsByPlaceId(int placeId, int limit, int offset)
+        {
+            var q = "SELECT * FROM TriperooHotels WHERE PlaceId = " + placeId;
+
             return ProcessQuery(q, limit, offset);
         }
 
         /// <summary>
         /// Return a list of hotels by proximity
         /// </summary>
-        public HotelListDto ReturnHotelsByProximity(double longitude, double latitude, int radius, int offset, int limit)
+        public List<HotelDto> ReturnHotelsByProximity(double longitude, double latitude, int radius, int offset, int limit)
         {
             //TODO: Change query so its based upon latitude & longitude
-            var q = "SELECT * FROM " + CouchbaseConfigHelper.Instance.BucketName + " WHERE LIMIT " + limit + " OFFSET " + offset;
+            var q = "SELECT * FROM TriperooHotels WHERE LIMIT " + limit + " OFFSET " + offset;
 
             return ProcessQuery(q, limit, offset);
         }
@@ -38,31 +49,24 @@ namespace core.hotels.services
         /// <summary>
         /// Process Query
         /// </summary>
-        private HotelListDto ProcessQuery(string q, int limit, int offset)
+        private List<HotelDto> ProcessQuery(string q, int limit, int offset)
         {
-            var list = new HotelListDto();
-
             if (limit > 0)
             {
                 q += " LIMIT " + limit + " OFFSET " + offset;
             }
 
-            var item = _couchbaseHelper.ReturnQuery<HotelDto>(q);
-
-            list.HotelList.AddRange(item);
-
-            return list;
+            return _couchbaseHelper.ReturnQuery<HotelDto>(q, "TriperooHotels");
         }
 
         /// <summary>
         /// Return a single hotel By id
         /// </summary>
-        public HotelDetailsDto ReturnHotelById(string id)
+        public HotelDetailDto ReturnHotelById(string id)
         {
-            var result = _couchbaseHelper.CheckRecordExistsInDB("Hotels:" + id);
+            var result = _couchbaseHelper.CheckRecordExistsInDB("hotel:" + id, "TriperooHotels");
 
-            return JsonSerializer.DeserializeFromString<HotelDetailsDto>(result);
+            return JsonSerializer.DeserializeFromString<HotelDetailDto>(result);
         }
-        
     }
 }

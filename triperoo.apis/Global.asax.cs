@@ -6,6 +6,7 @@ using triperoo.apis.Configuration;
 using Funq;
 using ServiceStack;
 using ServiceStack.Configuration;
+using ServiceStack.Caching;
 using ServiceStack.Validation;
 
 namespace triperoo.apis
@@ -40,6 +41,8 @@ namespace triperoo.apis
             /// <param name="container">The built-in IoC used with ServiceStack.</param>
             public override void Configure(Container container)
             {
+                container.Register<ICacheClient>(new MemoryCacheClient());
+
                 // Configure the global exception handlers
                 ServiceExceptionHandlers.Add((httpReq, request, exception) => HandleException(this, request, exception));
 

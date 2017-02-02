@@ -13,14 +13,6 @@ namespace library.couchbase
             get { if (instance == null) { instance = new CouchbaseConfigHelper(); } return instance; }
         }
 
-        public string BucketName
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["couchbase.bucketName"];
-            }
-        }
-
         public string Server
         {
             get
@@ -45,7 +37,7 @@ namespace library.couchbase
             }
         }
 
-        public Boolean UseSSL
+        public bool UseSSL
         {
             get
             {

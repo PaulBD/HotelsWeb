@@ -1,9 +1,7 @@
 ﻿using core.places.dtos;
 using FactualDriver;
-using System.Configuration;
-using ServiceStack.Text;
-using FactualDriver.Filters;
 using library.couchbase;
+using System.Collections.Generic;
 
 namespace core.places.services
 {
@@ -14,34 +12,42 @@ namespace core.places.services
 
         public PlaceService()
         {
-            _factual = new Factual(ConfigurationManager.AppSettings["attractions.factual.key"], ConfigurationManager.AppSettings["attractions.factual.secret"]);
-
             _couchbaseHelper = new CouchBaseHelper();
         }
 
         /// <summary>
         /// Return a list of places by town and country
         /// </summary>
-        public PlaceDto ReturnPlacesByTownAndCountry(string town, string country, string type, int limit, int offset)
+        public List<FactualDto> ReturnPlacesByTownAndCountry(string town, string country, string type, int limit, int offset)
         {
-            var q = new Query();
+            /*
+            var result = _couchbaseHelper.ReturnQuery<FactualDto>("SELECT * FROM Triperoo where address.postTown = '" + town + "'", "TriperooCommon");
 
-            if (string.Compare(type, "all", true) != 0)
+            if (result == null)
             {
-                q.Search(type);
+                var q = new Query();
+
+                if (string.Compare(type, "all", true) != 0)
+                {
+                    q.Search(type);
+                }
+
+                q.And(q.Field("locality").Equal(town));
+                q.And(q.Field("country").Equal(country));
+
+                return JsonSerializer.DeserializeFromString<List<FactualDto>>(ProcessQuery(q, limit, offset));
             }
-
-            q.And(q.Field("locality").Equal(town));
-            q.And(q.Field("country").Equal(country));
-
-            return JsonSerializer.DeserializeFromString<PlaceDto>(ProcessQuery(q, limit, offset));
+            else { return result; }
+            */
+            return null;
         }
         
         /// <summary>
         /// Return a list of places by proximity
         /// </summary>
-        public PlaceDto ReturnPlacesByProximity(double longitude, double latitude, int radius, string type, int offset, int limit)
+        public FactualDto ReturnPlacesByProximity(double longitude, double latitude, int radius, string type, int offset, int limit)
         {
+            /*
             var q = new Query();
 
             if (string.Compare(type, "all", true) != 0)
@@ -51,32 +57,22 @@ namespace core.places.services
 
             q.WithIn(new Circle(longitude, latitude, radius));
 
-            return JsonSerializer.DeserializeFromString<PlaceDto>(ProcessQuery(q, limit, offset));
+            return JsonSerializer.DeserializeFromString<FactualDto>(ProcessQuery(q, limit, offset));
+            */
+            return null;
         }
 
         /// <summary>
         /// Return a place by factual id
         /// </summary>
-        public DataDto ReturnPlaceById(string placeId)
+        public PlaceDto ReturnPlaceById(string placeId, string type)
         {
-            PlaceDto place;
-            var dbResult = _couchbaseHelper.CheckRecordExistsInDB("Place:" + placeId);
+            /*
+            var result = _couchbaseHelper.CheckRecordExistsInDB("place:" + type + ":" + placeId, "TriperooCommon");
 
-            if (dbResult == null)
-            {
-                var result = _factual.FetchRow("places", placeId);
-                place = JsonSerializer.DeserializeFromString<PlaceDto>(result);
-
-                _couchbaseHelper.AddRecordToCouchbase("Place:" + placeId, JsonSerializer.SerializeToString(place.Response.Data[0]), placeId);
-
-                return place.Response.Data[0];
-            }
-            else
-            {
-                return JsonSerializer.DeserializeFromString<DataDto>(dbResult);
-            }
-
-            // TODO: Add result to cache for next time
+            return JsonSerializer.DeserializeFromString<PlaceDto>(result);
+            */
+            return null;
         }
 
 

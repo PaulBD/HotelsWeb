@@ -77,7 +77,7 @@ namespace triperoo.apis.endpoints.flights
             }
             catch (Exception ex)
             {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message, ex.InnerException);
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
             return new HttpResult(response, HttpStatusCode.OK);

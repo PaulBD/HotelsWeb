@@ -4,6 +4,7 @@ using ServiceStack;
 using ServiceStack.FluentValidation;
 using core.places.services;
 using core.places.dtos;
+using System.Collections.Generic;
 
 namespace triperoo.apis.endpoints.places
 {
@@ -90,10 +91,11 @@ namespace triperoo.apis.endpoints.places
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/place/{FactualId}", "GET")]
+    [Route("/v1/place/{type}/{id}", "GET")]
     public class PlaceRequest
     {
-        public string FactualId { get; set; }
+        public string type { get; set; }
+        public string id { get; set; }
 
     }
 
@@ -110,7 +112,8 @@ namespace triperoo.apis.endpoints.places
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.FactualId).NotEmpty().WithMessage("Invalid place id have been supplied");
+                RuleFor(r => r.id).NotEmpty().WithMessage("Invalid place id have been supplied");
+                RuleFor(r => r.type).NotEmpty().WithMessage("Invalid place type have been supplied");
             });
 
         }
@@ -138,7 +141,7 @@ namespace triperoo.apis.endpoints.places
         /// </summary>
         public object Get(PlacesByTownRequest request)
         {
-            PlaceDto response;
+            List<FactualDto> response;
 
             try
             {
@@ -146,7 +149,7 @@ namespace triperoo.apis.endpoints.places
             }
             catch (Exception ex)
             {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message, ex.InnerException);
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
             return new HttpResult(response, HttpStatusCode.OK);
@@ -157,7 +160,7 @@ namespace triperoo.apis.endpoints.places
         /// </summary>
         public object Get(PlacesByProximityRequest request)
         {
-            PlaceDto response;
+            FactualDto response;
 
             try
             {
@@ -165,7 +168,7 @@ namespace triperoo.apis.endpoints.places
             }
             catch (Exception ex)
             {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message, ex.InnerException);
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
             return new HttpResult(response, HttpStatusCode.OK);
@@ -176,14 +179,14 @@ namespace triperoo.apis.endpoints.places
         /// </summary>
         public object Get(PlaceRequest request)
         {
-            DataDto response;
+            PlaceDto response;
             try
             {
-                response = _placeService.ReturnPlaceById(request.FactualId);
+                response = _placeService.ReturnPlaceById(request.id, request.type);
             }
             catch (Exception ex)
             {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message, ex.InnerException);
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
             
             return new HttpResult(response, HttpStatusCode.OK);

@@ -1,27 +1,18 @@
 ﻿using Couchbase;
-using Couchbase.Views;
 using System.Collections.Generic;
-using System.Configuration;
 
 namespace library.couchbase
 {
     public class CouchBaseHelper
     {
-        private string _bucketName;
-
-        public CouchBaseHelper()
-        {
-            _bucketName = ConfigurationManager.AppSettings["couchbase.bucketName"];
-        }
-
         /// <summary>
         /// Check record exists in couchbase
         /// </summary>
-        public string CheckRecordExistsInDB(string key)
+        public string CheckRecordExistsInDB(string key, string bucketName)
         {
-            using (var cluster = new Cluster(CouchbaseConfig.Initialize()))
+            using (var cluster = new Cluster(CouchbaseConfig.Initialize(bucketName)))
             {
-                using (var bucket = cluster.OpenBucket(_bucketName))
+                using (var bucket = cluster.OpenBucket(bucketName))
                 {
                     var item = bucket.GetDocument<dynamic>(key);
 
@@ -38,11 +29,11 @@ namespace library.couchbase
         /// <summary>
         /// Return Dynamic Query
         /// </summary>
-        public List<T> ReturnQuery<T>(string query)
+        public List<T> ReturnQuery<T>(string query, string bucketName)
         {
-            using (var cluster = new Cluster(CouchbaseConfig.Initialize()))
+            using (var cluster = new Cluster(CouchbaseConfig.Initialize(bucketName)))
             {
-                using (var bucket = cluster.OpenBucket(ConfigurationManager.AppSettings["couchbase.bucketName"]))
+                using (var bucket = cluster.OpenBucket(bucketName))
                 {
                     var queryRequest = new Couchbase.N1QL.QueryRequest().Statement(query);
 
@@ -54,11 +45,11 @@ namespace library.couchbase
         /// <summary>
         /// Add record to couchbase
         /// </summary>
-        public void AddRecordToCouchbase(string key, string content, string factualId)
+        public void AddRecordToCouchbase(string key, string content, string factualId, string bucketName)
         {
-            using (var cluster = new Cluster(CouchbaseConfig.Initialize()))
+            using (var cluster = new Cluster(CouchbaseConfig.Initialize(bucketName)))
             {
-                using (var bucket = cluster.OpenBucket(_bucketName))
+                using (var bucket = cluster.OpenBucket(bucketName))
                 {
                     bucket.Insert(key, content);
                 }

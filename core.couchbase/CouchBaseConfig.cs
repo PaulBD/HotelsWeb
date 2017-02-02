@@ -6,7 +6,7 @@ namespace library.couchbase
 {
     public static class CouchbaseConfig
     {
-        public static ClientConfiguration Initialize()
+        public static ClientConfiguration Initialize(string bucketName)
         {
             var config = new ClientConfiguration();
             config.BucketConfigs.Clear();
@@ -15,9 +15,9 @@ namespace library.couchbase
             config.UseSsl = CouchbaseConfigHelper.Instance.UseSSL;
             config.BucketConfigs = new Dictionary<string, BucketConfiguration>
                 {
-                    { CouchbaseConfigHelper.Instance.BucketName, new BucketConfiguration
+                    { bucketName, new BucketConfiguration
                     {
-                        BucketName = CouchbaseConfigHelper.Instance.BucketName,
+                        BucketName = bucketName,
                         UseSsl = CouchbaseConfigHelper.Instance.UseSSL,
                         Password = CouchbaseConfigHelper.Instance.BucketPassword,
                         PoolConfiguration = new PoolConfiguration
