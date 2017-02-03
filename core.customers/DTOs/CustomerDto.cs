@@ -1,53 +1,53 @@
-﻿using core.customers.enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace core.customers.dtos
 {
-    public class CustomerDto
+    public class ProfileDto
     {
-        public string Id { get; set; }
+        public string PrefixName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public List<string> EmailAddressList { get; set; }
-        public List<string> CookieList { get; set; }
         public string DateOfBirth { get; set; }
-        public string Gender { get; set; }
-
-        public List<BehaviourDto> BehaviourList { get; set; }
-        public List<FriendListDto> FriendList { get; set; }
+        public string Locale { get; set; }
+        public int CurrentCityId { get; set; }
+        public string EmailAddress { get; set; }
+        public string Pass { get; set; }
     }
 
-    public class FriendListDto
+    public class FavouriteDto
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public DateTime DateAdded { get; set; }
+        public int Id { get; set; }
+        public string PlaceType { get; set; }
+        public int PlaceId { get; set; }
+        public DateTime DateCreated { get; set; }
+        public bool IsArchived { get; set; }
     }
 
-    public class BehaviourDto
+    public class Customer
     {
-        public DateTime Date { get; set; }
-        public BehaviourType Type { get; set; }
+        public Customer()
+        {
+            Profile = new ProfileDto();
+            Favourites = new List<FavouriteDto>();
+        }
+
+        public string Token { get; set; }
+        public string Type { get { return "customer"; } }
+        public string Reference { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateUpdate { get; set; }
+        public ProfileDto Profile { get; set; }
+        public List<FavouriteDto> Favourites { get; set; }
     }
 
-    public class CountryDto
+    public class CustomerDto
     {
+        public CustomerDto()
+        {
+            TriperooCustomers = new Customer();
+        }
 
-    }
-
-    public class CityDto
-    {
-
-    }
-
-    public class PlaceDto
-    {
-
-    }
-
-    public class HotelDto
-    {
-
+        public Customer TriperooCustomers { get; set; }
     }
 }

@@ -81,10 +81,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\CustomerDto.cs" />
+    <Compile Include="DTOs\ReviewDto.cs" />
     <Compile Include="Enums\BrowsingTypes.cs" />
     <Compile Include="Services\AuthorizeService.cs" />
+    <Compile Include="Services\IReviewService.cs" />
+    <Compile Include="Services\ReviewService.cs" />
+    <Compile Include="Services\FavouriteService.cs" />
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\IAuthorizeService.cs" />
+    <Compile Include="Services\IFavouriteService.cs" />
     <Compile Include="Services\ICustomerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -98,6 +103,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

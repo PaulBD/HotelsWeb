@@ -104,6 +104,9 @@
     <Compile Include="Configuration\Serialiser.cs" />
     <Compile Include="Configuration\Services.cs" />
     <Compile Include="endpoints\auth\Authorize.cs" />
+    <Compile Include="endpoints\review\Reviews.cs" />
+    <Compile Include="endpoints\customer\Favourites.cs" />
+    <Compile Include="endpoints\customer\Customer.cs" />
     <Compile Include="endpoints\flights\Flights.cs" />
     <Compile Include="endpoints\Locations\Location.cs" />
     <Compile Include="endpoints\places\Places.cs" />
@@ -113,10 +116,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="endpoints\customer\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\core.customers\core.customers.csproj">
       <Project>{c1e33184-5386-47aa-baca-da61005892e5}</Project>

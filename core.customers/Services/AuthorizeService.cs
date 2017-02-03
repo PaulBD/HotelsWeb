@@ -5,20 +5,17 @@ namespace core.customers.services
 {
     public class AuthorizeService : IAuthorizeService
     {
-        private readonly string _secretKey = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrk";
+        private readonly string _secretKey = "GQDstcKsx0NHjPOuXOYg5MbeJ1XT0uFiwDVvVBrkTriperoo";
 
-        public string AuthorizeCustomer(string emailAddress, string password)
+        public string AssignToken(string emailAddress, string reference)
         {
-            //TODO: Check username & Password exists
-            var customerId = 0;
             var payload = new Dictionary<string, object>()
             {
                 { "emailAddress", emailAddress },
-                { "customerId", customerId }
+                { "reference", reference }
             };
 
             return JWT.JsonWebToken.Encode(payload, _secretKey, JWT.JwtHashAlgorithm.HS256);
-
         }
 
         public string AuthorizeCustomer(string token)

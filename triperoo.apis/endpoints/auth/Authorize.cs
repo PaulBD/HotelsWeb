@@ -12,8 +12,8 @@ namespace triperoo.apis.endpoints.auth
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/authorize")]
-    public class AuthorizeRequest : Service
+    [Route("/v1/authorize", "POST")]
+    public class AuthorizeRequest
     {
         public string EmailAddress { get; set; }
         public string Password { get; set; }
@@ -32,7 +32,7 @@ namespace triperoo.apis.endpoints.auth
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.EmailAddress).NotNull().WithMessage("Supply a valid username");
+                RuleFor(r => r.EmailAddress).NotNull().WithMessage("Supply a valid email address");
                 RuleFor(r => r.Password).NotNull().WithMessage("Supply a valid password");
             });
         }
@@ -56,18 +56,24 @@ namespace triperoo.apis.endpoints.auth
             _authorizeService = authorizeService;
         }
 
-        #region Return Customer By Email & Password
+        #region Authorize Customer
 
         /// <summary>
-        /// Lists location by reference (type:id)
+        /// Authorize Customer
         /// </summary>
-        public object Get(AuthorizeRequest request)
+        public object Post(AuthorizeRequest request)
         {
-            CustomerDto response = new CustomerDto();
+            CustomerDto response;
 
             try
             {
-                _customerService.ReturnCustomerByUsernamePassword(request.EmailAddress, request.Password);
+                var token = _authorizeService.AssignToken(request.EmailAddress, request.Password);
+                response = _customerService.ReturnCustomerByToken(token);
+
+                if (response == null)
+                {
+                    return new HttpResult("Unauthorized", HttpStatusCode.Unauthorized);
+                }
             }
             catch (Exception ex)
             {

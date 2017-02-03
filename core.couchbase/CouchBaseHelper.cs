@@ -51,7 +51,21 @@ namespace library.couchbase
             {
                 using (var bucket = cluster.OpenBucket(bucketName))
                 {
-                    bucket.Insert(key, content);
+                    bucket.Upsert(key, content);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add record to couchbase
+        /// </summary>
+        public void AddRecordToCouchbase(string key, object json, string bucketName)
+        {
+            using (var cluster = new Cluster(CouchbaseConfig.Initialize(bucketName)))
+            {
+                using (var bucket = cluster.OpenBucket(bucketName))
+                {
+                    bucket.Upsert(key, json);
                 }
             }
         }
