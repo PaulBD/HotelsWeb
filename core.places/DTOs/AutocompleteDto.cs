@@ -9,6 +9,7 @@ namespace core.places.dtos
         public string searchName { get; set; }
         public string type { get; set; }
         public string url { get; set; }
+        public int priority { get; set; }
     }
 
     public class TriperooCommon

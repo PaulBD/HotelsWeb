@@ -29,8 +29,22 @@ namespace triperoo.apis.endpoints.customer
     /// Request
     /// </summary>
     [Route("/v1/customer/favourites", "GET")]
-    public class FavouritesRequest
+    public class CustomerFavouritesRequest
     {
+    }
+
+    #endregion
+
+    #region Favourites Endpoint
+
+    /// <summary>
+    /// Request
+    /// </summary>
+    [Route("/v1/place/favourites/{type}/{Guid}", "GET")]
+    public class PlaceFavouritesRequest
+    {
+        public string Guid { get; set; }
+        public string Type { get; set; }
     }
 
     #endregion
@@ -49,12 +63,47 @@ namespace triperoo.apis.endpoints.customer
             _favouriteService = favouriteService;
         }
 
-        #region Return Favorites By Token
+        #region Return Place Favorites By Guid
+
+        /// <summary>
+        /// Return Favourite By Guid
+        /// </summary>
+        public object Get(PlaceFavouritesRequest request)
+        {
+            var response = new List<FavouriteDto>();
+
+            try
+            {
+                var token = Request.Headers.Get("securityToken");
+
+                if (token == null)
+                {
+                    throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
+                }
+
+                response = _favouriteService.ReturnFavouritesByPlaceReference(request.Type + ":" + request.Guid);
+
+                if (response == null)
+                {
+                    throw new HttpError(HttpStatusCode.BadRequest, "Bad Request");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+            }
+
+            return new HttpResult(response, HttpStatusCode.OK);
+        }
+
+        #endregion
+
+        #region Return Customer Favorites By Token
 
         /// <summary>
         /// Return Favourite By Token
         /// </summary>
-        public object Get(FavouritesRequest request)
+        public object Get(CustomerFavouritesRequest request)
         {
             var response = new List<FavouriteDto>();
 
@@ -154,8 +203,6 @@ namespace triperoo.apis.endpoints.customer
         /// </summary>
         public object Delete(FavouriteRequest request)
         {
-            var response = new CustomerDto();
-
             try
             {
                 var token = Request.Headers.Get("securityToken");
@@ -172,7 +219,7 @@ namespace triperoo.apis.endpoints.customer
                 throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
-            return new HttpResult(response, HttpStatusCode.OK);
+            return new HttpResult(HttpStatusCode.OK);
         }
 
         #endregion

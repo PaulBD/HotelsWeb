@@ -4,6 +4,7 @@ namespace core.customers.services
 {
     public interface ICustomerService
     {
+        NewsletterDto InsertNewsletter(NewsletterDto newsletter);
         CustomerDto InsertUpdateCustomer(string reference, Customer customer);
         CustomerDto ReturnCustomerByReference(string guid);
         CustomerDto ReturnCustomerByToken(string token);

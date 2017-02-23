@@ -9,5 +9,6 @@ namespace core.customers.services
         FavouriteDto ReturnFavouriteById(int id, string token);
         void ArchiveFavouriteById(int id, string token);
         List<FavouriteDto> ReturnFavouritesByToken(string token);
+        List<FavouriteDto> ReturnFavouritesByPlaceReference(string reference);
     }
 }

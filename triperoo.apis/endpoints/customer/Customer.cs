@@ -94,7 +94,7 @@ namespace triperoo.apis.endpoints.customer
                     customer.Profile.Pass = "";
                 }
 
-                response = _customerService.InsertUpdateCustomer(customer.Token, customer);
+                response = _customerService.InsertUpdateCustomer(customer.Reference, customer);
             }
             catch (Exception ex)
             {
@@ -138,7 +138,7 @@ namespace triperoo.apis.endpoints.customer
                 response.TriperooCustomers.DateUpdate = DateTime.Now;
                 response.TriperooCustomers.Profile.Pass = "";
 
-                response = _customerService.InsertUpdateCustomer(token, response.TriperooCustomers);
+                response = _customerService.InsertUpdateCustomer(response.TriperooCustomers.Reference, response.TriperooCustomers);
             }
             catch (Exception ex)
             {

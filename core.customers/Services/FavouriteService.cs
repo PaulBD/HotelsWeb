@@ -2,6 +2,7 @@
 using library.couchbase;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace core.customers.services
 {
@@ -70,6 +71,11 @@ namespace core.customers.services
             }
 
             return null;
+        }
+
+        public List<FavouriteDto> ReturnFavouritesByPlaceReference(string reference)
+        {
+            throw new NotImplementedException();
         }
     }
 }

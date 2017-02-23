@@ -19,7 +19,7 @@ namespace core.customers.dtos
     {
         public int Id { get; set; }
         public string PlaceType { get; set; }
-        public int PlaceId { get; set; }
+        public string PlaceReference { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsArchived { get; set; }
     }

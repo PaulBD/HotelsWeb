@@ -150,7 +150,7 @@ namespace triperoo.apis.endpoints.locations
                 if (result.Count > 0)
                 {
                     base.Cache.Add(cacheName, result);
-                    var r = result[0].TriperooCommon.places.Where(q => q.name.ToLower().StartsWith(search)).Take(10).ToList();
+                    var r = result[0].TriperooCommon.places.Where(q => q.name.ToLower().StartsWith(search)).OrderBy(q => q.priority).Take(10).ToList();
                     response.TriperooCommon.count = r.Count;
                     response.TriperooCommon.places = r;
                     response.TriperooCommon.letterIndex = search;

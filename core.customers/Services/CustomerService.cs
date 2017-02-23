@@ -84,5 +84,25 @@ namespace core.customers.services
 
             return null;
         }
+
+        /// <summary>
+        /// Insert Newsletter
+        /// </summary>
+        public NewsletterDto InsertNewsletter(NewsletterDto newsletter)
+        {
+            var result = _couchbaseHelper.ReturnQuery<Newsletter>("SELECT * FROM " + _bucketName + " WHERE reference = 'NewsletterList'", _bucketName);
+
+            var list = new NewsletterListDto();
+            list.NewsletterDto.Add(newsletter);
+
+            if (result.Count > 0)
+            {
+                list.NewsletterDto.AddRange(result[0].TriperooCustomers.NewsletterDto);
+            }
+
+            _couchbaseHelper.AddRecordToCouchbase("Newsletter", list, _bucketName);
+            
+            return newsletter;
+        }
     }
 }

@@ -12,28 +12,31 @@ namespace triperoo.apis.endpoints.auth
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/authorize", "POST")]
-    public class AuthorizeRequest
+    [Route("/v1/authorize/facebook", "POST")]
+    public class AuthorizeFacebookRequest
     {
         public string EmailAddress { get; set; }
-        public string Password { get; set; }
+        public string FacebookId { get; set; }
+        public string Name { get; set; }
+        public string Image { get; set; }
     }
 
     /// <summary>
     /// Validator
     /// </summary>
-    public class AuthorizeRequestValidator : AbstractValidator<AuthorizeRequest>
+    public class AuthorizeFacebookRequestValidator : AbstractValidator<AuthorizeFacebookRequest>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthorizeRequestValidator()
+        public AuthorizeFacebookRequestValidator()
         {
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
                 RuleFor(r => r.EmailAddress).NotNull().WithMessage("Supply a valid email address");
-                RuleFor(r => r.Password).NotNull().WithMessage("Supply a valid password");
+                RuleFor(r => r.FacebookId).NotNull().WithMessage("Supply a valid facebook id");
+                RuleFor(r => r.Name).NotNull().WithMessage("Supply a valid name");
             });
         }
     }
@@ -42,7 +45,7 @@ namespace triperoo.apis.endpoints.auth
 
     #region API logic
 
-    public class AuthorizeApi : Service
+    public class AuthorizeFacebookApi : Service
     {
         private readonly ICustomerService _customerService;
         private readonly IAuthorizeService _authorizeService;
@@ -50,29 +53,29 @@ namespace triperoo.apis.endpoints.auth
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthorizeApi(ICustomerService customerService, IAuthorizeService authorizeService)
+        public AuthorizeFacebookApi(ICustomerService customerService, IAuthorizeService authorizeService)
         {
             _customerService = customerService;
             _authorizeService = authorizeService;
         }
 
-        #region Authorize Customer
+        #region Authorize Facebook Customer
 
         /// <summary>
         /// Authorize Customer
         /// </summary>
-        public object Post(AuthorizeRequest request)
+        public object Post(AuthorizeFacebookRequest request)
         {
             CustomerDto response;
 
             try
             {
-                var token = _authorizeService.AssignToken(request.EmailAddress, request.Password);
+                var token = _authorizeService.AssignToken(request.EmailAddress, request.FacebookId);
                 response = _customerService.ReturnCustomerByToken(token);
 
                 if (response == null)
                 {
-                    return new HttpResult("Email Address or Password is invalid", HttpStatusCode.Unauthorized);
+                    return new HttpResult("Facebook credentials invalid", HttpStatusCode.Unauthorized);
                 }
             }
             catch (Exception ex)
