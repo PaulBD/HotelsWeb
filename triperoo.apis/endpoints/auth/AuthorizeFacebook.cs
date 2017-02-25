@@ -18,7 +18,8 @@ namespace triperoo.apis.endpoints.auth
         public string EmailAddress { get; set; }
         public string FacebookId { get; set; }
         public string Name { get; set; }
-        public string Image { get; set; }
+        public string ImageUrl { get; set; }
+        public string CurrentCity { get; set; }
     }
 
     /// <summary>
@@ -37,6 +38,7 @@ namespace triperoo.apis.endpoints.auth
                 RuleFor(r => r.EmailAddress).NotNull().WithMessage("Supply a valid email address");
                 RuleFor(r => r.FacebookId).NotNull().WithMessage("Supply a valid facebook id");
                 RuleFor(r => r.Name).NotNull().WithMessage("Supply a valid name");
+                RuleFor(r => r.CurrentCity).NotNull().WithMessage("Supply a valid city");
             });
         }
     }
@@ -67,15 +69,26 @@ namespace triperoo.apis.endpoints.auth
         public object Post(AuthorizeFacebookRequest request)
         {
             CustomerDto response;
+            string token = null;
 
             try
             {
-                var token = _authorizeService.AssignToken(request.EmailAddress, request.FacebookId);
+                token = _authorizeService.AssignToken(request.EmailAddress, request.FacebookId);
                 response = _customerService.ReturnCustomerByToken(token);
 
                 if (response == null)
                 {
-                    return new HttpResult("Facebook credentials invalid", HttpStatusCode.Unauthorized);
+                    var customer = new Customer();
+                    customer.DateCreated = DateTime.Now;
+                    customer.IsFacebookSignup = true;
+                    customer.Reference = "customer:" + Guid.NewGuid().ToString();
+                    customer.Profile.Name = request.Name;
+                    customer.Profile.CurrentCity = request.CurrentCity;
+                    customer.Profile.EmailAddress = request.EmailAddress;
+                    customer.Token = token;
+                    customer.Profile.ImageUrl = request.ImageUrl;
+
+                    _customerService.InsertUpdateCustomer(customer.Reference, customer);
                 }
             }
             catch (Exception ex)
@@ -83,7 +96,7 @@ namespace triperoo.apis.endpoints.auth
                 throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
-            return new HttpResult(response, HttpStatusCode.OK);
+            return new HttpResult(token, HttpStatusCode.OK);
         }
 
         #endregion

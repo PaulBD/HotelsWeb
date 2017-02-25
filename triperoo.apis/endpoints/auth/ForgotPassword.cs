@@ -7,33 +7,31 @@ using core.customers.dtos;
 
 namespace triperoo.apis.endpoints.auth
 {
-    #region Authorize a customer
+    #region Send customer password
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/authorize", "POST")]
-    public class AuthorizeRequest
+    [Route("/v1/reset-password", "POST")]
+    public class ForgotPasswordRequest
     {
         public string EmailAddress { get; set; }
-        public string Password { get; set; }
     }
 
     /// <summary>
     /// Validator
     /// </summary>
-    public class AuthorizeRequestValidator : AbstractValidator<AuthorizeRequest>
+    public class ForgotPasswordRequestValidator : AbstractValidator<ForgotPasswordRequest>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthorizeRequestValidator()
+        public ForgotPasswordRequestValidator()
         {
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
                 RuleFor(r => r.EmailAddress).NotNull().WithMessage("Supply a valid email address");
-                RuleFor(r => r.Password).NotNull().WithMessage("Supply a valid password");
             });
         }
     }
@@ -42,46 +40,44 @@ namespace triperoo.apis.endpoints.auth
 
     #region API logic
 
-    public class AuthorizeApi : Service
+    public class ForgotPasswordRequestApi : Service
     {
         private readonly ICustomerService _customerService;
-        private readonly IAuthorizeService _authorizeService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthorizeApi(ICustomerService customerService, IAuthorizeService authorizeService)
+        public ForgotPasswordRequestApi(ICustomerService customerService)
         {
             _customerService = customerService;
-            _authorizeService = authorizeService;
         }
 
-        #region Authorize Customer
+        #region Send forgot password to Customer
 
         /// <summary>
-        /// Authorize Customer
+        /// Send forgot password to Customer
         /// </summary>
-        public object Post(AuthorizeRequest request)
+        public object Post(ForgotPasswordRequest request)
         {
             CustomerDto response;
-            string token = null;
 
             try
             {
-                token = _authorizeService.AssignToken(request.EmailAddress, request.Password);
-                response = _customerService.ReturnCustomerByToken(token);
+                response = _customerService.ReturnCustomerByEmailAddress(request.EmailAddress);
 
                 if (response == null)
                 {
-                    return new HttpResult("Email Address or Password is invalid", HttpStatusCode.Unauthorized);
+                    return new HttpResult("Email address not found", HttpStatusCode.NotFound);
                 }
+
+                //TODO: Send password reset
             }
             catch (Exception ex)
             {
                 throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
-            return new HttpResult(token, HttpStatusCode.OK);
+            return new HttpResult(HttpStatusCode.OK);
         }
 
         #endregion

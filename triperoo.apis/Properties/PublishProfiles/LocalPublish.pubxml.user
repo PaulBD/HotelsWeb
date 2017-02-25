@@ -19,7 +19,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/14/2015 13:35:30</publishTime>
     </File>
     <File Include="bin/core.customers.dll">
-      <publishTime>02/23/2017 08:33:24</publishTime>
+      <publishTime>02/24/2017 15:53:02</publishTime>
     </File>
     <File Include="bin/core.flights.dll">
       <publishTime>02/06/2017 18:27:08</publishTime>
@@ -67,7 +67,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/15/2016 07:17:28</publishTime>
     </File>
     <File Include="bin/triperoo.apis.dll">
-      <publishTime>02/23/2017 08:33:24</publishTime>
+      <publishTime>02/25/2017 00:09:55</publishTime>
     </File>
     <File Include="Global.asax">
       <publishTime>11/15/2016 07:21:58</publishTime>

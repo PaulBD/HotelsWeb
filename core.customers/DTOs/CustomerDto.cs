@@ -6,13 +6,15 @@ namespace core.customers.dtos
     public class ProfileDto
     {
         public string PrefixName { get; set; }
+        public string Name { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DateOfBirth { get; set; }
         public string Locale { get; set; }
-        public int CurrentCityId { get; set; }
+        public string CurrentCity { get; set; }
         public string EmailAddress { get; set; }
         public string Pass { get; set; }
+        public string ImageUrl { get; set; }
     }
 
     public class FavouriteDto
@@ -32,6 +34,7 @@ namespace core.customers.dtos
             Favourites = new List<FavouriteDto>();
         }
 
+        public bool IsFacebookSignup { get; set; }
         public string Token { get; set; }
         public string Type { get { return "customer"; } }
         public string Reference { get; set; }

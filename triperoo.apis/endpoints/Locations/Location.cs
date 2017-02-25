@@ -18,6 +18,7 @@ namespace triperoo.apis.endpoints.locations
     public class LocationSearchRequest : Service
     {
         public string Q { get; set; }
+        public string type { get; set; }
     }
 
     /// <summary>
@@ -137,6 +138,7 @@ namespace triperoo.apis.endpoints.locations
             string search = request.Q.ToLower();
             string cacheName = "autocomplete:" + search.Substring(0, 3);
             List<AutocompleteDto> result = null;
+            List<Place> place = null;
 
             try
             {
@@ -150,9 +152,17 @@ namespace triperoo.apis.endpoints.locations
                 if (result.Count > 0)
                 {
                     base.Cache.Add(cacheName, result);
-                    var r = result[0].TriperooCommon.places.Where(q => q.name.ToLower().StartsWith(search)).OrderBy(q => q.priority).Take(10).ToList();
-                    response.TriperooCommon.count = r.Count;
-                    response.TriperooCommon.places = r;
+
+                    if (request.type.ToLower() == "all")
+                    {
+                        place = result[0].TriperooCommon.places.Where(q => q.name.ToLower().StartsWith(search)).OrderBy(q => q.priority).Take(10).ToList();
+                    }
+                    else {
+                        place = result[0].TriperooCommon.places.Where(q => q.type.ToLower() == request.type.ToLower()).Where(q => q.name.ToLower().StartsWith(search)).OrderBy(q => q.priority).Take(10).ToList();
+                    }
+
+                    response.TriperooCommon.count = place.Count;
+                    response.TriperooCommon.places = place;
                     response.TriperooCommon.letterIndex = search;
                 }
             }

@@ -7,33 +7,39 @@ using core.customers.dtos;
 
 namespace triperoo.apis.endpoints.auth
 {
-    #region Authorize a customer
+    #region Register a new customer
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/authorize", "POST")]
-    public class AuthorizeRequest
+    [Route("/v1/register", "POST")]
+    public class RegisterRequest
     {
         public string EmailAddress { get; set; }
         public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string CurrentCity { get; set; }
     }
 
     /// <summary>
     /// Validator
     /// </summary>
-    public class AuthorizeRequestValidator : AbstractValidator<AuthorizeRequest>
+    public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthorizeRequestValidator()
+        public RegisterRequestValidator()
         {
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
                 RuleFor(r => r.EmailAddress).NotNull().WithMessage("Supply a valid email address");
                 RuleFor(r => r.Password).NotNull().WithMessage("Supply a valid password");
+                RuleFor(r => r.FirstName).NotNull().WithMessage("Supply a valid first name");
+                RuleFor(r => r.LastName).NotNull().WithMessage("Supply a valid last name");
+                RuleFor(r => r.CurrentCity).NotNull().WithMessage("Supply a valid city");
             });
         }
     }
@@ -42,7 +48,7 @@ namespace triperoo.apis.endpoints.auth
 
     #region API logic
 
-    public class AuthorizeApi : Service
+    public class RegisterApi : Service
     {
         private readonly ICustomerService _customerService;
         private readonly IAuthorizeService _authorizeService;
@@ -50,18 +56,18 @@ namespace triperoo.apis.endpoints.auth
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthorizeApi(ICustomerService customerService, IAuthorizeService authorizeService)
+        public RegisterApi(ICustomerService customerService, IAuthorizeService authorizeService)
         {
             _customerService = customerService;
             _authorizeService = authorizeService;
         }
 
-        #region Authorize Customer
+        #region Register Customer
 
         /// <summary>
         /// Authorize Customer
         /// </summary>
-        public object Post(AuthorizeRequest request)
+        public object Post(RegisterRequest request)
         {
             CustomerDto response;
             string token = null;
@@ -71,10 +77,24 @@ namespace triperoo.apis.endpoints.auth
                 token = _authorizeService.AssignToken(request.EmailAddress, request.Password);
                 response = _customerService.ReturnCustomerByToken(token);
 
-                if (response == null)
+                if (response != null)
                 {
-                    return new HttpResult("Email Address or Password is invalid", HttpStatusCode.Unauthorized);
+                    return new HttpResult("You are already a member of Triperoo", HttpStatusCode.Conflict);
                 }
+
+                var customer = new Customer();
+                customer.DateCreated = DateTime.Now;
+                customer.IsFacebookSignup = false;
+                customer.Reference = "customer:" + Guid.NewGuid().ToString();
+                customer.Profile.Name = request.FirstName + " " + request.LastName;
+                customer.Profile.FirstName = request.FirstName;
+                customer.Profile.LastName = request.LastName;
+                customer.Profile.CurrentCity = request.CurrentCity;
+                customer.Profile.EmailAddress = request.EmailAddress;
+                customer.Profile.Pass = request.Password;
+                customer.Token = token;
+
+                _customerService.InsertUpdateCustomer(customer.Reference, customer);
             }
             catch (Exception ex)
             {
