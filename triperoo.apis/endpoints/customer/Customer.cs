@@ -84,9 +84,19 @@ namespace triperoo.apis.endpoints.customer
 
             try
             {
+                var guid = Guid.NewGuid().ToString();
                 var customer = request.Customer;
                 customer.DateCreated = DateTime.Now;
-                customer.Reference = "customer:" + Guid.NewGuid().ToString();
+                customer.Reference = "customer:" + guid;
+
+                if (customer.Profile.FirstName.Length > 0)
+                {
+                    customer.Profile.ProfileUrl = "/profile/" + guid + "/" + request.Customer.Profile.FirstName.Replace(" ", "_").ToLower() + "-" + request.Customer.Profile.LastName.Replace(" ", "_").ToLower();
+                }
+                else
+                {
+                    customer.Profile.ProfileUrl = "/profile/" + guid + "/" + request.Customer.Profile.Name.Replace(" ", "_").ToLower();
+                }
 
                 if ((!string.IsNullOrEmpty(customer.Profile.EmailAddress)) && (!string.IsNullOrEmpty(customer.Profile.Pass)))
                 {

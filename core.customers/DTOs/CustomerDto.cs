@@ -15,6 +15,7 @@ namespace core.customers.dtos
         public string EmailAddress { get; set; }
         public string Pass { get; set; }
         public string ImageUrl { get; set; }
+        public string ProfileUrl { get; set; }
     }
 
     public class FavouriteDto

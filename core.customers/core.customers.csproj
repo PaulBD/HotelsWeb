@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\AuthorizationDto.cs" />
     <Compile Include="DTOs\CustomerDto.cs" />
     <Compile Include="DTOs\NewsletterDto.cs" />
     <Compile Include="DTOs\ReviewDto.cs" />
@@ -98,6 +99,14 @@
     <ProjectReference Include="..\core.couchbase\library.couchbase.csproj">
       <Project>{96a89dbf-00fe-4079-ae95-195824745c91}</Project>
       <Name>library.couchbase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\core.hotels\core.hotels.csproj">
+      <Project>{fbef7b0b-1fcc-4996-97bc-59cd1e412642}</Project>
+      <Name>core.hotels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\core.places\core.places.csproj">
+      <Project>{c84790f7-37b6-459e-b2d9-57cf8281e171}</Project>
+      <Name>core.places</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

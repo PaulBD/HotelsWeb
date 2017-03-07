@@ -1,5 +1,4 @@
 ﻿using core.customers.dtos;
-using System.Collections.Generic;
 
 namespace core.customers.services
 {

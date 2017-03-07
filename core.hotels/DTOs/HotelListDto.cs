@@ -16,6 +16,7 @@ namespace core.hotels.dtos
         public string HotelCounty { get; set; }
         public string HotelPostcode { get; set; }
         public string HotelCountry { get; set; }
+        public int CountryId { get; set; }
         public string CountryIso { get; set; }
         public string HotelDescription { get; set; }
         public string HotelDirections { get; set; }

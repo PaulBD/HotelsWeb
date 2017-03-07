@@ -57,13 +57,15 @@ namespace triperoo.apis.endpoints.review
     public class ReviewApi : Service
     {
         private readonly IReviewService _reviewService;
+        private readonly ICustomerService _customerService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ReviewApi(IReviewService reviewService)
+        public ReviewApi(IReviewService reviewService, ICustomerService customerService)
         {
             _reviewService = reviewService;
+            _customerService = customerService;
         }
 
         #region Return Review By Id
@@ -159,8 +161,24 @@ namespace triperoo.apis.endpoints.review
         {
             try
             {
+                var token = Request.Headers["token"];
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    return new HttpResult("Token not found", HttpStatusCode.Unauthorized);
+                }
+
+                var customer = _customerService.ReturnCustomerByToken(token);
+
+                if (customer == null)
+                {
+                    return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
+                }
+
                 var reference = "review:" + Guid.NewGuid();
                 request.Review.Reference = reference;
+                request.Review.DateCreated = DateTime.Now;
+                request.Review.CustomerReference = customer.TriperooCustomers.Reference;
 
                 _reviewService.InsertNewReview(reference, request.Review);
             }

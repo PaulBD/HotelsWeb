@@ -71,6 +71,7 @@ namespace triperoo.apis.endpoints.auth
         {
             CustomerDto response;
             string token = null;
+            var authorizationDto = new AuthorizationDto();
 
             try
             {
@@ -95,13 +96,17 @@ namespace triperoo.apis.endpoints.auth
                 customer.Token = token;
 
                 _customerService.InsertUpdateCustomer(customer.Reference, customer);
+
+                authorizationDto.Token = token;
+                authorizationDto.UserImage = "";
+                authorizationDto.UserName = customer.Profile.Name;
             }
             catch (Exception ex)
             {
                 throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
-            return new HttpResult(token, HttpStatusCode.OK);
+            return new HttpResult(authorizationDto, HttpStatusCode.OK);
         }
 
         #endregion

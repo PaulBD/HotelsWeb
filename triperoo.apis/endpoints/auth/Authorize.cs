@@ -63,25 +63,29 @@ namespace triperoo.apis.endpoints.auth
         /// </summary>
         public object Post(AuthorizeRequest request)
         {
-            CustomerDto response;
+            var authorizationDto = new AuthorizationDto();
             string token = null;
 
             try
             {
                 token = _authorizeService.AssignToken(request.EmailAddress, request.Password);
-                response = _customerService.ReturnCustomerByToken(token);
+                var response = _customerService.ReturnCustomerByToken(token);
 
                 if (response == null)
                 {
                     return new HttpResult("Email Address or Password is invalid", HttpStatusCode.Unauthorized);
                 }
+
+                authorizationDto.Token = token;
+                authorizationDto.UserImage = response.TriperooCustomers.Profile.ImageUrl;
+                authorizationDto.UserName = response.TriperooCustomers.Profile.Name;
             }
             catch (Exception ex)
             {
                 throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
-            return new HttpResult(token, HttpStatusCode.OK);
+            return new HttpResult(authorizationDto, HttpStatusCode.OK);
         }
 
         #endregion

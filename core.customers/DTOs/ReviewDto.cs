@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace core.customers.dtos
 {
+    public class TagDto
+    {
+        public int Id { get; set; }
+        public string Text { get; set; }
+    }
     public class ReviewDetail
     {
         public string Type {  get { return "review"; } }
@@ -10,8 +16,10 @@ namespace core.customers.dtos
         public string PlaceReference { get; set; }
         public string PlaceType { get; set; }
         public int StarRating { get; set; }
-        public string Review { get; set; }
+        public string Comment { get; set; }
+        public List<TagDto> Tags { get; set; }
         public bool IsArchived { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 
     public class ReviewDto
