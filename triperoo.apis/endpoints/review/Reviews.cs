@@ -1,5 +1,7 @@
 ﻿using core.customers.dtos;
 using core.customers.services;
+using core.hotels.services;
+using core.places.services;
 using ServiceStack;
 using ServiceStack.FluentValidation;
 using System;
@@ -56,14 +58,18 @@ namespace triperoo.apis.endpoints.review
     {
         private readonly IReviewService _reviewService;
         private readonly ICustomerService _customerService;
+        private readonly IHotelService _hotelService;
+        private readonly IPlaceService _placeService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ReviewsApi(IReviewService reviewService, ICustomerService customerService)
+        public ReviewsApi(IReviewService reviewService, ICustomerService customerService, IHotelService hotelService, IPlaceService placeService)
         {
             _reviewService = reviewService;
             _customerService = customerService;
+            _hotelService = hotelService;
+            _placeService = placeService;
         }
 
         #region Return Reviews By Customer Reference
@@ -138,6 +144,38 @@ namespace triperoo.apis.endpoints.review
                 if (response == null)
                 {
                     throw new HttpError(HttpStatusCode.BadRequest, "Bad Request");
+                }
+
+                // TODO: Fix this using query
+                // TODO: Add Caching
+
+                foreach (var r in response)
+                {
+                    var customer = _customerService.ReturnCustomerByReference(r.TriperooReviews.CustomerReference);
+
+                    if (customer != null)
+                    {
+                        r.TriperooReviews.ProfileImage = customer.TriperooCustomers.Profile.ImageUrl;
+                        r.TriperooReviews.ProfileUrl = customer.TriperooCustomers.Profile.ProfileUrl;
+                        r.TriperooReviews.CustomerName = customer.TriperooCustomers.Profile.Name;
+                    }
+
+                    switch (r.TriperooReviews.PlaceType)
+                    {
+                        case "hotel":
+                            var hotel = _hotelService.ReturnHotelById(r.TriperooReviews.Reference);
+                            r.TriperooReviews.PlaceName = hotel.HotelName;
+                            r.TriperooReviews.PlaceAddress = hotel.Address1;
+                            r.TriperooReviews.PlaceCity = hotel.HotelCity;
+                            r.TriperooReviews.PlaceCountry = hotel.HotelCountry;
+                            r.TriperooReviews.PlaceImage = hotel.HotelImage;
+                            r.TriperooReviews.PlaceUrl = hotel.HotelUrl;
+                            break;
+                        case "country":
+                        case "city":
+                            var place = _placeService.ReturnPlaceById(r.TriperooReviews.Reference, r.TriperooReviews.PlaceType);
+                            break;
+                    }
                 }
             }
             catch (Exception ex)

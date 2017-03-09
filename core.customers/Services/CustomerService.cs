@@ -29,7 +29,12 @@ namespace core.customers.services
         /// </summary>
         public CustomerDto ReturnCustomerByReference(string guid)
         {
-            var q = "SELECT * FROM " + _bucketName + " WHERE reference = 'customer:" + guid + "'";
+            if (!guid.Contains("customer"))
+            {
+                guid = "customer:" + guid;
+            }
+
+            var q = "SELECT * FROM " + _bucketName + " WHERE customerReference = '" + guid + "'";
             return ProcessQuery(q);
         }
 

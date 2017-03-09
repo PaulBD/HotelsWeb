@@ -97,11 +97,12 @@ namespace core.customers.services
 
         public List<ReviewDto> ReturnReviewsByType(string type, int offset, int limit)
         {
+            //var q = "SELECT tr.*, tc.profile.name as userName, tc.profile.imageUrl as ProfileImage, tc.profile.profileUrl, th.HotelName, th.Url as HotelUrl, th.HotelImage, th.Address1, th.HotelCity, th.HotelCountry FROM " + _bucketName + " AS tr INNER JOIN TriperooCustomers AS tc ON KEYS tr.customerReference INNER JOIN TriperooHotels AS th ON KEYS tr.reference";
             var q = "SELECT * FROM TriperooReviews";
 
             if (type.ToLower() != "all")
             {
-                q += " WHERE placeType = '" + type + "'";
+                q += " WHERE placeType = '" + type + "' ORDER BY dateCreated DESC";
             }
 
             return ProcessQuery(q, limit, offset);

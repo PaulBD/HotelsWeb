@@ -33,18 +33,14 @@ namespace triperoo.apis.endpoints.review
     {
         private readonly IReviewService _reviewService;
         private readonly ICustomerService _customerService;
-        private readonly IHotelService _hotelService;
-        private readonly IPlaceService _placeService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ReviewApi(IReviewService reviewService, ICustomerService customerService, IHotelService hotelService, IPlaceService placeService)
+        public ReviewApi(IReviewService reviewService, ICustomerService customerService)
         {
             _reviewService = reviewService;
             _customerService = customerService;
-            _hotelService = hotelService;
-            _placeService = placeService;
 
         }
 
@@ -100,33 +96,9 @@ namespace triperoo.apis.endpoints.review
                 }
 
                 var reference = "review:" + Guid.NewGuid();
-                request.Review.Reference = reference;
+                request.Review.ReviewReference = reference;
                 request.Review.DateCreated = DateTime.Now;
-
-                // Add the reviewer Details
-                request.Review.Reviewer.Name = customer.TriperooCustomers.Profile.Name;
-                request.Review.Reviewer.ImageUrl = customer.TriperooCustomers.Profile.ImageUrl;
-                request.Review.Reviewer.ProfileUrl = customer.TriperooCustomers.Profile.ProfileUrl;
-
-                // Add the location details
-                switch (request.Review.PlaceType)
-                {
-                    case "city":
-                    case "country":
-                        var place = _placeService.ReturnPlaceById(request.Review.PlaceReference, request.Review.PlaceType);
-                        break;
-                    case "hotel":
-                        var hotel = _hotelService.ReturnHotelById(request.Review.PlaceReference);
-                        request.Review.Place.Address = hotel.Address1;
-                        request.Review.Place.City = hotel.HotelCity;
-                        request.Review.Place.Country = hotel.HotelCountry;
-                        request.Review.Place.ImageUrl = hotel.HotelImage;
-                        request.Review.Place.Url = hotel.HotelUrl;
-                        request.Review.Place.Type = "hotel";
-                        request.Review.Place.Name = hotel.HotelName;
-                        break;
-
-                }
+                request.Review.CustomerReference = customer.TriperooCustomers.CustomerReference;
 
                 _reviewService.InsertNewReview(reference, request.Review);
             }
@@ -150,7 +122,7 @@ namespace triperoo.apis.endpoints.review
             try
             {
                 var reference = "review:" + request.Guid;
-                request.Review.Reference = reference;
+                request.Review.ReviewReference = reference;
                 _reviewService.InsertNewReview(reference, request.Review);
             }
             catch (Exception ex)

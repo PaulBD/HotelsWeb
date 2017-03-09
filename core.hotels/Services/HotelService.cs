@@ -62,15 +62,24 @@ namespace core.hotels.services
         /// <summary>
         /// Return a single hotel By id
         /// </summary>
-        public HotelDetailDto ReturnHotelById(string id)
+        public HotelDetailDto ReturnHotelById(string guid)
         {
-            if (!id.Contains("hotel"))
+            if (!guid.Contains("hotel"))
             {
-                id = "hotel:" + id;
+                guid = "hotel:" + guid;
             }
-            var result = _couchbaseHelper.CheckRecordExistsInDB(id, "TriperooHotels");
 
-            return JsonSerializer.DeserializeFromString<HotelDetailDto>(result);
+            //TODO: Change query so its based upon latitude & longitude
+            var q = "SELECT * FROM TriperooHotels WHERE Reference = '" + guid + "'";
+
+            var result = ProcessQuery(q, 0, 0);
+
+            if (result.Count > 0)
+            {
+                return result[0].TriperooHotels;
+            }
+
+            return null;
         }
     }
 }
