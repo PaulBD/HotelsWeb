@@ -64,7 +64,11 @@ namespace core.hotels.services
         /// </summary>
         public HotelDetailDto ReturnHotelById(string id)
         {
-            var result = _couchbaseHelper.CheckRecordExistsInDB("hotel:" + id, "TriperooHotels");
+            if (!id.Contains("hotel"))
+            {
+                id = "hotel:" + id;
+            }
+            var result = _couchbaseHelper.CheckRecordExistsInDB(id, "TriperooHotels");
 
             return JsonSerializer.DeserializeFromString<HotelDetailDto>(result);
         }

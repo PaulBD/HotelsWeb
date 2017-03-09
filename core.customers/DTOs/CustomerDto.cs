@@ -38,7 +38,7 @@ namespace core.customers.dtos
         public bool IsFacebookSignup { get; set; }
         public string Token { get; set; }
         public string Type { get { return "customer"; } }
-        public string Reference { get; set; }
+        public string CustomerReference { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateUpdate { get; set; }
         public ProfileDto Profile { get; set; }

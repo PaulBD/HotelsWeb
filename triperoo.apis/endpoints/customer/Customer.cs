@@ -87,7 +87,7 @@ namespace triperoo.apis.endpoints.customer
                 var guid = Guid.NewGuid().ToString();
                 var customer = request.Customer;
                 customer.DateCreated = DateTime.Now;
-                customer.Reference = "customer:" + guid;
+                customer.CustomerReference = "customer:" + guid;
 
                 if (customer.Profile.FirstName.Length > 0)
                 {
@@ -100,11 +100,11 @@ namespace triperoo.apis.endpoints.customer
 
                 if ((!string.IsNullOrEmpty(customer.Profile.EmailAddress)) && (!string.IsNullOrEmpty(customer.Profile.Pass)))
                 {
-                    customer.Token = _authorizeService.AssignToken(customer.Profile.EmailAddress, customer.Reference);
+                    customer.Token = _authorizeService.AssignToken(customer.Profile.EmailAddress, customer.CustomerReference);
                     customer.Profile.Pass = "";
                 }
 
-                response = _customerService.InsertUpdateCustomer(customer.Reference, customer);
+                response = _customerService.InsertUpdateCustomer(customer.CustomerReference, customer);
             }
             catch (Exception ex)
             {
@@ -148,7 +148,7 @@ namespace triperoo.apis.endpoints.customer
                 response.TriperooCustomers.DateUpdate = DateTime.Now;
                 response.TriperooCustomers.Profile.Pass = "";
 
-                response = _customerService.InsertUpdateCustomer(response.TriperooCustomers.Reference, response.TriperooCustomers);
+                response = _customerService.InsertUpdateCustomer(response.TriperooCustomers.CustomerReference, response.TriperooCustomers);
             }
             catch (Exception ex)
             {

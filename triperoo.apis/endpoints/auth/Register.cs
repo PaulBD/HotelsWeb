@@ -83,10 +83,12 @@ namespace triperoo.apis.endpoints.auth
                     return new HttpResult("You are already a member of Triperoo", HttpStatusCode.Conflict);
                 }
 
+                var guid = Guid.NewGuid().ToString().ToLower(); ;
+
                 var customer = new Customer();
                 customer.DateCreated = DateTime.Now;
                 customer.IsFacebookSignup = false;
-                customer.Reference = "customer:" + Guid.NewGuid().ToString();
+                customer.CustomerReference = "customer:" + guid;
                 customer.Profile.Name = request.FirstName + " " + request.LastName;
                 customer.Profile.FirstName = request.FirstName;
                 customer.Profile.LastName = request.LastName;
@@ -94,8 +96,9 @@ namespace triperoo.apis.endpoints.auth
                 customer.Profile.EmailAddress = request.EmailAddress;
                 customer.Profile.Pass = request.Password;
                 customer.Token = token;
+                customer.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-").ToLower();
 
-                _customerService.InsertUpdateCustomer(customer.Reference, customer);
+                _customerService.InsertUpdateCustomer(customer.CustomerReference, customer);
 
                 authorizationDto.Token = token;
                 authorizationDto.UserImage = "";

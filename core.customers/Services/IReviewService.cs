@@ -1,4 +1,5 @@
 ﻿using core.customers.dtos;
+using System.Collections.Generic;
 
 namespace core.customers.services
 {
@@ -6,8 +7,9 @@ namespace core.customers.services
     {
         void InsertNewReview(string reference, ReviewDetail review);
         ReviewDetail ReturnReviewByReference(string reference);
-        ReviewDto ReturnReviewsByCustomerReference(string customerReference);
-        ReviewDto ReturnReviewsByPlaceReference(string type, string placeReference);
+        List<ReviewDto> ReturnReviewsByCustomerReference(string customerReference);
+        List<ReviewDto> ReturnReviewsByPlaceReference(string type, string placeReference);
+        List<ReviewDto> ReturnReviewsByType(string type, int offset, int limit);
         void ArchiveReviewById(string reference);
     }
 }

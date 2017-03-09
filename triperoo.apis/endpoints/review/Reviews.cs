@@ -8,19 +8,17 @@ using System.Net;
 
 namespace triperoo.apis.endpoints.review
 {
-    #region Review Endpoint
+    #region Customer Reviews Endpoint
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/review/{Guid}", "GET")]
-    [Route("/v1/review/{Guid}", "DELETE")]
-    [Route("/v1/review/{Guid}", "PUT")]
-    [Route("/v1/review", "POST")]
-    public class ReviewRequest
+    [Route("/v1/reviews/{Type}", "GET")]
+    public class TopReviewRequest
     {
-        public string Guid { get; set; }
-        public ReviewDetail Review { get; set; }
+        public int Limit { get; set; }
+        public int Offset { get; set; }
+        public string Type { get; set; }
     }
 
     #endregion
@@ -54,7 +52,7 @@ namespace triperoo.apis.endpoints.review
 
     #region API logic
 
-    public class ReviewApi : Service
+    public class ReviewsApi : Service
     {
         private readonly IReviewService _reviewService;
         private readonly ICustomerService _customerService;
@@ -62,39 +60,11 @@ namespace triperoo.apis.endpoints.review
         /// <summary>
         /// Constructor
         /// </summary>
-        public ReviewApi(IReviewService reviewService, ICustomerService customerService)
+        public ReviewsApi(IReviewService reviewService, ICustomerService customerService)
         {
             _reviewService = reviewService;
             _customerService = customerService;
         }
-
-        #region Return Review By Id
-
-        /// <summary>
-        /// Return Review
-        /// </summary>
-        public object Get(ReviewRequest request)
-        {
-            var response = new ReviewDetail();
-
-            try
-            {
-                response = _reviewService.ReturnReviewByReference("review:" + request.Guid);
-
-                if (response == null)
-                {
-                    throw new HttpError(HttpStatusCode.BadRequest, "Bad Request");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
-            }
-
-            return new HttpResult(response, HttpStatusCode.OK);
-        }
-
-        #endregion
 
         #region Return Reviews By Customer Reference
 
@@ -103,7 +73,7 @@ namespace triperoo.apis.endpoints.review
         /// </summary>
         public object Get(CustomerReviewRequest request)
         {
-            var response = new ReviewDto();
+            var response = new List<ReviewDto>();
 
             try
             {
@@ -131,7 +101,7 @@ namespace triperoo.apis.endpoints.review
         /// </summary>
         public object Get(PlaceReviewRequest request)
         {
-            var response = new ReviewDto();
+            var response = new List<ReviewDto>();
 
             try
             {
@@ -152,86 +122,30 @@ namespace triperoo.apis.endpoints.review
 
         #endregion
 
-        #region Insert Review
+        #region Return Top Reviews By Type
 
         /// <summary>
-        /// Insert Review
+        /// Return Top Reviews By Type
         /// </summary>
-        public object Post(ReviewRequest request)
+        public object Get(TopReviewRequest request)
         {
+            var response = new List<ReviewDto>();
+
             try
             {
-                var token = Request.Headers["token"];
+                response = _reviewService.ReturnReviewsByType(request.Type, request.Offset, request.Limit);
 
-                if (string.IsNullOrEmpty(token))
+                if (response == null)
                 {
-                    return new HttpResult("Token not found", HttpStatusCode.Unauthorized);
+                    throw new HttpError(HttpStatusCode.BadRequest, "Bad Request");
                 }
-
-                var customer = _customerService.ReturnCustomerByToken(token);
-
-                if (customer == null)
-                {
-                    return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
-                }
-
-                var reference = "review:" + Guid.NewGuid();
-                request.Review.Reference = reference;
-                request.Review.DateCreated = DateTime.Now;
-                request.Review.CustomerReference = customer.TriperooCustomers.Reference;
-
-                _reviewService.InsertNewReview(reference, request.Review);
             }
             catch (Exception ex)
             {
                 throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
-            return new HttpResult(HttpStatusCode.OK);
-        }
-
-        #endregion
-
-        #region Update Review
-
-        /// <summary>
-        /// Update Review
-        /// </summary>
-        public object Put(ReviewRequest request)
-        {
-            try
-            {
-                var reference = "review:" + request.Guid;
-                request.Review.Reference = reference;
-                _reviewService.InsertNewReview(reference, request.Review);
-            }
-            catch (Exception ex)
-            {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
-            }
-
-            return new HttpResult(HttpStatusCode.OK);
-        }
-
-        #endregion
-
-        #region Archive Review
-
-        /// <summary>
-        /// Archive Review
-        /// </summary>
-        public object Delete(ReviewRequest request)
-        {
-            try
-            {
-                _reviewService.ArchiveReviewById("review:" + request.Guid);
-            }
-            catch (Exception ex)
-            {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
-            }
-
-            return new HttpResult(HttpStatusCode.OK);
+            return new HttpResult(response, HttpStatusCode.OK);
         }
 
         #endregion

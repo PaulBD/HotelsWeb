@@ -25,7 +25,7 @@ namespace core.customers.services
             {
                 favourite.Id = customer.TriperooCustomers.Favourites.Count + 1;
                 customer.TriperooCustomers.Favourites.Add(favourite);
-                _customerService.InsertUpdateCustomer(customer.TriperooCustomers.Reference, customer.TriperooCustomers);
+                _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
             }
         }
 
@@ -54,7 +54,7 @@ namespace core.customers.services
             if ((customer != null) && (customer.TriperooCustomers != null))
             {
                 customer.TriperooCustomers.Favourites[id - 1].IsArchived = true;
-                var newCustomer = _customerService.InsertUpdateCustomer(customer.TriperooCustomers.Reference, customer.TriperooCustomers);
+                var newCustomer = _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
             }
         }
 

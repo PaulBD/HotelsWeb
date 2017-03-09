@@ -109,6 +109,7 @@
     <Compile Include="endpoints\auth\Authorize.cs" />
     <Compile Include="endpoints\customer\Newsletter.cs" />
     <Compile Include="endpoints\review\Reviews.cs" />
+    <Compile Include="endpoints\review\Review.cs" />
     <Compile Include="endpoints\customer\Favourites.cs" />
     <Compile Include="endpoints\customer\Customer.cs" />
     <Compile Include="endpoints\flights\Flights.cs" />

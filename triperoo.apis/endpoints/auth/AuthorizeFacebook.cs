@@ -71,6 +71,7 @@ namespace triperoo.apis.endpoints.auth
             CustomerDto response;
             string token = null;
             var authorizationDto = new AuthorizationDto();
+            var customer = new Customer();
 
             try
             {
@@ -79,22 +80,24 @@ namespace triperoo.apis.endpoints.auth
 
                 if (response == null)
                 {
-                    var customer = new Customer();
+                    var guid = Guid.NewGuid().ToString().ToLower();
+
                     customer.DateCreated = DateTime.Now;
                     customer.IsFacebookSignup = true;
-                    customer.Reference = "customer:" + Guid.NewGuid().ToString();
+                    customer.CustomerReference = "customer:" + guid;
                     customer.Profile.Name = request.Name;
                     customer.Profile.CurrentCity = request.CurrentCity;
                     customer.Profile.EmailAddress = request.EmailAddress;
                     customer.Token = token;
                     customer.Profile.ImageUrl = request.ImageUrl;
+                    customer.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-").ToLower();
 
-                    _customerService.InsertUpdateCustomer(customer.Reference, customer);
+                    _customerService.InsertUpdateCustomer(customer.CustomerReference, customer);
                 }
 
                 authorizationDto.Token = token;
-                authorizationDto.UserImage = response.TriperooCustomers.Profile.ImageUrl;
-                authorizationDto.UserName = response.TriperooCustomers.Profile.Name;
+                authorizationDto.UserImage = customer.Profile.ImageUrl;
+                authorizationDto.UserName = customer.Profile.Name;
             }
             catch (Exception ex)
             {

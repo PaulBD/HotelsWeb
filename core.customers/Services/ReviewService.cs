@@ -1,5 +1,7 @@
-﻿using core.customers.dtos;
+﻿using System;
+using core.customers.dtos;
 using library.couchbase;
+using System.Collections.Generic;
 
 namespace core.customers.services
 {
@@ -39,10 +41,10 @@ namespace core.customers.services
         /// <summary>
         /// Return reviews by place reference
         /// </summary>
-        public ReviewDto ReturnReviewsByPlaceReference(string type, string placeReference)
+        public List<ReviewDto> ReturnReviewsByPlaceReference(string type, string placeReference)
         {
             var q = "SELECT * FROM " + _bucketName + " WHERE placeReference = '" + type + ":" + placeReference + "'";
-            return ProcessQuery(q);
+            return ProcessQuery(q, 0, 0);
         }
 
         /// <summary>
@@ -51,11 +53,14 @@ namespace core.customers.services
         public ReviewDetail ReturnReviewByReference(string reference)
         {
             var q = "SELECT * FROM " + _bucketName + " WHERE reference = '" + reference + "'";
-            var response = ProcessQuery(q);
+            var response = ProcessQuery(q, 0, 0);
 
-            if (response.TriperooReviews != null)
+            if (response.Count > 0)
             {
-                return response.TriperooReviews;
+                if (response[0].TriperooReviews != null)
+                {
+                    return response[0].TriperooReviews;
+                }
             }
 
             return null;
@@ -64,25 +69,42 @@ namespace core.customers.services
         /// <summary>
         /// Return reviews by customer reference
         /// </summary>
-        public ReviewDto ReturnReviewsByCustomerReference(string customerReference)
+        public List<ReviewDto> ReturnReviewsByCustomerReference(string customerReference)
         {
             var q = "SELECT * FROM " + _bucketName + " WHERE customerReference = '" + customerReference + "'";
-            return ProcessQuery(q);
+            return ProcessQuery(q, 0, 0);
         }
 
         /// <summary>
         /// Process Query
         /// </summary>
-        private ReviewDto ProcessQuery(string q)
+        private List<ReviewDto> ProcessQuery(string q, int limit, int offset)
         {
+            if (limit > 0)
+            {
+                q += " LIMIT " + limit + " OFFSET " + offset;
+            }
+
             var result = _couchbaseHelper.ReturnQuery<ReviewDto>(q, _bucketName);
 
             if (result.Count > 0)
             {
-                return result[0];
+                return result;
             }
 
             return null;
+        }
+
+        public List<ReviewDto> ReturnReviewsByType(string type, int offset, int limit)
+        {
+            var q = "SELECT * FROM TriperooReviews";
+
+            if (type.ToLower() != "all")
+            {
+                q += " WHERE placeType = '" + type + "'";
+            }
+
+            return ProcessQuery(q, limit, offset);
         }
     }
 }
