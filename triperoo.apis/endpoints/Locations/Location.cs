@@ -14,11 +14,11 @@ namespace triperoo.apis.endpoints.locations
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/locations/search")]
+    [Route("/v1/autocomplete")]
     public class LocationSearchRequest : Service
     {
-        public string Q { get; set; }
-        public string type { get; set; }
+        public string SearchValue { get; set; }
+        public string SearchType { get; set; }
     }
 
     /// <summary>
@@ -34,8 +34,9 @@ namespace triperoo.apis.endpoints.locations
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.Q).NotNull().WithMessage("Supply a valid search parameter");
-                RuleFor(r => r.Q).Length(3, 250).WithMessage("Supply a valid search parameter greater than 3 characters");
+                RuleFor(r => r.SearchValue).NotEmpty().WithMessage("Supply a valid search parameter");
+                RuleFor(r => r.SearchValue).Length(3, 250).WithMessage("Supply a valid search parameter greater than 3 characters");
+                RuleFor(r => r.SearchType).NotEmpty().WithMessage("Invalid type have been supplied");
             });
         }
     }
@@ -47,11 +48,10 @@ namespace triperoo.apis.endpoints.locations
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/location/{type}/{id}", "GET")]
+    [Route("/v1/location", "GET")]
     public class LocationRequest
     {
         public int id { get; set; }
-        public string type { get; set; }
 
     }
 
@@ -69,7 +69,6 @@ namespace triperoo.apis.endpoints.locations
             RuleSet(ApplyTo.Get, () =>
             {
                 RuleFor(r => r.id).GreaterThan(0).WithMessage("Invalid location id have been supplied");
-                RuleFor(r => r.type).NotEmpty().WithMessage("Invalid type have been supplied");
             });
 
         }
@@ -91,15 +90,15 @@ namespace triperoo.apis.endpoints.locations
             _locationService = locationService;
         }
 
-        #region List Location by Reference
+        #region List Location by Id
 
         /// <summary>
-        /// Lists location by reference (type:id)
+        /// Lists location by Id
         /// </summary>
         public object Get(LocationRequest request)
         {
             LocationDto response = new LocationDto();
-            string cacheName = request.type + ":" + request.id;
+            string cacheName = "places:" + request.id;
             List<LocationDto> result = null;
 
             try
@@ -108,7 +107,7 @@ namespace triperoo.apis.endpoints.locations
 
                 if (result == null)
                 {
-                    result = _locationService.ReturnLocationById(request.type + ":" + request.id);
+                    result = _locationService.ReturnLocationById(request.id);
                     base.Cache.Add(cacheName, result);
                 }
 
@@ -135,35 +134,34 @@ namespace triperoo.apis.endpoints.locations
         public object Get(LocationSearchRequest request)
         {
             AutocompleteDto response = new AutocompleteDto();
-            string search = request.Q.ToLower();
-            string cacheName = "autocomplete:" + search.Substring(0, 3);
-            List<AutocompleteDto> result = null;
-            List<Place> place = null;
+            List<LocationDto> result = null;
+            List<LocationDto> locations = null;
 
             try
             {
-                result = Cache.Get<List<AutocompleteDto>>(cacheName);
+                string search = request.SearchValue.ToLower();
+                string cacheName = "autocomplete:" + search.Substring(0, 3);
+
+                result = Cache.Get<List<LocationDto>>(cacheName);
 
                 if (result == null)
                 {
-                    result = _locationService.ReturnLocationsForAutocomplete(search);
+                    result = _locationService.ReturnLocationsForAutocomplete(search.Substring(0, 3));
                 }
 
                 if (result.Count > 0)
                 {
                     base.Cache.Add(cacheName, result);
 
-                    if (request.type.ToLower() == "all")
+                    if (request.SearchType.ToLower() == "all")
                     {
-                        place = result[0].TriperooCommon.places.Where(q => q.name.ToLower().StartsWith(search)).OrderBy(q => q.priority).Take(10).ToList();
+                        locations = result.Where(q => q.Type.ToLower() == "city" || q.Type.ToLower() == "country" || q.Type.ToLower() == "Hotel").Where(q => q.Name.ToLower().StartsWith(search)).OrderBy(q => q.Priority).OrderBy(q => q.Name).Take(10).ToList();
                     }
                     else {
-                        place = result[0].TriperooCommon.places.Where(q => q.type.ToLower() == request.type.ToLower()).Where(q => q.name.ToLower().StartsWith(search)).OrderBy(q => q.priority).Take(10).ToList();
+                        locations = result.Where(q => q.Type.ToLower() == request.SearchType.ToLower()).Where(q => q.Name.ToLower().StartsWith(search)).OrderBy(q => q.Priority).OrderBy(q => q.Name).Take(10).ToList();
                     }
 
-                    response.TriperooCommon.count = place.Count;
-                    response.TriperooCommon.places = place;
-                    response.TriperooCommon.letterIndex = search;
+                    response.Locations = locations;
                 }
             }
             catch (Exception ex)

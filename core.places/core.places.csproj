@@ -91,13 +91,8 @@
   <ItemGroup>
     <Compile Include="DTOs\AutocompleteDto.cs" />
     <Compile Include="DTOs\BaseDto.cs" />
-    <Compile Include="DTOs\FactualDto.cs" />
-    <Compile Include="DTOs\LocationDto.cs" />
-    <Compile Include="DTOs\PlaceDto.cs" />
     <Compile Include="Services\ILocationService.cs" />
-    <Compile Include="Services\IPlaceService.cs" />
     <Compile Include="Services\LocationService.cs" />
-    <Compile Include="Services\PlaceService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

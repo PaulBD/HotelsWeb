@@ -8,6 +8,7 @@ namespace core.hotels.services
     public class HotelService : IHotelService
     {
         private CouchBaseHelper _couchbaseHelper;
+        private readonly string _bucketName = "TriperooHotels";
 
         public HotelService()
         {
@@ -19,7 +20,7 @@ namespace core.hotels.services
         /// </summary>
         public List<HotelDto> ReturnHotelsByTown(string town, string country, int limit, int offset)
         {
-            var q = "SELECT * FROM TriperooHotels WHERE LOWER(HotelCity) = '" + town.ToLower() + "' AND LOWER(HotelCountry) = '" + country.ToLower() + "'";
+            var q = "SELECT * FROM " + _bucketName + " WHERE LOWER(HotelCity) = '" + town.ToLower() + "' AND LOWER(HotelCountry) = '" + country.ToLower() + "'";
             
             return ProcessQuery(q, limit, offset);
         }
@@ -29,7 +30,7 @@ namespace core.hotels.services
         /// </summary>
         public List<HotelDto> ReturnHotelsByPlaceId(int placeId, int limit, int offset)
         {
-            var q = "SELECT * FROM TriperooHotels WHERE PlaceId = " + placeId;
+            var q = "SELECT * FROM " + _bucketName + " WHERE PlaceId = " + placeId;
 
             return ProcessQuery(q, limit, offset);
         }
@@ -40,7 +41,7 @@ namespace core.hotels.services
         public List<HotelDto> ReturnHotelsByProximity(double longitude, double latitude, int radius, int offset, int limit)
         {
             //TODO: Change query so its based upon latitude & longitude
-            var q = "SELECT * FROM TriperooHotels WHERE LIMIT " + limit + " OFFSET " + offset;
+            var q = "SELECT * FROM " + _bucketName + " WHERE LIMIT " + limit + " OFFSET " + offset;
 
             return ProcessQuery(q, limit, offset);
         }
@@ -56,7 +57,7 @@ namespace core.hotels.services
                 q += " LIMIT " + limit + " OFFSET " + offset;
             }
 
-            return _couchbaseHelper.ReturnQuery<HotelDto>(q, "TriperooHotels");
+            return _couchbaseHelper.ReturnQuery<HotelDto>(q, _bucketName);
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace core.hotels.services
             }
 
             //TODO: Change query so its based upon latitude & longitude
-            var q = "SELECT * FROM TriperooHotels WHERE Reference = '" + guid + "'";
+            var q = "SELECT * FROM " + _bucketName + " WHERE Reference = '" + guid + "'";
 
             var result = ProcessQuery(q, 0, 0);
 

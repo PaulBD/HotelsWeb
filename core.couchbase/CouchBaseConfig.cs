@@ -13,20 +13,23 @@ namespace library.couchbase
 
             config.Servers = new List<Uri>(new Uri[] { new Uri(CouchbaseConfigHelper.Instance.Server) });
             config.UseSsl = CouchbaseConfigHelper.Instance.UseSSL;
-            config.BucketConfigs = new Dictionary<string, BucketConfiguration>
+
+            var bucketConfigs = new Dictionary<string, BucketConfiguration>();
+
+
+                bucketConfigs.Add(bucketName, new BucketConfiguration
                 {
-                    { bucketName, new BucketConfiguration
+                    BucketName = bucketName,
+                    UseSsl = CouchbaseConfigHelper.Instance.UseSSL,
+                    Password = CouchbaseConfigHelper.Instance.BucketPassword,
+                    PoolConfiguration = new PoolConfiguration
                     {
-                        BucketName = bucketName,
-                        UseSsl = CouchbaseConfigHelper.Instance.UseSSL,
-                        Password = CouchbaseConfigHelper.Instance.BucketPassword,
-                        PoolConfiguration = new PoolConfiguration
-                        {
-                            MaxSize = 10,
-                            MinSize = 5
-                        }
-                    }}
-                };
+                        MaxSize = 10,
+                        MinSize = 5
+                    }
+                });
+
+            config.BucketConfigs = bucketConfigs;
 
             return config;
         }

@@ -112,10 +112,7 @@
     <Compile Include="endpoints\review\Review.cs" />
     <Compile Include="endpoints\customer\Favourites.cs" />
     <Compile Include="endpoints\customer\Customer.cs" />
-    <Compile Include="endpoints\flights\Flights.cs" />
     <Compile Include="endpoints\Locations\Location.cs" />
-    <Compile Include="endpoints\places\Places.cs" />
-    <Compile Include="endpoints\hotels\Hotels.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -126,6 +123,10 @@
     <ProjectReference Include="..\core.customers\core.customers.csproj">
       <Project>{c1e33184-5386-47aa-baca-da61005892e5}</Project>
       <Name>core.customers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\core.extras\core.extras.csproj">
+      <Project>{6ff87c61-e535-423b-a08a-072ab3337c03}</Project>
+      <Name>core.extras</Name>
     </ProjectReference>
     <ProjectReference Include="..\core.flights\core.flights.csproj">
       <Project>{f4df4801-9778-46dd-a450-ef2bc02b9ed6}</Project>

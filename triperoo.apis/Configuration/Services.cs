@@ -3,6 +3,7 @@ using core.places.services;
 using core.hotels.services;
 using core.flights.services;
 using core.customers.services;
+using core.extras.services;
 
 namespace triperoo.apis.Configuration
 {
@@ -11,7 +12,7 @@ namespace triperoo.apis.Configuration
         public static void Register(Container container)
         {
             container.RegisterAutoWiredAs<LocationService, ILocationService>().ReusedWithin(ReuseScope.Container);
-            container.RegisterAutoWiredAs<PlaceService, IPlaceService>().ReusedWithin(ReuseScope.Container);
+            //container.RegisterAutoWiredAs<PlaceService, IPlaceService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<HotelService, IHotelService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<HotelPriceService, IHotelPriceService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<FlightService, IFlightService>().ReusedWithin(ReuseScope.Container);
@@ -19,6 +20,7 @@ namespace triperoo.apis.Configuration
             container.RegisterAutoWiredAs<AuthorizeService, IAuthorizeService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<FavouriteService, IFavouriteService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<ReviewService, IReviewService>().ReusedWithin(ReuseScope.Container);
+            container.RegisterAutoWiredAs<ParkingService, IParkingService>().ReusedWithin(ReuseScope.Container);
         }
     }
 }

@@ -8,6 +8,7 @@ using ServiceStack;
 using ServiceStack.Configuration;
 using ServiceStack.Caching;
 using ServiceStack.Validation;
+using ServiceStack.Text;
 
 namespace triperoo.apis
 {
@@ -55,6 +56,14 @@ namespace triperoo.apis
                     ApiVersion = "v1",
                     ReturnsInnerException = true
                 });
+
+                // Set JSON web services to return idiomatic JSON camelCase properties
+                //JsConfig.EmitCamelCaseNames = true;
+
+                // Ensure all dates and times are serialised in UTC format
+                JsConfig.AssumeUtc = true;
+                JsConfig.DateHandler = DateHandler.ISO8601;
+                //JsConfig.PropertyConvention = PropertyConvention.Lenient;
 
                 // Configure the default ServiceStack serialiser
                 Serialiser.Configure();

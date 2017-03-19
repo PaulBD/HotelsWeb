@@ -1,6 +1,7 @@
 ﻿using core.customers.dtos;
 using library.couchbase;
 using System;
+using System.Collections.Generic;
 
 namespace core.customers.services
 {

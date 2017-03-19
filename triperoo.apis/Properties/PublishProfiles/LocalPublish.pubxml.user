@@ -19,19 +19,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/14/2015 13:35:30</publishTime>
     </File>
     <File Include="bin/core.customers.dll">
-      <publishTime>03/09/2017 11:48:10</publishTime>
+      <publishTime>03/19/2017 17:07:30</publishTime>
+    </File>
+    <File Include="bin/core.extras.dll">
+      <publishTime>03/14/2017 13:55:54</publishTime>
     </File>
     <File Include="bin/core.flights.dll">
       <publishTime>02/06/2017 18:27:08</publishTime>
     </File>
     <File Include="bin/core.hotels.dll">
-      <publishTime>03/09/2017 11:39:52</publishTime>
+      <publishTime>03/19/2017 15:26:46</publishTime>
     </File>
     <File Include="bin/core.places.dll">
-      <publishTime>03/09/2017 11:39:52</publishTime>
+      <publishTime>03/19/2017 17:02:15</publishTime>
     </File>
     <File Include="bin/Couchbase.NetClient.dll">
-      <publishTime>01/03/2017 11:59:30</publishTime>
+      <publishTime>03/01/2017 11:59:30</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>11/15/2016 07:17:23</publishTime>
@@ -46,7 +49,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/15/2015 10:15:52</publishTime>
     </File>
     <File Include="bin/library.couchbase.dll">
-      <publishTime>03/09/2017 11:39:52</publishTime>
+      <publishTime>03/19/2017 15:26:46</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>06/13/2016 23:06:14</publishTime>
@@ -67,16 +70,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/15/2016 07:17:28</publishTime>
     </File>
     <File Include="bin/triperoo.apis.dll">
-      <publishTime>03/09/2017 11:54:38</publishTime>
+      <publishTime>03/19/2017 17:33:23</publishTime>
     </File>
     <File Include="Global.asax">
       <publishTime>11/15/2016 07:21:58</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>01/02/2017 18:54:05</publishTime>
+      <publishTime>02/01/2017 18:54:05</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>03/04/2017 13:29:21</publishTime>
+      <publishTime>03/18/2017 19:01:51</publishTime>
     </File>
   </ItemGroup>
 </Project>

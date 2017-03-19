@@ -5,8 +5,8 @@ namespace core.places.services
 {
     public interface ILocationService
     {
-        List<LocationDto> ReturnLocationById(string locationId);
+        List<LocationDto> ReturnLocationById(int locationId);
 
-        List<AutocompleteDto> ReturnLocationsForAutocomplete(string searchValue);
+        List<LocationDto> ReturnLocationsForAutocomplete(string searchValue);
     }
 }

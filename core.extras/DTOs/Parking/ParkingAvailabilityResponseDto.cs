@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace core.extras.dtos
 {
@@ -26,8 +27,8 @@ namespace core.extras.dtos
 
     public class ParkingFilterDto
     {
-        public int park_and_ride { get; set; }
-        public object meet_and_greet { get; set; }
+        public int Park_and_ride { get; set; }
+        public int meet_and_greet { get; set; }
         public int car_parked_for_you { get; set; }
         public int lead_time { get; set; }
         public string terminal { get; set; }
@@ -48,14 +49,22 @@ namespace core.extras.dtos
         public string Name { get; set; }
         public string Code { get; set; }
         public ParkingFilterDto Filter { get; set; }
-        public double _latitude { get; set; }
-        public double _longitude { get; set; }
-        public string equivalent_product { get; set; }
-        public List<string> _a_equivalent_product { get; set; }
+
+        [JsonProperty(PropertyName = "_longitude")]
+        public double Latitude { get; set; }
+
+        [JsonProperty(PropertyName = "_longitude")]
+        public double Longitude { get; set; }
+
+        [JsonProperty(PropertyName = "equivalent_product")]
+        public string EquivalentProduct { get; set; }
+
+        [JsonProperty(PropertyName = "_a_equivalent_product")]
+        public List<string> AEquivalentProduct { get; set; }
         public string BookingURL { get; set; }
         public string MoreInfoURL { get; set; }
         public List<object> Attributes { get; set; }
-        public int? advance_purchase { get; set; }
+        public int? Advance_purchase { get; set; }
     }
 
     public class CancellationWaiver
@@ -85,10 +94,10 @@ namespace core.extras.dtos
         public int ArrivalTime { get; set; }
         public string DepartDate { get; set; }
         public int DepartTime { get; set; }
-        public string key { get; set; }
-        public string token { get; set; }
+        public string Key { get; set; }
+        public string Token { get; set; }
         public int v { get; set; }
-        public string format { get; set; }
+        public string Format { get; set; }
     }
 
     public class ParkingAPIHeaderDto
@@ -117,9 +126,9 @@ namespace core.extras.dtos
         public ParkingAPIHeaderDto API_Header { get; set; }
     }
 
-    public class ParkingDto
+    public class ParkingAvailabilityResponseDto
     {
-        public ParkingDto()
+        public ParkingAvailabilityResponseDto()
         {
             API_Reply = new APIReply();
         }

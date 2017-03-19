@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>core.extras</RootNamespace>
     <AssemblyName>core.extras</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ServiceStack.Text, Version=4.0.36.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.4.0.36\lib\net40\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>
@@ -45,14 +50,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTOs\Parking\ParkingAvailabilityRequestDto.cs" />
+    <Compile Include="DTOs\Parking\ParkingBookingRequestDto.cs" />
     <Compile Include="DTOs\Parking\ParkingCountDto.cs" />
-    <Compile Include="DTOs\Parking\ParkingDto.cs" />
+    <Compile Include="DTOs\Parking\ParkingAvailabilityResponseDto.cs" />
     <Compile Include="DTOs\Parking\ParkingUpgradesDto.cs" />
     <Compile Include="DTOs\UserTokenDto.cs" />
     <Compile Include="Services\BaseService.cs" />
-    <Compile Include="Services\UserTokenService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IUserTokenService.cs" />
     <Compile Include="Services\IParkingService.cs" />
     <Compile Include="Services\ParkingService.cs" />
   </ItemGroup>

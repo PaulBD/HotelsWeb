@@ -2,35 +2,25 @@
 
 namespace core.places.dtos
 {
-    public class Place
+    public class LocationDto
     {
-        public string documentId { get; set; }
-        public string name { get; set; }
-        public string searchName { get; set; }
-        public string type { get; set; }
-        public string url { get; set; }
-        public int priority { get; set; }
-    }
-
-    public class TriperooCommon
-    {
-        public TriperooCommon()
-        {
-            places = new List<Place>();
-        }
-
-        public int count { get; set; }
-        public string letterIndex { get; set; }
-        public List<Place> places { get; set; }
+        public string Name { get; set; }
+        public string NameShort { get; set; }
+        public int Priority { get; set; }
+        public string Search { get; set; }
+        public string Type { get; set; }
+        public string Url { get; set; }
+        public string Image { get; set; }
+        public int InventoryReference { get; set; }
     }
 
     public class AutocompleteDto
     {
         public AutocompleteDto()
         {
-            TriperooCommon = new TriperooCommon();
+            Locations = new List<LocationDto>();
         }
 
-        public TriperooCommon TriperooCommon { get; set; }
+        public List<LocationDto> Locations { get; set; }
     }
 }
