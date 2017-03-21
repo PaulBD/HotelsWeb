@@ -7,5 +7,6 @@ namespace core.customers.services
     {
         void InsertNewReview(string reference, ReviewDetailDto review);
         List<ReviewDto> ReturnReviewsByType(string type, int offset, int limit);
+        List<ReviewDto> ReturnReviewsByLocationId(int id, int offset, int limit);
     }
 }

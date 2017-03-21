@@ -15,6 +15,7 @@ namespace triperoo.apis.endpoints.review
     [Route("/v1/reviews/{Type}", "GET")]
     public class ReviewsRequest
     {
+        public int Id { get; set; }
         public int Limit { get; set; }
         public int Offset { get; set; }
         public string Type { get; set; }
@@ -47,7 +48,14 @@ namespace triperoo.apis.endpoints.review
 
             try
             {
-                response = _reviewService.ReturnReviewsByType(request.Type, request.Offset, request.Limit);
+                if (request.Id > 0)
+                {
+                    response = _reviewService.ReturnReviewsByLocationId(request.Id, request.Offset, request.Limit);
+                }
+                else
+                {
+                    response = _reviewService.ReturnReviewsByType(request.Type, request.Offset, request.Limit);
+                }
             }
             catch (Exception ex)
             {

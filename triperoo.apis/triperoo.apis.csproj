@@ -108,6 +108,10 @@
     <Compile Include="endpoints\auth\AuthorizeFacebook.cs" />
     <Compile Include="endpoints\auth\Authorize.cs" />
     <Compile Include="endpoints\customer\Newsletter.cs" />
+    <Compile Include="endpoints\Locations\Locations.cs" />
+    <Compile Include="endpoints\Locations\Weather.cs" />
+    <Compile Include="endpoints\question\Question.cs" />
+    <Compile Include="endpoints\question\Questions.cs" />
     <Compile Include="endpoints\review\Reviews.cs" />
     <Compile Include="endpoints\review\Review.cs" />
     <Compile Include="endpoints\customer\Favourites.cs" />
@@ -118,7 +122,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core.customers\core.customers.csproj">
       <Project>{c1e33184-5386-47aa-baca-da61005892e5}</Project>

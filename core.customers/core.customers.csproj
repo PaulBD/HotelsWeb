@@ -83,10 +83,13 @@
     <Compile Include="DTOs\AuthorizationDto.cs" />
     <Compile Include="DTOs\CustomerDto.cs" />
     <Compile Include="DTOs\NewsletterDto.cs" />
+    <Compile Include="DTOs\QuestionDto.cs" />
     <Compile Include="DTOs\ReviewDto.cs" />
     <Compile Include="Enums\BrowsingTypes.cs" />
     <Compile Include="Services\AuthorizeService.cs" />
+    <Compile Include="Services\IQuestionService.cs" />
     <Compile Include="Services\IReviewService.cs" />
+    <Compile Include="Services\QuestionService.cs" />
     <Compile Include="Services\ReviewService.cs" />
     <Compile Include="Services\FavouriteService.cs" />
     <Compile Include="Services\CustomerService.cs" />
@@ -107,6 +110,10 @@
     <ProjectReference Include="..\core.places\core.places.csproj">
       <Project>{c84790f7-37b6-459e-b2d9-57cf8281e171}</Project>
       <Name>core.places</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\library.common\library.common.csproj">
+      <Project>{84b36479-f642-4a11-ac93-36c016765fd2}</Project>
+      <Name>library.common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

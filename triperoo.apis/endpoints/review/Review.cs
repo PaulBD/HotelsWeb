@@ -76,14 +76,14 @@ namespace triperoo.apis.endpoints.review
                             return new HttpResult("Location not found" + token, HttpStatusCode.Unauthorized);
                         }
 
-                        if (location.Count > 0)
+                        if (location != null)
                         {
-                            request.Review.Place.NameShort = location[0].NameShort;
-                            request.Review.Place.Name = location[0].Name;
-                            request.Review.Place.Address = location[0].Name.Replace(location[0].NameShort + ",", "").Trim();
-                            request.Review.Place.ProfileUrl = location[0].Url;
-                            request.Review.Place.ImageUrl = location[0].Image;
-                            request.Review.Place.Type = location[0].Type;
+                            request.Review.Place.NameShort = location.NameShort;
+                            request.Review.Place.Name = location.Name;
+                            request.Review.Place.Address = location.Name.Replace(location.NameShort + ",", "").Trim();
+                            request.Review.Place.ProfileUrl = location.Url;
+                            request.Review.Place.ImageUrl = location.Image;
+                            request.Review.Place.Type = location.Type;
                         }
                         break;
                 }
