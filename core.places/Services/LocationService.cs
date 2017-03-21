@@ -8,10 +8,12 @@ namespace core.places.services
     {
         private CouchBaseHelper _couchbaseHelper;
         private readonly string _bucketName = "TriperooCommon";
+        private string _query;
 
         public LocationService()
         {
             _couchbaseHelper = new CouchBaseHelper();
+            _query = "SELECT Doctype, Image, LetterIndex, ListingPriority, LocationCoordinates.Latitude, LocationCoordinates.Longitude, ParentRegionID, ParentRegionName, ParentRegionNameLong, ParentRegionType, RegionID, RegionName, RegionNameLong, RegionType, RelativeSignificance, SearchPriority, Stats.AverageReviewScore, Stats.LikeCount, Stats.ReviewCount, SubClass, Summary.En as Summary, Url  FROM " + _bucketName;
         }
 
         /// <summary>
@@ -19,7 +21,7 @@ namespace core.places.services
         /// </summary>
         public List<LocationDto> ReturnLocationsForAutocomplete(string searchValue)
         {
-            var q = "SELECT regionID as inventoryReference, autocompleteName as name, regionName as nameShort, autocompleteSearch as search, autocompleteUrl as url, autocompleteType as type, autocompletePriority as priority FROM TriperooCommon WHERE autocompleteSearch = '" + searchValue.Substring(0, 3) + "'";
+            var q = _query + " WHERE LetterIndex = '" + searchValue.Substring(0, 3) + "' AND RegionType != 'Neighborhood' ORDER BY SearchPriority ASC";
 
             return ProcessQuery(q, 0, 0);
        }
@@ -29,7 +31,7 @@ namespace core.places.services
         /// </summary>
         public LocationDto ReturnLocationById(int locationId)
         {
-            var q = "SELECT regionID as inventoryReference, autocompleteName as name, regionName as nameShort, autocompleteUrl as url, autocompleteType as type, regionImage as image FROM TriperooCommon WHERE inventoryReference = " + locationId;
+            var q = _query + " WHERE RegionID = " + locationId;
 
             return ProcessQuery(q, 0, 0)[0];
         }
@@ -39,7 +41,7 @@ namespace core.places.services
         /// </summary>
         public List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type, int offset, int limit)
         {
-            var q = "SELECT regionID as inventoryReference, autocompleteName as name, regionName as nameShort, autocompleteUrl as url, autocompleteType as type, regionImage as image FROM TriperooCommon WHERE parentRegionID = " + parentLocationId;
+            var q = _query + " WHERE ParentRegionID = " + parentLocationId;
 
             return ProcessQuery(q, limit, offset);
         }

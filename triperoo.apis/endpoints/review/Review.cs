@@ -78,12 +78,12 @@ namespace triperoo.apis.endpoints.review
 
                         if (location != null)
                         {
-                            request.Review.Place.NameShort = location.NameShort;
-                            request.Review.Place.Name = location.Name;
-                            request.Review.Place.Address = location.Name.Replace(location.NameShort + ",", "").Trim();
+                            request.Review.Place.NameShort = location.RegionName;
+                            request.Review.Place.Name = location.RegionNameLong;
+                            request.Review.Place.Address = location.RegionNameLong.Replace(location.RegionName + ",", "").Trim();
                             request.Review.Place.ProfileUrl = location.Url;
                             request.Review.Place.ImageUrl = location.Image;
-                            request.Review.Place.Type = location.Type;
+                            request.Review.Place.Type = location.RegionType;
                         }
                         break;
                 }

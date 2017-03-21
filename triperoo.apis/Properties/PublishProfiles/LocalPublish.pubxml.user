@@ -19,7 +19,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/14/2015 13:35:30</publishTime>
     </File>
     <File Include="bin/core.customers.dll">
-      <publishTime>03/20/2017 22:18:22</publishTime>
+      <publishTime>03/21/2017 09:08:36</publishTime>
     </File>
     <File Include="bin/core.extras.dll">
       <publishTime>03/14/2017 13:55:54</publishTime>
@@ -31,7 +31,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/19/2017 15:26:46</publishTime>
     </File>
     <File Include="bin/core.places.dll">
-      <publishTime>03/20/2017 21:35:53</publishTime>
+      <publishTime>03/21/2017 09:08:36</publishTime>
     </File>
     <File Include="bin/Couchbase.NetClient.dll">
       <publishTime>03/01/2017 11:59:30</publishTime>
@@ -73,7 +73,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/15/2016 07:17:28</publishTime>
     </File>
     <File Include="bin/triperoo.apis.dll">
-      <publishTime>03/20/2017 22:18:22</publishTime>
+      <publishTime>03/21/2017 09:08:36</publishTime>
     </File>
     <File Include="Global.asax">
       <publishTime>11/15/2016 07:21:58</publishTime>
