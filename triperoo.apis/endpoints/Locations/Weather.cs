@@ -7,13 +7,14 @@ using core.places.dtos;
 
 namespace triperoo.apis.endpoints.locations
 {
-    #region Return a single location by id
+
+    #region Return a Weather by location id
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/location", "GET")]
-    public class LocationRequest
+    [Route("/v1/weather", "GET")]
+    public class WeatherRequest
     {
         public int id { get; set; }
 
@@ -22,12 +23,12 @@ namespace triperoo.apis.endpoints.locations
     /// <summary>
     /// Validator
     /// </summary>
-    public class LocationRequestValidator : AbstractValidator<LocationRequest>
+    public class WeatherRequestValidator : AbstractValidator<WeatherRequest>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public LocationRequestValidator()
+        public WeatherRequestValidator()
         {
             // Get
             RuleSet(ApplyTo.Get, () =>
@@ -42,35 +43,35 @@ namespace triperoo.apis.endpoints.locations
 
     #region API logic
 
-    public class LocationApi : Service
+    public class WeatherApi : Service
     {
-        private readonly ILocationService _locationService;
+        private readonly IWeatherService _weatherService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LocationApi(ILocationService locationService)
+        public WeatherApi(IWeatherService weatherService)
         {
-            _locationService = locationService;
+            _weatherService = weatherService;
         }
 
-        #region List Location by Id
+        #region List Weather by Id
 
         /// <summary>
-        /// Lists location by Id
+        /// Lists Weather by Id
         /// </summary>
-        public object Get(LocationRequest request)
+        public object Get(WeatherRequest request)
         {
-            LocationDto response = null;
-            string cacheName = "location:" + request.id;
+            WeatherDto response = new WeatherDto();
+            string cacheName = "places:" + request.id + ":weather";
 
             try
             {
-                response = Cache.Get<LocationDto>(cacheName);
+                response = Cache.Get<WeatherDto>(cacheName);
 
                 if (response == null)
                 {
-                    response = _locationService.ReturnLocationById(request.id);
+                    response = _weatherService.ReturnWeatherById(request.id);
                     base.Cache.Add(cacheName, response);
                 }
             }

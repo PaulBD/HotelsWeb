@@ -64,28 +64,21 @@ namespace triperoo.apis.endpoints.review
                     return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
                 }
 
-                switch (request.Review.ReviewType)
+                var location = _locationService.ReturnLocationById(request.Review.InventoryReference);
+
+                if (location == null)
                 {
-                    case "City":
-                    case "Country":
-                    case "Vicinity":
-                        var location = _locationService.ReturnLocationById(request.Review.InventoryReference);
+                    return new HttpResult("Location not found" + token, HttpStatusCode.Unauthorized);
+                }
 
-                        if (location == null)
-                        {
-                            return new HttpResult("Location not found" + token, HttpStatusCode.Unauthorized);
-                        }
-
-                        if (location != null)
-                        {
-                            request.Review.Place.NameShort = location.RegionName;
-                            request.Review.Place.Name = location.RegionNameLong;
-                            request.Review.Place.Address = location.RegionNameLong.Replace(location.RegionName + ",", "").Trim();
-                            request.Review.Place.ProfileUrl = location.Url;
-                            request.Review.Place.ImageUrl = location.Image;
-                            request.Review.Place.Type = location.RegionType;
-                        }
-                        break;
+                if (location != null)
+                {
+                    request.Review.Place.NameShort = location.RegionName;
+                    request.Review.Place.Name = location.RegionNameLong;
+                    request.Review.Place.Address = location.RegionNameLong.Replace(location.RegionName + ",", "").Trim();
+                    request.Review.Place.ProfileUrl = location.Url;
+                    request.Review.Place.ImageUrl = location.Image;
+                    request.Review.Place.Type = location.RegionType;
                 }
 
                 var reference = "review:" + Guid.NewGuid();
@@ -94,6 +87,13 @@ namespace triperoo.apis.endpoints.review
                 request.Review.CustomerReference = customer.TriperooCustomers.CustomerReference;
 
                 _reviewService.InsertNewReview(reference, request.Review);
+
+                location.ReviewCount += 1;
+                location.AverageReviewScore = (location.AverageReviewScore + request.Review.StarRating) / location.ReviewCount;
+
+                var key = "location:" + location.RegionID;
+                _locationService.UpdateLocation(key, location);
+                base.Cache.Add(key, location);
             }
             catch (Exception ex)
             {

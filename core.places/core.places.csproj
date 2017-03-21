@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\AutocompleteDto.cs" />
+    <Compile Include="DTOs\LocationListDto.cs" />
     <Compile Include="DTOs\BaseDto.cs" />
     <Compile Include="DTOs\WeatherDto.cs" />
     <Compile Include="Services\IWeatherService.cs" />

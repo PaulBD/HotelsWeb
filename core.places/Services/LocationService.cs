@@ -13,7 +13,7 @@ namespace core.places.services
         public LocationService()
         {
             _couchbaseHelper = new CouchBaseHelper();
-            _query = "SELECT Doctype, Image, LetterIndex, ListingPriority, LocationCoordinates.Latitude, LocationCoordinates.Longitude, ParentRegionID, ParentRegionName, ParentRegionNameLong, ParentRegionType, RegionID, RegionName, RegionNameLong, RegionType, RelativeSignificance, SearchPriority, Stats.AverageReviewScore, Stats.LikeCount, Stats.ReviewCount, SubClass, Summary.En as Summary, Url  FROM " + _bucketName;
+            _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, summary.en as summary, url FROM " + _bucketName;
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace core.places.services
         /// </summary>
         public List<LocationDto> ReturnLocationsForAutocomplete(string searchValue)
         {
-            var q = _query + " WHERE LetterIndex = '" + searchValue.Substring(0, 3) + "' AND RegionType != 'Neighborhood' ORDER BY SearchPriority ASC";
+            var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'Neighborhood' ORDER BY SearchPriority ASC";
 
             return ProcessQuery(q, 0, 0);
        }
@@ -31,7 +31,7 @@ namespace core.places.services
         /// </summary>
         public LocationDto ReturnLocationById(int locationId)
         {
-            var q = _query + " WHERE RegionID = " + locationId;
+            var q = _query + " WHERE regionID = " + locationId;
 
             return ProcessQuery(q, 0, 0)[0];
         }
@@ -41,7 +41,7 @@ namespace core.places.services
         /// </summary>
         public List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type, int offset, int limit)
         {
-            var q = _query + " WHERE ParentRegionID = " + parentLocationId;
+            var q = _query + " WHERE parentRegionID = " + parentLocationId;
 
             return ProcessQuery(q, limit, offset);
         }
@@ -64,6 +64,45 @@ namespace core.places.services
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Update Location
+        /// </summary>
+        public void UpdateLocation(string reference, LocationDto dto)
+        {
+            var updatedLocation = new AutocompleteDto()
+            {
+                Doctype = dto.Doctype,
+                ListingPriority = dto.ListingPriority,
+                ParentRegionID = dto.ParentRegionID,
+                ParentRegionName = dto.ParentRegionName,
+                ParentRegionNameLong = dto.ParentRegionNameLong,
+                ParentRegionType = dto.ParentRegionType,
+                RegionID = dto.RegionID,
+                RegionName = dto.RegionName,
+                RegionNameLong = dto.RegionNameLong,
+                RegionType = dto.RegionType,
+                RelativeSignificance = dto.RelativeSignificance,
+                SubClass = dto.SubClass,
+                Summary = new Summary
+                {
+                    En = dto.Summary
+                },
+                Stats = new Stats
+                {
+                    AverageReviewScore = dto.AverageReviewScore,
+                    LikeCount = dto.LikeCount,
+                    ReviewCount = dto.ReviewCount
+                },
+                LocationCoordinates = new LocationCoordinates
+                {
+                    Latitude = dto.Latitude,
+                    Longitude = dto.Longitude
+                }
+            };
+
+            _couchbaseHelper.AddRecordToCouchbase(reference, updatedLocation, _bucketName);
         }
     }
 }
