@@ -107,8 +107,11 @@
     <Compile Include="endpoints\auth\Register.cs" />
     <Compile Include="endpoints\auth\AuthorizeFacebook.cs" />
     <Compile Include="endpoints\auth\Authorize.cs" />
+    <Compile Include="endpoints\cach\Cache.cs" />
     <Compile Include="endpoints\customer\Newsletter.cs" />
+    <Compile Include="endpoints\hotels\HotelDeals.cs" />
     <Compile Include="endpoints\Locations\Locations.cs" />
+    <Compile Include="endpoints\Locations\Events.cs" />
     <Compile Include="endpoints\Locations\Weather.cs" />
     <Compile Include="endpoints\question\Question.cs" />
     <Compile Include="endpoints\question\Questions.cs" />
@@ -130,6 +133,10 @@
       <Project>{c1e33184-5386-47aa-baca-da61005892e5}</Project>
       <Name>core.customers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\core.deals\core.deals.csproj">
+      <Project>{21899b8b-edf5-4de8-a2dc-5f320d02966b}</Project>
+      <Name>core.deals</Name>
+    </ProjectReference>
     <ProjectReference Include="..\core.extras\core.extras.csproj">
       <Project>{6ff87c61-e535-423b-a08a-072ab3337c03}</Project>
       <Name>core.extras</Name>
@@ -145,6 +152,14 @@
     <ProjectReference Include="..\core.hotels\core.hotels.csproj">
       <Project>{fbef7b0b-1fcc-4996-97bc-59cd1e412642}</Project>
       <Name>core.hotels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\library.events\library.events.csproj">
+      <Project>{624f8f2f-b182-4184-8cb4-5efa77a0a98e}</Project>
+      <Name>library.events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\library.weather\library.weather.csproj">
+      <Project>{2d10c643-cd6c-4bfc-bca5-71da19abb93d}</Project>
+      <Name>library.weather</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

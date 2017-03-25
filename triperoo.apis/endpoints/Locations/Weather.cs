@@ -2,8 +2,8 @@
 using System.Net;
 using ServiceStack;
 using ServiceStack.FluentValidation;
-using core.places.services;
-using core.places.dtos;
+using library.weather.services;
+using library.weather.dtos;
 
 namespace triperoo.apis.endpoints.locations
 {
@@ -16,7 +16,9 @@ namespace triperoo.apis.endpoints.locations
     [Route("/v1/weather", "GET")]
     public class WeatherRequest
     {
-        public int id { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string Lang { get; set; }
 
     }
 
@@ -33,7 +35,8 @@ namespace triperoo.apis.endpoints.locations
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.id).GreaterThan(0).WithMessage("Invalid location id have been supplied");
+                RuleFor(r => r.Latitude).NotNull().WithMessage("Invalid latitude has been supplied");
+                RuleFor(r => r.Longitude).NotNull().WithMessage("Invalid longitude has been supplied");
             });
 
         }
@@ -63,7 +66,7 @@ namespace triperoo.apis.endpoints.locations
         public object Get(WeatherRequest request)
         {
             WeatherDto response = new WeatherDto();
-            string cacheName = "places:" + request.id + ":weather";
+            string cacheName = "places:" + request.Latitude + "," + request.Longitude + ":weather";
 
             try
             {
@@ -71,7 +74,7 @@ namespace triperoo.apis.endpoints.locations
 
                 if (response == null)
                 {
-                    response = _weatherService.ReturnWeatherById(request.id);
+                    response = _weatherService.ReturnWeatherByLocation(request.Latitude, request.Longitude, request.Lang);
                     base.Cache.Add(cacheName, response);
                 }
             }

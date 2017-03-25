@@ -12,7 +12,7 @@ namespace triperoo.apis.endpoints.review
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/reviews/{Type}", "GET")]
+    [Route("/v1/reviews", "GET")]
     public class ReviewsRequest
     {
         public int Id { get; set; }

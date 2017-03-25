@@ -152,10 +152,10 @@ namespace triperoo.apis.endpoints.locations
 
                     if (request.SearchType.ToLower() == "all")
                     {
-                        locations = result.Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.RegionNameLong).Take(10).ToList();
+                        locations = result.Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).ToList().Take(10).ToList();
                     }
                     else {
-                        locations = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.RegionNameLong).Take(10).ToList();
+                        locations = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).Take(10).ToList();
                     }
 
                     response.Locations = locations;

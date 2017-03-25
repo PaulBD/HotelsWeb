@@ -4,11 +4,12 @@ using core.hotels.services;
 using core.places.services;
 using ServiceStack;
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace triperoo.apis.endpoints.review
 {
-    #region Review Endpoint
+    #region Insert Review Endpoint
 
     /// <summary>
     /// Request
@@ -16,8 +17,20 @@ namespace triperoo.apis.endpoints.review
     [Route("/v1/review", "POST")]
     public class ReviewRequest
     {
-        public string Guid { get; set; }
         public ReviewDetailDto Review { get; set; }
+    }
+
+    #endregion
+
+    #region Like Review Endpoint
+
+    /// <summary>
+    /// Request
+    /// </summary>
+    [Route("/v1/review/like", "PUT")]
+    public class LikeReviewRequest
+    {
+        public string ReviewReference { get; set; }
     }
 
     #endregion
@@ -94,6 +107,41 @@ namespace triperoo.apis.endpoints.review
                 var key = "location:" + location.RegionID;
                 _locationService.UpdateLocation(key, location);
                 base.Cache.Add(key, location);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+            }
+
+            return new HttpResult(HttpStatusCode.OK);
+        }
+
+        #endregion
+
+        #region Like Review
+
+        /// <summary>
+        /// Like Review
+        /// </summary>
+        public object Put(LikeReviewRequest request)
+        {
+            try
+            {
+                var token = Request.Headers["token"];
+
+                if (string.IsNullOrEmpty(token))
+                {
+                    return new HttpResult("Token not found", HttpStatusCode.Unauthorized);
+                }
+
+                var customer = _customerService.ReturnCustomerByToken(token);
+
+                if (customer == null)
+                {
+                    return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
+                }
+
+                _reviewService.LikeReview(request.ReviewReference);
             }
             catch (Exception ex)
             {

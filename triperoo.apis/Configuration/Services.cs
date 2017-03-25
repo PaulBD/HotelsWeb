@@ -4,6 +4,9 @@ using core.hotels.services;
 using core.flights.services;
 using core.customers.services;
 using core.extras.services;
+using library.weather.services;
+using core.deals.Services;
+using library.events.services;
 
 namespace triperoo.apis.Configuration
 {
@@ -22,6 +25,8 @@ namespace triperoo.apis.Configuration
             container.RegisterAutoWiredAs<ReviewService, IReviewService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<QuestionService, IQuestionService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<ParkingService, IParkingService>().ReusedWithin(ReuseScope.Container);
+            container.RegisterAutoWiredAs<TravelzooService, ITravelzooService>().ReusedWithin(ReuseScope.Container);
+            container.RegisterAutoWiredAs<EventService, IEventService>().ReusedWithin(ReuseScope.Container);
         }
     }
 }
