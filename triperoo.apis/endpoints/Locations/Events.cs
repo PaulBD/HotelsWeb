@@ -5,7 +5,8 @@ using ServiceStack.FluentValidation;
 using library.events.services;
 using library.events.dtos;
 using System.Linq;
-using System.Collections.Generic;
+using core.places.services;
+using core.places.dtos;
 
 namespace triperoo.apis.endpoints.locations
 {
@@ -17,7 +18,8 @@ namespace triperoo.apis.endpoints.locations
     [Route("/v1/events", "GET")]
     public class EventRequest
     {
-        public string Location { get; set; }
+        public int LocationId { get; set; }
+        public string CategoryName { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
 
@@ -36,7 +38,7 @@ namespace triperoo.apis.endpoints.locations
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.Location).NotNull().WithMessage("Invalid location has been supplied");
+                RuleFor(r => r.LocationId).NotNull().WithMessage("Invalid location id has been supplied");
                 RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
                 RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
             });
@@ -51,12 +53,14 @@ namespace triperoo.apis.endpoints.locations
     public class EventApi : Service
     {
         private readonly IEventService _eventService;
+        private readonly ILocationService _locationService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EventApi(IEventService eventService)
+        public EventApi(IEventService eventService, ILocationService locationService)
         {
+            _locationService = locationService;
             _eventService = eventService;
         }
 
@@ -67,30 +71,45 @@ namespace triperoo.apis.endpoints.locations
         /// </summary>
         public object Get(EventRequest request)
         {
-            List<Event> response = new List<Event>();
-            string cacheName = "event:" + request.Location + ":" + request.PageNumber;
+            EventDto eventResponse = new EventDto();
+            LocationDto locationResponse = new LocationDto();
+            string cacheName = "event:" + request.LocationId + ":" + request.CategoryName;
+            string locationCacheName = "location:" + request.LocationId;
 
             try
             {
-                response = Cache.Get<List<Event>>(cacheName);
+                locationResponse = Cache.Get<LocationDto>(locationCacheName);
 
-                if (response == null)
+                if (locationResponse == null)
                 {
-                    var r = _eventService.ReturnEventsByLocation(request.Location, request.PageSize, request.PageNumber);
-
-                    if (r != null)
-                    {
-                        response = r.events.Event.Where(q => q.image != null).ToList();
-                        base.Cache.Add(cacheName, response);
-                    }
+                    locationResponse = _locationService.ReturnLocationById(request.LocationId);
+                    base.Cache.Add(locationCacheName, locationResponse);
                 }
+
+                eventResponse = Cache.Get<EventDto>(cacheName);
+
+                if (eventResponse == null)
+                {
+                    if (request.CategoryName == "all")
+                    {
+                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, null, 10, request.PageNumber);
+                    }
+                    else
+                    {
+                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, request.CategoryName, 10, request.PageNumber);
+                    }
+
+                   // base.Cache.Add(cacheName, response);
+                }
+
+                eventResponse.events.Event = eventResponse.events.Event.Take(request.PageSize).ToList();
             }
             catch (Exception ex)
             {
                 throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }
 
-            return new HttpResult(response, HttpStatusCode.OK);
+            return new HttpResult(eventResponse, HttpStatusCode.OK);
         }
 
         #endregion

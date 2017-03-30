@@ -7,9 +7,14 @@ namespace library.events.services
 {
     public class EventService : IEventService
     {
-        public EventDto ReturnEventsByLocation(string location, int pageSize, int pageNumber)
+        public EventDto ReturnEventsByLocation(string location, string category, int pageSize, int pageNumber)
         {
             var url = string.Format(ConfigurationManager.AppSettings["events.eventful.url"], location, pageSize, pageNumber);
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                url += "&category=" + category;
+            }
 
             var message = new HttpRequestMessage(HttpMethod.Get, url);
 
