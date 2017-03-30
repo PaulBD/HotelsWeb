@@ -99,10 +99,13 @@ namespace triperoo.apis.endpoints.locations
                         eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, request.CategoryName, 10, request.PageNumber);
                     }
 
-                   // base.Cache.Add(cacheName, response);
+                    // base.Cache.Add(cacheName, response);
                 }
 
-                eventResponse.events.Event = eventResponse.events.Event.Take(request.PageSize).ToList();
+                if (eventResponse.events != null)
+                {
+                    eventResponse.events.Event = eventResponse.events.Event.Take(request.PageSize).ToList();
+                }
             }
             catch (Exception ex)
             {
