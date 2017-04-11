@@ -109,10 +109,13 @@
     <Compile Include="endpoints\auth\Authorize.cs" />
     <Compile Include="endpoints\cach\Cache.cs" />
     <Compile Include="endpoints\customer\Newsletter.cs" />
+    <Compile Include="endpoints\flights\Flights.cs" />
     <Compile Include="endpoints\hotels\HotelDeals.cs" />
+    <Compile Include="endpoints\hotels\AirportHotels.cs" />
     <Compile Include="endpoints\Locations\Locations.cs" />
     <Compile Include="endpoints\Locations\Events.cs" />
     <Compile Include="endpoints\Locations\Weather.cs" />
+    <Compile Include="endpoints\parking\Parking.cs" />
     <Compile Include="endpoints\question\Question.cs" />
     <Compile Include="endpoints\question\Questions.cs" />
     <Compile Include="endpoints\review\Reviews.cs" />

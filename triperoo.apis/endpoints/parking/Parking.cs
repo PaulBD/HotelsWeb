@@ -7,7 +7,7 @@ using core.extras.dtos;
 
 namespace triperoo.apis.endpoints.parking
 {
-    #region Send customer password
+    #region Parking Availability
 
     /// <summary>
     /// Request
@@ -16,9 +16,13 @@ namespace triperoo.apis.endpoints.parking
     public class ParkingRequest
     {
         public string LocationName { get; set; }
-        public DateTime ArrivalDate { get; set; }
-        public DateTime DepartDate { get; set; }
+        public string DropoffDate { get; set; }
+        public string DropoffTime { get; set; }
+        public string PickupDate { get; set; }
+        public string PickupTime { get; set; }
+        public string Language { get; set; }
         public string Initials { get; set; }
+        public int PassengerCount { get; set; }
     }
 
     /// <summary>
@@ -31,6 +35,16 @@ namespace triperoo.apis.endpoints.parking
         /// </summary>
         public ParkingRequestValidator()
         {
+            // Get
+            RuleSet(ApplyTo.Get, () =>
+            {
+                RuleFor(r => r.LocationName).NotNull().WithMessage("Supply a valid from location");
+                RuleFor(r => r.DropoffDate).NotNull().WithMessage("Supply a valid drop off date");
+                RuleFor(r => r.DropoffTime).NotNull().WithMessage("Supply a valid drop off time");
+                RuleFor(r => r.PickupDate).NotNull().WithMessage("Supply a valid pick up date");
+                RuleFor(r => r.PickupTime).NotNull().WithMessage("Supply a valid pick up time");
+                RuleFor(r => r.Language).NotNull().WithMessage("Supply a valid language");
+            });
         }
     }
 
@@ -61,14 +75,7 @@ namespace triperoo.apis.endpoints.parking
 
             try
             {
-                var dto = new ParkingAvailabilityRequestDto();
-
-                dto.Passenger.Initials = request.Initials;
-                dto.Location.ArrivalDate = request.ArrivalDate;
-                dto.Location.DepartDate = request.DepartDate;
-                dto.Location.LocationName = request.LocationName;
-
-                response = _parkingService.AvailabilityAtDestination(dto);
+                response = _parkingService.AvailabilityAtDestination(request.LocationName, request.DropoffDate, request.DropoffTime, request.PickupDate, request.PickupTime, request.Initials, request.Language, request.PassengerCount);
             }
             catch (Exception ex)
             {

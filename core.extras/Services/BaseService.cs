@@ -13,11 +13,12 @@ namespace core.extras.services
         public BaseService()
         {
             ServerAddress = "http://api.holidayextras.co.uk";
-
+/*
             if (ConfigurationManager.AppSettings["Environment"] == "Dev")
             {
                 ServerAddress = "http://api.holidayextras.co.uk/sandbox";
             }
+            */
         }
 
         /// <summary>

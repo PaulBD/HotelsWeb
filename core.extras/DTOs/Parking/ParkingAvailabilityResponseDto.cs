@@ -8,7 +8,7 @@ namespace core.extras.dtos
         public string Product { get; set; }
         public int RequestCode { get; set; }
         public string Result { get; set; }
-        public string expires { get; set; }
+        public string Expires { get; set; }
     }
 
     public class ParkingRequestFlagsDto
@@ -27,12 +27,28 @@ namespace core.extras.dtos
 
     public class ParkingFilterDto
     {
-        public int Park_and_ride { get; set; }
-        public int meet_and_greet { get; set; }
-        public int car_parked_for_you { get; set; }
-        public int lead_time { get; set; }
-        public string terminal { get; set; }
-        public int? on_airport { get; set; }
+        public int Park_And_Ride { get; set; }
+        public int Meet_And_Greet { get; set; }
+        public int Car_Parked_For_You { get; set; }
+        public int Lead_Time { get; set; }
+        public string Terminal { get; set; }
+        public int? On_Airport { get; set; }
+    }
+
+    public class ImageDto
+    {
+        public string Alt { get; set; }
+        public string Src { get; set; }
+    }
+
+    public class ImagesListDto
+    {
+        public ImagesListDto()
+        {
+            image = new List<ImageDto>();
+        }
+
+        public List<ImageDto> image { get; set; }
     }
 
     public class CarParDto
@@ -44,27 +60,41 @@ namespace core.extras.dtos
         }
         public double TotalPrice { get; set; }
         public double NonDiscPrice { get; set; }
-        public object GatePrice { get; set; }
+        public double GatePrice { get; set; }
         public ParkingRequestFlagsDto RequestFlags { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public ParkingFilterDto Filter { get; set; }
-
-        [JsonProperty(PropertyName = "_longitude")]
         public double Latitude { get; set; }
-
-        [JsonProperty(PropertyName = "_longitude")]
         public double Longitude { get; set; }
+        public string Address { get; set; }
+        public string Logo { get; set; }
+        public string Sellpoint_Location { get; set; }
+        public string Sellpoint_Parking { get; set; }
+        public string Sellpoint_Security { get; set; }
+        public string Sellpoint_Transfers { get; set; }
+        public string Transfers { get; set; }
+        public string Introduction { get; set; }
+        public string TripappImages { get; set; }
+        public string TripapCarparkSellpoint { get; set; }
+        public string TripappTransferTip { get; set; }
+        public string[] TripappImagesList
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(TripappImages))
+                {
+                    return TripappImages.Split(';');
+                }
 
-        [JsonProperty(PropertyName = "equivalent_product")]
-        public string EquivalentProduct { get; set; }
-
-        [JsonProperty(PropertyName = "_a_equivalent_product")]
-        public List<string> AEquivalentProduct { get; set; }
+                return null;
+            }
+        }
+        public ImagesListDto Images { get; set; }
         public string BookingURL { get; set; }
         public string MoreInfoURL { get; set; }
         public List<object> Attributes { get; set; }
-        public int? Advance_purchase { get; set; }
+        public bool Advance_Purchase { get; set; }
     }
 
     public class CancellationWaiver
@@ -91,9 +121,9 @@ namespace core.extras.dtos
     public class ParkingRequestDto
     {
         public string ArrivalDate { get; set; }
-        public int ArrivalTime { get; set; }
+        public string ArrivalTime { get; set; }
         public string DepartDate { get; set; }
-        public int DepartTime { get; set; }
+        public string DepartTime { get; set; }
         public string Key { get; set; }
         public string Token { get; set; }
         public int v { get; set; }

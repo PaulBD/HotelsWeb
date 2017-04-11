@@ -50,14 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTOs\Parking\ParkingAvailabilityRequestDto.cs" />
-    <Compile Include="DTOs\Parking\ParkingBookingRequestDto.cs" />
+    <Compile Include="DTOs\Parking\AirportHotelResponseDto.cs" />
     <Compile Include="DTOs\Parking\ParkingCountDto.cs" />
     <Compile Include="DTOs\Parking\ParkingAvailabilityResponseDto.cs" />
     <Compile Include="DTOs\Parking\ParkingUpgradesDto.cs" />
     <Compile Include="DTOs\UserTokenDto.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AirportHotelService.cs" />
+    <Compile Include="Services\IAirportHotelService.cs" />
     <Compile Include="Services\IParkingService.cs" />
     <Compile Include="Services\ParkingService.cs" />
   </ItemGroup>
