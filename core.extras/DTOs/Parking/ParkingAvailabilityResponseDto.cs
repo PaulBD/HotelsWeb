@@ -74,10 +74,11 @@ namespace core.extras.dtos
         public string Sellpoint_Security { get; set; }
         public string Sellpoint_Transfers { get; set; }
         public string Transfers { get; set; }
-        public string Introduction { get; set; }
         public string TripappImages { get; set; }
+        public string Introduction { get; set; }
         public string TripapCarparkSellpoint { get; set; }
         public string TripappTransferTip { get; set; }
+        public string Star_Rating { get; set; }
         public string[] TripappImagesList
         {
             get

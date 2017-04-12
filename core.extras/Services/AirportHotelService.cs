@@ -35,7 +35,7 @@ namespace core.extras.services
                 url += "&Lang=" + language;
             }
 
-            url += "&fields=images,address,latitude,longitude,sellingpoint,browser_description,features,tripappimages,sellpoint_location,sellpoint_terminal,sellpoint_transfers,sellpoint_parking,sellpoint_security,transfers,logo";
+            url += "&fields=star_rating,tripappsellpoint1,tripapptransfertip,tripappcarparksellpoint,tripapptransfertip,introduction,images,address,latitude,longitude,features,tripappimages,sellpoint_location,sellpoint_terminal,sellpoint_transfers,sellpoint_parking,sellpoint_security,transfers,logo";
 
             var message = new HttpRequestMessage(HttpMethod.Get, url);
 

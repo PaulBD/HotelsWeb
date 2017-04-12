@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace core.extras.dtos
 {
@@ -74,6 +75,9 @@ namespace core.extras.dtos
         public string Sellpoint_Transfers { get; set; }
         public string Transfers { get; set; }
         public string TripappImages { get; set; }
+        public string TripappSellpoint1 { get; set; }
+        public string TripappTransferTip { get; set; }
+        public int? Star_Rating { get; set; }
         public string[] TripappImagesList
         {
             get
@@ -105,6 +109,9 @@ namespace core.extras.dtos
         public string key { get; set; }
         public string token { get; set; }
         public string ArrivalDate { get; set; }
+        public string DropOffCarDate { get; set; }
+        public string CollectCarDate { get; set; }
+        public string ParkToDate { get; set; }
         public int Nights { get; set; }
         public int ParkingDays { get; set; }
         public string RoomType { get; set; }

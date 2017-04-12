@@ -18,7 +18,8 @@ namespace triperoo.apis.endpoints.hotels
         public string LocationName { get; set; }
         public string ArrivalDate { get; set; }
         public string DepartDate { get; set; }
-        public string FlightDate { get; set; }
+        public string DropOffCarDate { get; set; }
+        public string CollectCarDate { get; set; }
         public int Nights { get; set; }
         public string RoomType { get; set; }
         public string SecondRoomType { get; set; }
@@ -74,7 +75,10 @@ namespace triperoo.apis.endpoints.hotels
 
             try
             {
-                response = _airportHotelService.AvailabilityAtHotel(request.LocationName, request.ArrivalDate, request.DepartDate, request.FlightDate, request.Nights, request.RoomType, request.SecondRoomType, request.ParkingDays, request.Language);
+                response = _airportHotelService.AvailabilityAtHotel(request.LocationName, request.ArrivalDate, request.DepartDate, request.CollectCarDate, request.Nights, request.RoomType, request.SecondRoomType, request.ParkingDays, request.Language);
+
+                response.API_Reply.API_Header.Request.CollectCarDate = request.CollectCarDate;
+                response.API_Reply.API_Header.Request.DropOffCarDate = request.DropOffCarDate;
             }
             catch (Exception ex)
             {
