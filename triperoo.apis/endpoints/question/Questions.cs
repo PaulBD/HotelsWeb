@@ -1,8 +1,10 @@
 ﻿using core.customers.dtos;
 using core.customers.services;
 using ServiceStack;
+using ServiceStack.FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace triperoo.apis.endpoints.review
@@ -15,9 +17,29 @@ namespace triperoo.apis.endpoints.review
     [Route("/v1/questions", "GET")]
     public class QuestionsRequest
     {
-        public int Limit { get; set; }
-        public int Offset { get; set; }
         public int LocationId { get; set; }
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
+    }
+
+    /// <summary>
+    /// Validator
+    /// </summary>
+    public class QuestionsRequestValidator : AbstractValidator<QuestionsRequest>
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public QuestionsRequestValidator()
+        {
+            // Get
+            RuleSet(ApplyTo.Get, () =>
+            {
+                RuleFor(r => r.LocationId).GreaterThan(0).WithMessage("Invalid location id have been supplied");
+                RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
+                RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
+            });
+        }
     }
 
     #endregion
@@ -47,7 +69,16 @@ namespace triperoo.apis.endpoints.review
 
             try
             {
-                response = _questionService.ReturnQuestionsByLocationId(request.LocationId, request.Offset, request.Limit);
+                response = _questionService.ReturnQuestionsByLocationId(request.LocationId);
+
+                if (request.PageNumber > 0)
+                {
+                    response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                }
+                else
+                {
+                    response = response.Take(request.PageSize).ToList();
+                }
             }
             catch (Exception ex)
             {

@@ -28,13 +28,8 @@ namespace core.customers.services
         /// <summary>
         /// Process Query
         /// </summary>
-        private List<ReviewDto> ProcessQuery(string q, int limit, int offset)
+        private List<ReviewDto> ProcessQuery(string q)
         {
-            if (limit > 0)
-            {
-                q += " LIMIT " + limit + " OFFSET " + offset;
-            }
-
             var result = _couchbaseHelper.ReturnQuery<ReviewDto>(q, _bucketName);
 
             if (result.Count > 0)
@@ -45,7 +40,7 @@ namespace core.customers.services
             return null;
         }
 
-        public List<ReviewDto> ReturnReviewsByType(string type, int limit, int offset)
+        public List<ReviewDto> ReturnReviewsByType(string type)
         {
             var q = _query;
 
@@ -57,21 +52,21 @@ namespace core.customers.services
                 q += " WHERE tr.type = 'review' ORDER BY tr.dateCreated DESC";
             }
 
-            return ProcessQuery(q, limit, offset);
+            return ProcessQuery(q);
         }
 
-        public List<ReviewDto> ReturnReviewsByLocationId(int id, int limit, int offset)
+        public List<ReviewDto> ReturnReviewsByLocationId(int id)
         {
             var q = _query + " WHERE tr.type = 'review' AND tr.inventoryReference = " + id + " ORDER BY tr.dateCreated DESC";
 
-            return ProcessQuery(q, limit, offset);
+            return ProcessQuery(q);
         }
 
         public void LikeReview(string reviewReference)
         {
             var q = "UPDATE " + _bucketName + " SET likeCount = likeCount + 1 WHERE reviewReference = '" + reviewReference + "'";
             
-            ProcessQuery(q, 0, 0);
+            ProcessQuery(q);
         }
     }
 }

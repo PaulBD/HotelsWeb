@@ -57,4 +57,15 @@ namespace core.customers.dtos
         public string Type { get; set; }
         public int LikeCount { get; set; }
     }
+
+    public class ReviewListDto
+    {
+        public ReviewListDto()
+        {
+            ReviewDto = new List<ReviewDto>();
+        }
+
+        public List<ReviewDto> ReviewDto { get; set; }
+        public int ReviewCount { get; set; }
+    }
 }

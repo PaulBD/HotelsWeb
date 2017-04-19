@@ -5,6 +5,6 @@ namespace core.deals.Services
 {
     public interface ITravelzooService
     {
-        List<TravelzooDto> ReturnDeals(string location, int limit, int offset);
+        List<TravelzooDto> ReturnDeals(string location);
     }
 }

@@ -35,6 +35,7 @@ namespace core.places.dtos
             Locations = new List<LocationDto>();
         }
 
-        public List<LocationDto> Locations { get; set; }
+        public IList<LocationDto> Locations { get; set; }
+        public int LocationCount { get; set; }
     }
 }

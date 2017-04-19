@@ -23,7 +23,7 @@ namespace core.places.services
         {
             var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'Neighborhood' AND regionType != 'Point of Interest Shadow'";
 
-            return ProcessQuery(q, 0, 0);
+            return ProcessQuery(q);
        }
 
         /// <summary>
@@ -33,29 +33,24 @@ namespace core.places.services
         {
             var q = _query + " WHERE regionID = " + locationId;
 
-            return ProcessQuery(q, 0, 0)[0];
+            return ProcessQuery(q)[0];
         }
 
         /// <summary>
         /// Return a child locations by parent Id
         /// </summary>
-        public List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type, int offset, int limit)
+        public List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type)
         {
             var q = _query + " WHERE parentRegionID = " + parentLocationId;
 
-            return ProcessQuery(q, limit, offset);
+            return ProcessQuery(q);
         }
 
         /// <summary>
         /// Process Query
         /// </summary>
-        private List<LocationDto> ProcessQuery(string q, int limit, int offset)
+        private List<LocationDto> ProcessQuery(string q)
         {
-            if (limit > 0)
-            {
-                q += " LIMIT " + limit + " OFFSET " + offset;
-            }
-
             var result = _couchbaseHelper.ReturnQuery<LocationDto>(q, _bucketName);
 
             if (result.Count > 0)

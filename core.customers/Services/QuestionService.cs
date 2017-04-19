@@ -26,13 +26,8 @@ namespace core.customers.services
         /// <summary>
         /// Process Query
         /// </summary>
-        private List<QuestionDto> ProcessQuery(string q, int limit, int offset)
+        private List<QuestionDto> ProcessQuery(string q)
         {
-            if (limit > 0)
-            {
-                q += " LIMIT " + limit + " OFFSET " + offset;
-            }
-
             var result = _couchbaseHelper.ReturnQuery<QuestionDto>(q, _bucketName);
 
             if (result.Count > 0)
@@ -46,13 +41,13 @@ namespace core.customers.services
         /// <summary>
         /// Return Questions By Location Id
         /// </summary>
-        public List<QuestionDto> ReturnQuestionsByLocationId(int id, int offset, int limit)
+        public List<QuestionDto> ReturnQuestionsByLocationId(int id)
         {
             var q = "SELECT tr.question, tr.questionReference, tr.customerReference, tr.dateCreated, tr.inventoryReference, tr.isArchived, tr.type, tc.profile.name as customerName, tc.profile.imageUrl as customerImageUrl, tc.profile.profileUrl as customerProfileUrl FROM TriperooCustomers tr JOIN TriperooCustomers tc ON KEYS tr.customerReference";
 
             q += " WHERE tr.type = 'question' AND tr.inventoryReference = " + id + " ORDER BY tr.dateCreated DESC";
 
-            return ProcessQuery(q, limit, offset);
+            return ProcessQuery(q);
 
         }
     }

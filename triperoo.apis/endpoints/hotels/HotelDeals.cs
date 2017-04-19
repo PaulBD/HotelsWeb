@@ -17,9 +17,9 @@ namespace triperoo.apis.endpoints.hotels
     [Route("/v1/hotel/deals")]
     public class HotelDealRequest : Service
     {
-        public string Location { get; set; }
-        public int Limit { get; set; }
-        public int Offset { get; set; }
+        public string LocationName { get; set; }
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
     }
 
     /// <summary>
@@ -35,7 +35,9 @@ namespace triperoo.apis.endpoints.hotels
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.Location).NotEmpty().WithMessage("Supply a valid location parameter");
+                RuleFor(r => r.LocationName).NotEmpty().WithMessage("Supply a valid location name parameter");
+                RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
+                RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
             });
         }
     }
@@ -63,7 +65,7 @@ namespace triperoo.apis.endpoints.hotels
         /// </summary>
         public object Get(HotelDealRequest request)
         {
-            string cacheName = "deals:hotels:" + request.Location;
+            string cacheName = "deals:hotels:" + request.LocationName;
             List<TravelzooDto> response = null;
 
             try
@@ -72,9 +74,19 @@ namespace triperoo.apis.endpoints.hotels
 
                 if (response == null)
                 {
-                    response = _travelzooService.ReturnDeals(request.Location, request.Limit, request.Offset);
+                    response = _travelzooService.ReturnDeals(request.LocationName);
                     base.Cache.Add(cacheName, response);
                 }
+                
+                if (request.PageNumber > 0)
+                {
+                    response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                }
+                else
+                {
+                    response = response.Take(request.PageSize).ToList();
+                }
+
             }
             catch (Exception ex)
             {

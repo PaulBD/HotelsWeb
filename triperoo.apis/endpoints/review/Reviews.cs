@@ -1,8 +1,10 @@
 ﻿using core.customers.dtos;
 using core.customers.services;
 using ServiceStack;
+using ServiceStack.FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace triperoo.apis.endpoints.review
@@ -15,10 +17,29 @@ namespace triperoo.apis.endpoints.review
     [Route("/v1/reviews", "GET")]
     public class ReviewsRequest
     {
-        public int Id { get; set; }
-        public int Limit { get; set; }
-        public int Offset { get; set; }
+        public int LocationId { get; set; }
         public string Type { get; set; }
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
+    }
+
+    /// <summary>
+    /// Validator
+    /// </summary>
+    public class ReviewsRequestValidator : AbstractValidator<ReviewsRequest>
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ReviewsRequestValidator()
+        {
+            // Get
+            RuleSet(ApplyTo.Get, () =>
+            {
+                RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
+                RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
+            });
+        }
     }
 
     #endregion
@@ -44,17 +65,27 @@ namespace triperoo.apis.endpoints.review
         /// </summary>
         public object Get(ReviewsRequest request)
         {
-            var response = new List<ReviewDto>();
+            var response = new ReviewListDto();
 
             try
             {
-                if (request.Id > 0)
+                if (request.LocationId > 0)
                 {
-                    response = _reviewService.ReturnReviewsByLocationId(request.Id, request.Offset, request.Limit);
+                    response.ReviewDto = _reviewService.ReturnReviewsByLocationId(request.LocationId);
                 }
                 else
                 {
-                    response = _reviewService.ReturnReviewsByType(request.Type, request.Offset, request.Limit);
+                    response.ReviewDto = _reviewService.ReturnReviewsByType(request.Type);
+                }
+
+                response.ReviewCount = response.ReviewDto.Count;
+
+                if (request.PageNumber > 0)
+                {
+                    response.ReviewDto = response.ReviewDto.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                } else
+                {
+                    response.ReviewDto = response.ReviewDto.Take(request.PageSize).ToList();
                 }
             }
             catch (Exception ex)

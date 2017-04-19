@@ -92,7 +92,9 @@
     <Compile Include="DTOs\AutocompleteDto.cs" />
     <Compile Include="DTOs\LocationListDto.cs" />
     <Compile Include="DTOs\BaseDto.cs" />
+    <Compile Include="Services\IAttractionService.cs" />
     <Compile Include="Services\ILocationService.cs" />
+    <Compile Include="Services\AttractionService.cs" />
     <Compile Include="Services\LocationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

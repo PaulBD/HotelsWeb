@@ -98,6 +98,7 @@ namespace triperoo.apis.endpoints.auth
                 authorizationDto.Token = token;
                 authorizationDto.UserImage = customer.Profile.ImageUrl;
                 authorizationDto.UserName = customer.Profile.Name;
+                authorizationDto.BaseUrl = "/profile/" + response.TriperooCustomers.CustomerReference.Replace("customer:", "") + "/" + response.TriperooCustomers.Profile.Name.Replace(" ", "-");
             }
             catch (Exception ex)
             {

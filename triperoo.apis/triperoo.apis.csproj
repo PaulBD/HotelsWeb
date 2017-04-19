@@ -112,6 +112,7 @@
     <Compile Include="endpoints\flights\Flights.cs" />
     <Compile Include="endpoints\hotels\HotelDeals.cs" />
     <Compile Include="endpoints\hotels\AirportHotels.cs" />
+    <Compile Include="endpoints\Locations\Attractions.cs" />
     <Compile Include="endpoints\Locations\Locations.cs" />
     <Compile Include="endpoints\Locations\Events.cs" />
     <Compile Include="endpoints\Locations\Weather.cs" />

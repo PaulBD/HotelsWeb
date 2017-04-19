@@ -51,11 +51,10 @@ namespace triperoo.apis.endpoints.locations
     [Route("/v1/locations", "GET")]
     public class ParentLocationRequest
     {
-        public int parentId { get; set; }
-        public int Limit { get; set; }
-        public int Offset { get; set; }
+        public int parentLocationId { get; set; }
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
         public string Type { get; set; }
-
     }
 
     /// <summary>
@@ -71,9 +70,10 @@ namespace triperoo.apis.endpoints.locations
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.parentId).GreaterThan(0).WithMessage("Invalid parent location id have been supplied");
+                RuleFor(r => r.parentLocationId).GreaterThan(0).WithMessage("Invalid parent location id have been supplied");
+                RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
+                RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
             });
-
         }
     }
 
@@ -100,7 +100,7 @@ namespace triperoo.apis.endpoints.locations
         /// </summary>
         public object Get(ParentLocationRequest request)
         {
-            string cacheName = "parentLocations:" + request.parentId;
+            string cacheName = "parentLocations:" + request.parentLocationId;
             List<LocationDto> response = null;
 
             try
@@ -109,8 +109,17 @@ namespace triperoo.apis.endpoints.locations
 
                 if (response == null)
                 {
-                    response = _locationService.ReturnLocationByParentId(request.parentId, request.Type, request.Offset, request.Limit);
+                    response = _locationService.ReturnLocationByParentId(request.parentLocationId, request.Type);
                     base.Cache.Add(cacheName, response);
+                }
+
+                if (request.PageNumber > 0)
+                {
+                    response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                }
+                else
+                {
+                    response = response.Take(request.PageSize).ToList();
                 }
             }
             catch (Exception ex)

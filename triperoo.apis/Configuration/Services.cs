@@ -15,6 +15,7 @@ namespace triperoo.apis.Configuration
         public static void Register(Container container)
         {
             container.RegisterAutoWiredAs<LocationService, ILocationService>().ReusedWithin(ReuseScope.Container);
+            container.RegisterAutoWiredAs<AttractionService, IAttractionService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<WeatherService, IWeatherService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<HotelService, IHotelService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<HotelPriceService, IHotelPriceService>().ReusedWithin(ReuseScope.Container);

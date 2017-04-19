@@ -22,7 +22,6 @@ namespace triperoo.apis.endpoints.locations
         public string CategoryName { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
-
     }
 
     /// <summary>
@@ -92,11 +91,11 @@ namespace triperoo.apis.endpoints.locations
                 {
                     if (request.CategoryName == "all")
                     {
-                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, null, 10, request.PageNumber);
+                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, null, 10, request.PageNumber + 1);
                     }
                     else
                     {
-                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, request.CategoryName, 10, request.PageNumber);
+                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, request.CategoryName, 10, request.PageNumber + 1);
                     }
 
                     // base.Cache.Add(cacheName, response);
