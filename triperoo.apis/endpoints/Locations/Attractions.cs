@@ -16,9 +16,10 @@ namespace triperoo.apis.endpoints.locations
     [Route("/v1/attractions", "GET")]
     public class ParentAttractionRequest
     {
-        public int parentLocationId { get; set; }
+        public int ParentLocationId { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
+        public string CategoryName { get; set; }
     }
 
     /// <summary>
@@ -34,7 +35,7 @@ namespace triperoo.apis.endpoints.locations
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.parentLocationId).GreaterThan(0).WithMessage("Invalid parent location id have been supplied");
+                RuleFor(r => r.ParentLocationId).GreaterThan(0).WithMessage("Invalid parent location id have been supplied");
                 RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
                 RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
             });
@@ -64,7 +65,7 @@ namespace triperoo.apis.endpoints.locations
         /// </summary>
         public object Get(ParentAttractionRequest request)
         {
-            string cacheName = "Attractions:" + request.parentLocationId;
+            string cacheName = "Attractions:" + request.ParentLocationId + request.CategoryName;
             LocationListDto response = null;
 
             try
@@ -74,9 +75,17 @@ namespace triperoo.apis.endpoints.locations
                 if (response == null)
                 {
                     response = new LocationListDto();
-                    response.Locations = _attractionService.ReturnAttractionsByParentId(request.parentLocationId);
+
+                    if (!string.IsNullOrEmpty(request.CategoryName))
+                    {
+                        response.Locations = _attractionService.ReturnAttractionsByParentIdAndCategory(request.ParentLocationId, request.CategoryName);
+                    }
+                    else
+                    {
+                        response.Locations = _attractionService.ReturnAttractionsByParentId(request.ParentLocationId);
+                    }
                     response.LocationCount = response.Locations.Count;
-                    base.Cache.Add(cacheName, response);
+                    //base.Cache.Add(cacheName, response);
                 }
 
                 response.Locations = response.Locations.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList(); 

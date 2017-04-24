@@ -110,7 +110,7 @@ namespace triperoo.apis.endpoints.locations
                 if (response == null)
                 {
                     response = _locationService.ReturnLocationByParentId(request.parentLocationId, request.Type);
-                    base.Cache.Add(cacheName, response);
+                    //base.Cache.Add(cacheName, response);
                 }
 
                 if (request.PageNumber > 0)

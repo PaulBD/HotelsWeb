@@ -83,7 +83,8 @@ namespace triperoo.apis.endpoints.review
                 if (request.PageNumber > 0)
                 {
                     response.ReviewDto = response.ReviewDto.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
-                } else
+                }
+                else
                 {
                     response.ReviewDto = response.ReviewDto.Take(request.PageSize).ToList();
                 }

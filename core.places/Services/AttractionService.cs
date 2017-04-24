@@ -27,6 +27,16 @@ namespace core.places.services
         }
 
         /// <summary>
+        /// Return attractions by parent Id and category
+        /// </summary>
+        public List<LocationDto> ReturnAttractionsByParentIdAndCategory(int parentLocationId, string category)
+        {
+            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Point of Interest Shadow' AND subClass = '" + category + "'";
+
+            return ProcessQuery(q);
+        }
+
+        /// <summary>
         /// Process Query
         /// </summary>
         private List<LocationDto> ProcessQuery(string q)
