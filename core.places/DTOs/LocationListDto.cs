@@ -26,6 +26,13 @@ namespace core.places.dtos
         public string SubClass { get; set; }
         public string Summary { get; set; }
         public string Url { get; set; }
+        public string ParentUrl
+        {
+            get
+            {
+                return "/" + ParentRegionID + "/visit/" + ParentRegionNameLong.Replace(",", "").Replace(" ", "-");
+            }
+        }
     }
 
     public class LocationListDto

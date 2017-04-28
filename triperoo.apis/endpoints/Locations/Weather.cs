@@ -7,7 +7,6 @@ using library.weather.dtos;
 
 namespace triperoo.apis.endpoints.locations
 {
-
     #region Return a Weather by location id
 
     /// <summary>

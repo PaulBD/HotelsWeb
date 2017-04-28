@@ -12,7 +12,7 @@ namespace triperoo.apis.endpoints.locations
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/location", "GET")]
+    [Route("/v1/location/{id}", "GET")]
     public class LocationRequest
     {
         public int id { get; set; }

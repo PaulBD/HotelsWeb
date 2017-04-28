@@ -14,10 +14,10 @@ namespace triperoo.apis.endpoints.review
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/reviews", "GET")]
+    [Route("/v1/location/{id}/reviews", "GET")]
     public class ReviewsRequest
     {
-        public int LocationId { get; set; }
+        public int Id { get; set; }
         public string Type { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
@@ -69,9 +69,9 @@ namespace triperoo.apis.endpoints.review
 
             try
             {
-                if (request.LocationId > 0)
+                if (request.Id > 0)
                 {
-                    response.ReviewDto = _reviewService.ReturnReviewsByLocationId(request.LocationId);
+                    response.ReviewDto = _reviewService.ReturnReviewsByLocationId(request.Id);
                 }
                 else
                 {

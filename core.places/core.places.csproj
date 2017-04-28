@@ -92,6 +92,10 @@
     <Compile Include="DTOs\AutocompleteDto.cs" />
     <Compile Include="DTOs\LocationListDto.cs" />
     <Compile Include="DTOs\BaseDto.cs" />
+    <Compile Include="Services\INightlifeService.cs" />
+    <Compile Include="Services\IRestaurantService.cs" />
+    <Compile Include="Services\NightlifeService.cs" />
+    <Compile Include="Services\RestaurantService.cs" />
     <Compile Include="Services\IAttractionService.cs" />
     <Compile Include="Services\ILocationService.cs" />
     <Compile Include="Services\AttractionService.cs" />

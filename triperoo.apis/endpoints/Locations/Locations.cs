@@ -48,7 +48,7 @@ namespace triperoo.apis.endpoints.locations
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/locations", "GET")]
+    [Route("/v1/locations/{parentLocationId}", "GET")]
     public class ParentLocationRequest
     {
         public int parentLocationId { get; set; }

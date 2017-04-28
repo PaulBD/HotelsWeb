@@ -8,13 +8,13 @@ using System.Linq;
 
 namespace triperoo.apis.endpoints.locations
 {
-    #region Return attractions by parent id
+    #region Return restaurants by parent id
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/location/{id}/attractions", "GET")]
-    public class ParentAttractionRequest
+    [Route("/v1/location/{id}/restaurants", "GET")]
+    public class ParentRestaurantRequest
     {
         public int Id { get; set; }
         public int PageSize { get; set; }
@@ -25,12 +25,12 @@ namespace triperoo.apis.endpoints.locations
     /// <summary>
     /// Validator
     /// </summary>
-    public class ParentAttractionRequestValidator : AbstractValidator<ParentAttractionRequest>
+    public class ParentRestaurantRequestValidator : AbstractValidator<ParentRestaurantRequest>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ParentAttractionRequestValidator()
+        public ParentRestaurantRequestValidator()
         {
             // Get
             RuleSet(ApplyTo.Get, () =>
@@ -46,26 +46,26 @@ namespace triperoo.apis.endpoints.locations
 
     #region API logic
 
-    public class AttractionsApi : Service
+    public class RestaurantsApi : Service
     {
-        private readonly IAttractionService _attractionService;
+        private readonly IRestaurantService _restaurantService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AttractionsApi(IAttractionService attractionService)
+        public RestaurantsApi(IRestaurantService restaurantService)
         {
-            _attractionService = attractionService;
+            _restaurantService = restaurantService;
         }
 
-        #region List attractions by location Id
+        #region List restaurants by location Id
 
         /// <summary>
-        /// Lists attractions by location Id
+        /// Lists restaurants by location Id
         /// </summary>
-        public object Get(ParentAttractionRequest request)
+        public object Get(ParentRestaurantRequest request)
         {
-            string cacheName = "Attractions:" + request.Id + request.CategoryName;
+            string cacheName = "Restaurants:" + request.Id + request.CategoryName;
             LocationListDto response = null;
 
             try
@@ -78,16 +78,16 @@ namespace triperoo.apis.endpoints.locations
 
                     if (!string.IsNullOrEmpty(request.CategoryName))
                     {
-                        response.Locations = _attractionService.ReturnAttractionsByParentIdAndCategory(request.Id, request.CategoryName);
+                        response.Locations = _restaurantService.ReturnRestaurantsByParentIdAndCategory(request.Id, request.CategoryName);
                     }
                     else
                     {
-                        response.Locations = _attractionService.ReturnAttractionsByParentId(request.Id);
+                        response.Locations = _restaurantService.ReturnRestaurantsByParentId(request.Id);
                     }
                     response.LocationCount = response.Locations.Count;
                     //base.Cache.Add(cacheName, response);
                 }
-
+                
                 if (response.LocationCount > request.PageSize)
                 {
                     response.Locations = response.Locations.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();

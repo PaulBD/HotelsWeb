@@ -4,22 +4,22 @@ using System.Collections.Generic;
 
 namespace core.places.services
 {
-    public class AttractionService : IAttractionService
+    public class RestaurantService : IRestaurantService
     {
         private CouchBaseHelper _couchbaseHelper;
         private readonly string _bucketName = "TriperooCommon";
         private string _query;
 
-        public AttractionService()
+        public RestaurantService()
         {
             _couchbaseHelper = new CouchBaseHelper();
             _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, summary.en as summary, url FROM " + _bucketName;
         }
 
         /// <summary>
-        /// Return attractions by location Id
+        /// Return restaurants by location Id
         /// </summary>
-        public List<LocationDto> ReturnAttractionsByParentId(int parentLocationId)
+        public List<LocationDto> ReturnRestaurantsByParentId(int parentLocationId)
         {
             var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Point of Interest Shadow'";
 
@@ -27,9 +27,9 @@ namespace core.places.services
         }
 
         /// <summary>
-        /// Return attractions by location Id and category
+        /// Return restaurants by location Id and category
         /// </summary>
-        public List<LocationDto> ReturnAttractionsByParentIdAndCategory(int parentLocationId, string category)
+        public List<LocationDto> ReturnRestaurantsByParentIdAndCategory(int parentLocationId, string category)
         {
             var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Point of Interest Shadow' AND subClass = '" + category + "'";
 

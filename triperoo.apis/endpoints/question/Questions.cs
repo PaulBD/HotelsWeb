@@ -14,10 +14,10 @@ namespace triperoo.apis.endpoints.review
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/questions", "GET")]
+    [Route("/v1/location/{id}/questions", "GET")]
     public class QuestionsRequest
     {
-        public int LocationId { get; set; }
+        public int Id { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
     }
@@ -35,9 +35,9 @@ namespace triperoo.apis.endpoints.review
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.LocationId).GreaterThan(0).WithMessage("Invalid location id have been supplied");
-                RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
-                RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
+                RuleFor(r => r.Id).GreaterThan(0).WithMessage("Invalid location id have been supplied");
+                RuleFor(r => r.PageSize).GreaterThan(0).WithMessage("Invalid page size has been supplied");
+                RuleFor(r => r.PageNumber).GreaterThan(0).WithMessage("Invalid page number has been supplied");
             });
         }
     }
@@ -69,7 +69,7 @@ namespace triperoo.apis.endpoints.review
 
             try
             {
-                response = _questionService.ReturnQuestionsByLocationId(request.LocationId);
+                response = _questionService.ReturnQuestionsByLocationId(request.Id);
 
                 if (request.PageNumber > 0)
                 {

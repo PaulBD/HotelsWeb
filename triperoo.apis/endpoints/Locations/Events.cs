@@ -15,13 +15,13 @@ namespace triperoo.apis.endpoints.locations
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/events", "GET")]
+    [Route("/v1/location/{id}/events", "GET")]
     public class EventRequest
     {
-        public int LocationId { get; set; }
-        public string CategoryName { get; set; }
+        public int Id { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
+        public string CategoryName { get; set; }
     }
 
     /// <summary>
@@ -37,9 +37,9 @@ namespace triperoo.apis.endpoints.locations
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.LocationId).NotNull().WithMessage("Invalid location id has been supplied");
-                RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
-                RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
+                RuleFor(r => r.Id).GreaterThan(0).WithMessage("Invalid location id has been supplied");
+                RuleFor(r => r.PageSize).GreaterThan(0).WithMessage("Invalid page size has been supplied");
+                RuleFor(r => r.PageNumber).GreaterThan(0).WithMessage("Invalid page number has been supplied");
             });
 
         }
@@ -72,8 +72,8 @@ namespace triperoo.apis.endpoints.locations
         {
             EventDto eventResponse = new EventDto();
             LocationDto locationResponse = new LocationDto();
-            string cacheName = "event:" + request.LocationId + ":" + request.CategoryName;
-            string locationCacheName = "location:" + request.LocationId;
+            string cacheName = "event:" + request.Id + ":" + request.CategoryName;
+            string locationCacheName = "location:" + request.Id;
 
             try
             {
@@ -81,7 +81,7 @@ namespace triperoo.apis.endpoints.locations
 
                 if (locationResponse == null)
                 {
-                    locationResponse = _locationService.ReturnLocationById(request.LocationId);
+                    locationResponse = _locationService.ReturnLocationById(request.Id);
                     base.Cache.Add(locationCacheName, locationResponse);
                 }
 
