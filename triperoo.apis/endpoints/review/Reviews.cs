@@ -36,8 +36,8 @@ namespace triperoo.apis.endpoints.review
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
-                RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
+                RuleFor(r => r.PageSize).GreaterThan(0).WithMessage("Invalid page size has been supplied");
+                RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(0).WithMessage("Invalid page number has been supplied");
             });
         }
     }

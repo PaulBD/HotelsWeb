@@ -37,7 +37,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/27/2017 20:59:12</publishTime>
     </File>
     <File Include="bin/Couchbase.NetClient.dll">
-      <publishTime>01/03/2017 11:59:30</publishTime>
+      <publishTime>03/01/2017 11:59:30</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>11/15/2016 07:17:23</publishTime>
@@ -82,13 +82,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/15/2016 07:17:28</publishTime>
     </File>
     <File Include="bin/triperoo.apis.dll">
-      <publishTime>04/28/2017 14:21:38</publishTime>
+      <publishTime>04/28/2017 23:47:22</publishTime>
     </File>
     <File Include="Global.asax">
       <publishTime>11/15/2016 07:21:58</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>01/02/2017 18:54:05</publishTime>
+      <publishTime>02/01/2017 18:54:05</publishTime>
     </File>
     <File Include="Web.config">
       <publishTime>03/28/2017 23:35:51</publishTime>
