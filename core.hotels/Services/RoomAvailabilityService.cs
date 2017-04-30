@@ -19,8 +19,9 @@ namespace core.hotels.Services
             _hash = _encryption.CalculateMD5Hash(_apiKey + _secret + (Int32)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
         }
 
-        public void CheckRoomAvailability(string hotelId, string arrivalDate, string departDate, string locale, string currency)
+        public void CheckRoomAvailability(string hotelId, string arrivalDate, string departDate, int nummberOfAdults, int numberOfChildren, string locale, string currency)
         {
+            //TODO: Add Room &room=1,0
             var url = _baseUrl + "/avail?cid=" + _cid + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currency + "&sig=" + _hash + "&hotelId=" + hotelId + "&arrivalDate=" + arrivalDate + "&departureDate=" + departDate + "&_type=json";
 
             var message = new HttpRequestMessage(HttpMethod.Get, url);
