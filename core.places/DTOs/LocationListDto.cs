@@ -7,11 +7,11 @@ namespace core.places.dtos
         public int AverageReviewScore { get; set; }
         public string Doctype { get; set; }
         public string Image { get; set; }
-        public int Latitude { get; set; }
+        public double Latitude { get; set; }
         public string LetterIndex { get; set; }
         public int LikeCount { get; set; }
         public int ListingPriority { get; set; }
-        public int Longitude { get; set; }
+        public double Longitude { get; set; }
         public int ParentRegionID { get; set; }
         public string ParentRegionName { get; set; }
         public string ParentRegionNameLong { get; set; }
