@@ -71,6 +71,8 @@ namespace triperoo.apis.endpoints.review
                 request.Question.CustomerReference = customer.TriperooCustomers.CustomerReference;
 
                 _questionService.InsertNewQuestion(reference, request.Question);
+
+                //TODO: Clear Location Question Cache
             }
             catch (Exception ex)
             {

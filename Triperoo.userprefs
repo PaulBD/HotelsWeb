@@ -1,0 +1,23 @@
+﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="triperoo.apis/Endpoints/Airport/AirportParking.cs">
+    <Files>
+      <File FileName="triperoo.apis/Endpoints/Airport/AirportLounges.cs" Line="79" Column="1" />
+      <File FileName="core.extras/Services/LoungeService.cs" Line="41" Column="82" />
+      <File FileName="core.extras/DTOs/Lounge/LoungeAvailabilityResponseDto.cs" Line="92" Column="4" />
+      <File FileName="core.extras/DTOs/Parking/ParkingAvailabilityResponseDto.cs" Line="168" Column="18" />
+      <File FileName="core.extras/Services/IParkingService.cs" Line="8" Column="34" />
+      <File FileName="core.extras/Services/ParkingService.cs" Line="51" Column="90" />
+      <File FileName="triperoo.apis/Endpoints/Airport/AirportParking.cs" Line="82" Column="54" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/endpoints/review/Reviews.cs" relfile="triperoo.apis/endpoints/review/Reviews.cs" line="92" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Airport/AirportLounges.cs" relfile="triperoo.apis/Endpoints/Airport/AirportLounges.cs" line="75" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.triperoo.apis PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>

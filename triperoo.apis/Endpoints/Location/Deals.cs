@@ -6,18 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using core.places.services;
+using core.places.dtos;
 
-namespace triperoo.apis.endpoints.hotels
+namespace triperoo.apis.endpoints.location
 {
-    #region Return a list of deals by location
+    #region Return Hotel Deals By Location Id
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/hotel/deals")]
+    [Route("/v1/location/{id}/deals/hotels")]
     public class HotelDealRequest : Service
     {
-        public string LocationName { get; set; }
+        public int Id { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
     }
@@ -34,10 +36,10 @@ namespace triperoo.apis.endpoints.hotels
         {
             // Get
             RuleSet(ApplyTo.Get, () =>
-            {
-                RuleFor(r => r.LocationName).NotEmpty().WithMessage("Supply a valid location name parameter");
-                RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
-                RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
+			{
+				RuleFor(r => r.Id).GreaterThan(0).WithMessage("Invalid location id has been supplied");
+				RuleFor(r => r.PageSize).GreaterThan(0).WithMessage("Invalid page size has been supplied");
+				RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(0).WithMessage("Invalid page number has been supplied");
             });
         }
     }
@@ -46,35 +48,47 @@ namespace triperoo.apis.endpoints.hotels
 
     #region API logic
 
-    public class LocationsApi : Service
+    public class DealsApi : Service
     {
         private readonly ITravelzooService _travelzooService;
+		private readonly ILocationService _locationService;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public LocationsApi(ITravelzooService travelzooService)
-        {
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		public DealsApi(ITravelzooService travelzooService, ILocationService locationService)
+		{
+			_locationService = locationService;
             _travelzooService = travelzooService;
         }
 
-        #region List Deals by location
+		#region Return Hotel Deals By Location Id
 
-        /// <summary>
-        /// Lists parent location by Id
-        /// </summary>
-        public object Get(HotelDealRequest request)
+		/// <summary>
+		/// Return Hotel Deals By Location Id
+		/// </summary>
+		public object Get(HotelDealRequest request)
         {
-            string cacheName = "deals:hotels:" + request.LocationName;
+			string cacheName = "deals:hotels:" + request.Id;
+			string locationCacheName = "location:" + request.Id;
+			LocationDto locationResponse = new LocationDto();
             List<TravelzooDto> response = null;
 
             try
-            {
+			{
+				locationResponse = Cache.Get<LocationDto>(locationCacheName);
+
+				if (locationResponse == null)
+				{
+					locationResponse = _locationService.ReturnLocationById(request.Id);
+					base.Cache.Add(locationCacheName, locationResponse);
+				}
+
                 response = Cache.Get<List<TravelzooDto>>(cacheName);
 
                 if (response == null)
                 {
-                    response = _travelzooService.ReturnDeals(request.LocationName);
+                    response = _travelzooService.ReturnDeals(locationResponse.RegionName);
                     //base.Cache.Add(cacheName, response);
                 }
                 

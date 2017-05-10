@@ -5,6 +5,6 @@ namespace core.extras.services
 {
     public interface IParkingService
     {
-        ParkingAvailabilityResponseDto AvailabilityAtDestination(string locationName, string dropoffDate, string dropoffTime, string pickupDate, string pickupTime, string initials, string language, int passengerCount);  
+        AirportParkingResponseDto AvailabilityAtDestination(string locationName, string dropoffDate, string dropoffTime, string pickupDate, string pickupTime, string initials, string language, int passengerCount);  
     }
 }

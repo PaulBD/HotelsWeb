@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace triperoo.apis.endpoints.locations
 {
-    #region Return attractions by parent id
+    #region Return Attractions by Location Id
 
     /// <summary>
     /// Request
@@ -35,7 +35,7 @@ namespace triperoo.apis.endpoints.locations
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.Id).GreaterThan(0).WithMessage("Invalid location id have been supplied");
+                RuleFor(r => r.Id).GreaterThan(0).WithMessage("Invalid location id has been supplied");
                 RuleFor(r => r.PageSize).GreaterThan(0).WithMessage("Invalid page size has been supplied");
                 RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(0).WithMessage("Invalid page number has been supplied");
             });
@@ -58,14 +58,14 @@ namespace triperoo.apis.endpoints.locations
             _attractionService = attractionService;
         }
 
-        #region List attractions by location Id
+		#region Return Attractions by Location Id
 
-        /// <summary>
-        /// Lists attractions by location Id
-        /// </summary>
-        public object Get(ParentAttractionRequest request)
+		/// <summary>
+		/// Return Attractions by Location Id
+		/// </summary>
+		public object Get(ParentAttractionRequest request)
         {
-            string cacheName = "Attractions:" + request.Id + request.CategoryName;
+            string cacheName = "attractions:" + request.Id + request.CategoryName;
             LocationListDto response = null;
 
             try
@@ -84,7 +84,9 @@ namespace triperoo.apis.endpoints.locations
                     {
                         response.Locations = _attractionService.ReturnAttractionsByParentId(request.Id);
                     }
+
                     response.LocationCount = response.Locations.Count;
+
                     //base.Cache.Add(cacheName, response);
                 }
 

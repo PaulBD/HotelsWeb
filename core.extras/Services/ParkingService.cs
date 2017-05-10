@@ -12,7 +12,7 @@ namespace core.extras.services
         /// <summary>
         /// Parking Availability
         /// </summary>
-        public ParkingAvailabilityResponseDto AvailabilityAtDestination(string locationName, string dropoffDate, string dropoffTime, string pickupDate, string pickupTime, string initials, string language, int passengerCount)
+        public AirportParkingResponseDto AvailabilityAtDestination(string locationName, string dropoffDate, string dropoffTime, string pickupDate, string pickupTime, string initials, string language, int passengerCount)
         {
             var tokenResponse = GetUserToken();
 
@@ -48,7 +48,7 @@ namespace core.extras.services
 
                 if (result.IsSuccessStatusCode)
                 {
-                    return JsonSerializer.DeserializeFromString<ParkingAvailabilityResponseDto>(result.Content.ReadAsStringAsync().Result);
+                    return JsonSerializer.DeserializeFromString<AirportParkingResponseDto>(result.Content.ReadAsStringAsync().Result);
                 }
             }
 

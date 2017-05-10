@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>triperoo.apis</RootNamespace>
     <AssemblyName>triperoo.apis</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -103,33 +103,34 @@
     <Compile Include="Configuration\Repositories.cs" />
     <Compile Include="Configuration\Serialiser.cs" />
     <Compile Include="Configuration\Services.cs" />
-    <Compile Include="endpoints\auth\ForgotPassword.cs" />
-    <Compile Include="endpoints\auth\Register.cs" />
-    <Compile Include="endpoints\auth\AuthorizeFacebook.cs" />
-    <Compile Include="endpoints\auth\Authorize.cs" />
-    <Compile Include="endpoints\cach\Cache.cs" />
-    <Compile Include="endpoints\customer\Newsletter.cs" />
-    <Compile Include="endpoints\flights\Flights.cs" />
-    <Compile Include="endpoints\hotels\HotelDeals.cs" />
-    <Compile Include="endpoints\hotels\AirportHotels.cs" />
-    <Compile Include="endpoints\Locations\Nightlife.cs" />
-    <Compile Include="endpoints\Locations\Restaurants.cs" />
-    <Compile Include="endpoints\Locations\Attractions.cs" />
-    <Compile Include="endpoints\Locations\Locations.cs" />
-    <Compile Include="endpoints\Locations\Events.cs" />
-    <Compile Include="endpoints\Locations\Weather.cs" />
-    <Compile Include="endpoints\parking\Parking.cs" />
-    <Compile Include="endpoints\question\Question.cs" />
-    <Compile Include="endpoints\question\Questions.cs" />
-    <Compile Include="endpoints\review\Reviews.cs" />
-    <Compile Include="endpoints\review\Review.cs" />
-    <Compile Include="endpoints\customer\Favourites.cs" />
-    <Compile Include="endpoints\customer\Customer.cs" />
-    <Compile Include="endpoints\Locations\Location.cs" />
+    <Compile Include="Endpoints\Auth\ForgotPassword.cs" />
+    <Compile Include="Endpoints\Auth\Register.cs" />
+    <Compile Include="Endpoints\Auth\AuthorizeFacebook.cs" />
+    <Compile Include="Endpoints\Auth\Authorize.cs" />
+    <Compile Include="Endpoints\Cache\Cache.cs" />
+    <Compile Include="Endpoints\Customer\Newsletter.cs" />
+    <Compile Include="Endpoints\Flight\Flights.cs" />
+    <Compile Include="Endpoints\Airport\AirportHotels.cs" />
+    <Compile Include="Endpoints\Location\Nightlife.cs" />
+    <Compile Include="Endpoints\Location\Restaurants.cs" />
+    <Compile Include="Endpoints\Location\Attractions.cs" />
+    <Compile Include="Endpoints\Location\Locations.cs" />
+    <Compile Include="Endpoints\Location\Events.cs" />
+    <Compile Include="Endpoints\Location\Weather.cs" />
+    <Compile Include="Endpoints\Question\Question.cs" />
+    <Compile Include="Endpoints\Review\Review.cs" />
+    <Compile Include="Endpoints\Customer\Favourites.cs" />
+    <Compile Include="Endpoints\Customer\Customer.cs" />
+    <Compile Include="Endpoints\Location\Location.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Endpoints\Location\Questions.cs" />
+    <Compile Include="Endpoints\Location\Reviews.cs" />
+    <Compile Include="Endpoints\Location\Deals.cs" />
+    <Compile Include="Endpoints\Airport\AirportLounges.cs" />
+    <Compile Include="Endpoints\Airport\AirportParking.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -173,8 +174,6 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
@@ -192,6 +191,11 @@
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
+    <MonoDevelop>
+      <Properties>
+        <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
+      </Properties>
+    </MonoDevelop>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

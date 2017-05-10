@@ -28,7 +28,8 @@ namespace triperoo.apis.Configuration
             container.RegisterAutoWiredAs<ReviewService, IReviewService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<QuestionService, IQuestionService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<ParkingService, IParkingService>().ReusedWithin(ReuseScope.Container);
-            container.RegisterAutoWiredAs<AirportHotelService, IAirportHotelService>().ReusedWithin(ReuseScope.Container);
+			container.RegisterAutoWiredAs<AirportHotelService, IAirportHotelService>().ReusedWithin(ReuseScope.Container);
+			container.RegisterAutoWiredAs<LoungeService, ILoungeService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<TravelzooService, ITravelzooService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<EventService, IEventService>().ReusedWithin(ReuseScope.Container);
         }

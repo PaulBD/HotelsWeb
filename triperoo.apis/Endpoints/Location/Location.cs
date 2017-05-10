@@ -5,14 +5,14 @@ using ServiceStack.FluentValidation;
 using core.places.services;
 using core.places.dtos;
 
-namespace triperoo.apis.endpoints.locations
+namespace triperoo.apis.endpoints.location
 {
-    #region Return a single location by id
+	#region Return Single Location By Id
 
-    /// <summary>
-    /// Request
-    /// </summary>
-    [Route("/v1/location/{id}", "GET")]
+	/// <summary>
+	/// Request
+	/// </summary>
+	[Route("/v1/location/{id}", "GET")]
     public class LocationRequest
     {
         public int id { get; set; }
@@ -32,7 +32,7 @@ namespace triperoo.apis.endpoints.locations
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.id).GreaterThan(0).WithMessage("Invalid location id have been supplied");
+                RuleFor(r => r.id).GreaterThan(0).WithMessage("Invalid location id has been supplied");
             });
 
         }
@@ -54,12 +54,12 @@ namespace triperoo.apis.endpoints.locations
             _locationService = locationService;
         }
 
-        #region List Location by Id
+		#region Return Single Location By Id
 
-        /// <summary>
-        /// Lists location by Id
-        /// </summary>
-        public object Get(LocationRequest request)
+		/// <summary>
+		/// Return Single Location By Id
+		/// </summary>
+		public object Get(LocationRequest request)
         {
             LocationDto response = null;
             string cacheName = "location:" + request.id;

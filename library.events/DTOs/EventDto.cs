@@ -56,7 +56,7 @@ namespace library.events.dtos
         public List<TicketLinksDto> Link { get; set; }
     }
 
-    public class Block200
+    public class Block250
     {
         public string width { get; set; }
         public string url { get; set; }
@@ -65,7 +65,7 @@ namespace library.events.dtos
 
     public class Image
     {
-        public Block200 block200 { get; set; }
+        public Block250 block250 { get; set; }
     }
 
     public class Event
@@ -103,7 +103,14 @@ namespace library.events.dtos
         public string modified { get; set; }
         public string venue_display { get; set; }
         public object tz_country { get; set; }
-        public string title { get; set; }
+		public string title { get; set; }
+        public string friendlyTitle
+        {
+            get
+            {
+                return title.Replace("'","").Replace(" ", "-").ToLower();
+            }
+        }
         public string venue_address { get; set; }
         public string geocode_type { get; set; }
         public object tz_olson_path { get; set; }

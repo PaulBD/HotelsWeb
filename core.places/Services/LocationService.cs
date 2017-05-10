@@ -21,7 +21,7 @@ namespace core.places.services
         /// </summary>
         public List<LocationDto> ReturnLocationsForAutocomplete(string searchValue)
         {
-            var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'Neighborhood' AND regionType != 'Point of Interest Shadow'";
+            var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'Neighborhood'  AND regionType != 'Point of Interest' AND regionType != 'Point of Interest Shadow' ORDER BY searchPriority DESC";
 
             return ProcessQuery(q);
        }

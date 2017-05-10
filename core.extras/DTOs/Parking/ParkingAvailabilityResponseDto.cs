@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace core.extras.dtos
 {
-    public class ParkingAttributesDto
+    public class ParkingAttributes
     {
         public string Product { get; set; }
         public int RequestCode { get; set; }
@@ -11,7 +11,7 @@ namespace core.extras.dtos
         public string Expires { get; set; }
     }
 
-    public class ParkingRequestFlagsDto
+    public class ParkingRequestFlags
     {
         public int Registration { get; set; }
         public int CarMake { get; set; }
@@ -25,7 +25,7 @@ namespace core.extras.dtos
         public int? MobileNum { get; set; }
     }
 
-    public class ParkingFilterDto
+    public class ParkingFilter
     {
         public int Park_And_Ride { get; set; }
         public int Meet_And_Greet { get; set; }
@@ -35,36 +35,36 @@ namespace core.extras.dtos
         public int? On_Airport { get; set; }
     }
 
-    public class ImageDto
+    public class ParkingImage
     {
         public string Alt { get; set; }
         public string Src { get; set; }
     }
 
-    public class ImagesListDto
+    public class ParkingImagesList
     {
-        public ImagesListDto()
+        public ParkingImagesList()
         {
-            image = new List<ImageDto>();
+            image = new List<ParkingImage>();
         }
 
-        public List<ImageDto> image { get; set; }
+        public List<ParkingImage> image { get; set; }
     }
 
-    public class CarParDto
+    public class CarPark
     {
-        public CarParDto()
+        public CarPark()
         {
-            RequestFlags = new ParkingRequestFlagsDto();
-            Filter = new ParkingFilterDto();
+            RequestFlags = new ParkingRequestFlags();
+            Filter = new ParkingFilter();
         }
         public double TotalPrice { get; set; }
         public double NonDiscPrice { get; set; }
         public double GatePrice { get; set; }
-        public ParkingRequestFlagsDto RequestFlags { get; set; }
+        public ParkingRequestFlags RequestFlags { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
-        public ParkingFilterDto Filter { get; set; }
+        public ParkingFilter Filter { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string Address { get; set; }
@@ -91,7 +91,7 @@ namespace core.extras.dtos
                 return null;
             }
         }
-        public ImagesListDto Images { get; set; }
+        public ParkingImagesList Images { get; set; }
         public string BookingURL { get; set; }
         public string MoreInfoURL { get; set; }
         public List<object> Attributes { get; set; }
@@ -103,9 +103,9 @@ namespace core.extras.dtos
         public double Waiver { get; set; }
     }
 
-    public class ParkingPricingDto
+    public class ParkingPricing
     {
-        public ParkingPricingDto()
+        public ParkingPricing()
         {
             CancellationWaiver = new List<dtos.CancellationWaiver>();
         }
@@ -119,7 +119,7 @@ namespace core.extras.dtos
         public List<CancellationWaiver> CancellationWaiver { get; set; }
     }
 
-    public class ParkingRequestDto
+    public class ParkingRequest
     {
         public string ArrivalDate { get; set; }
         public string ArrivalTime { get; set; }
@@ -131,39 +131,47 @@ namespace core.extras.dtos
         public string Format { get; set; }
     }
 
-    public class ParkingAPIHeaderDto
+    public class ParkingAPIHeader
     {
-        public ParkingAPIHeaderDto()
+        public ParkingAPIHeader()
         {
-            Request = new ParkingRequestDto();
+            Request = new ParkingRequest();
         }
 
-        public ParkingRequestDto Request { get; set; }
+        public ParkingRequest Request { get; set; }
     }
 
-    public class APIReply
-    {
-        public APIReply()
+	public class ParkingApiError
+	{
+		public string Code { get; set; }
+		public string Message { get; set; }
+	}
+
+	public class ParkingAPIReply
+	{
+        public ParkingAPIReply()
         {
-            Attributes = new ParkingAttributesDto();
-            API_Header = new ParkingAPIHeaderDto();
-            CarPark = new List<CarParDto>();
-            Pricing = new ParkingPricingDto();
+            Attributes = new ParkingAttributes();
+            API_Header = new ParkingAPIHeader();
+            CarPark = new List<CarPark>();
+            Pricing = new ParkingPricing();
+            Error = new ParkingApiError();
         }
 
-        public ParkingAttributesDto Attributes { get; set; }
-        public List<CarParDto> CarPark { get; set; }
-        public ParkingPricingDto Pricing { get; set; }
-        public ParkingAPIHeaderDto API_Header { get; set; }
+        public ParkingAttributes Attributes { get; set; }
+        public List<CarPark> CarPark { get; set; }
+        public ParkingPricing Pricing { get; set; }
+		public ParkingAPIHeader API_Header { get; set; }
+		public ParkingApiError Error { get; set; }
     }
 
-    public class ParkingAvailabilityResponseDto
+    public class AirportParkingResponseDto
     {
-        public ParkingAvailabilityResponseDto()
+        public AirportParkingResponseDto()
         {
-            API_Reply = new APIReply();
+            API_Reply = new ParkingAPIReply();
         }
 
-        public APIReply API_Reply { get; set; }
+        public ParkingAPIReply API_Reply { get; set; }
     }
 }

@@ -5,17 +5,17 @@ using ServiceStack.FluentValidation;
 using core.extras.services;
 using core.extras.dtos;
 
-namespace triperoo.apis.endpoints.parking
+namespace triperoo.apis.endpoints.airport
 {
     #region Parking Availability
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/parking", "GET")]
+    [Route("/v1/airport/{airportName}/parking", "GET")]
     public class ParkingRequest
     {
-        public string LocationName { get; set; }
+        public string AirportName { get; set; }
         public string DropoffDate { get; set; }
         public string DropoffTime { get; set; }
         public string PickupDate { get; set; }
@@ -38,7 +38,7 @@ namespace triperoo.apis.endpoints.parking
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.LocationName).NotNull().WithMessage("Supply a valid from location");
+                RuleFor(r => r.AirportName).NotNull().WithMessage("Supply a valid airport location");
                 RuleFor(r => r.DropoffDate).NotNull().WithMessage("Supply a valid drop off date");
                 RuleFor(r => r.DropoffTime).NotNull().WithMessage("Supply a valid drop off time");
                 RuleFor(r => r.PickupDate).NotNull().WithMessage("Supply a valid pick up date");
@@ -71,11 +71,11 @@ namespace triperoo.apis.endpoints.parking
         /// </summary>
         public object Get(ParkingRequest request)
         {
-            ParkingAvailabilityResponseDto response;
+            AirportParkingResponseDto response;
 
             try
             {
-                response = _parkingService.AvailabilityAtDestination(request.LocationName, request.DropoffDate, request.DropoffTime, request.PickupDate, request.PickupTime, request.Initials, request.Language, request.PassengerCount);
+                response = _parkingService.AvailabilityAtDestination(request.AirportName, request.DropoffDate, request.DropoffTime, request.PickupDate, request.PickupTime, request.Initials, request.Language, request.PassengerCount);
             }
             catch (Exception ex)
             {

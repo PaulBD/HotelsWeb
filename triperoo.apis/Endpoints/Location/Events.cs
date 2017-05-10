@@ -8,9 +8,9 @@ using System.Linq;
 using core.places.services;
 using core.places.dtos;
 
-namespace triperoo.apis.endpoints.locations
+namespace triperoo.apis.endpoints.location
 {
-    #region Return events by location name
+    #region Return Events By Location Id
 
     /// <summary>
     /// Request
@@ -63,16 +63,16 @@ namespace triperoo.apis.endpoints.locations
             _eventService = eventService;
         }
 
-        #region List events by location
+		#region Return Events By Location Id
 
-        /// <summary>
-        /// Lists events by location
-        /// </summary>
-        public object Get(EventRequest request)
+		/// <summary>
+		/// Return Events By Location Id
+		/// </summary>
+		public object Get(EventRequest request)
         {
             EventDto eventResponse = new EventDto();
             LocationDto locationResponse = new LocationDto();
-            string cacheName = "event:" + request.Id + ":" + request.CategoryName;
+            string cacheName = "events:" + request.Id + ":" + request.CategoryName;
             string locationCacheName = "location:" + request.Id;
 
             try
@@ -91,11 +91,11 @@ namespace triperoo.apis.endpoints.locations
                 {
                     if (request.CategoryName == "all")
                     {
-                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, null, 10, request.PageNumber + 1);
+                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, null, 12, request.PageNumber + 1);
                     }
                     else
                     {
-                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, request.CategoryName, 10, request.PageNumber + 1);
+                        eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, request.CategoryName, 12, request.PageNumber + 1);
                     }
 
                     // base.Cache.Add(cacheName, response);

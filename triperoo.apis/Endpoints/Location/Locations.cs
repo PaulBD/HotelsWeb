@@ -7,14 +7,14 @@ using core.places.dtos;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace triperoo.apis.endpoints.locations
+namespace triperoo.apis.endpoints.location
 {
-    #region Return a list of locations for autocomplete
+	#region Return a List of Locations By Search Value
 
-    /// <summary>
-    /// Request
-    /// </summary>
-    [Route("/v1/autocomplete")]
+	/// <summary>
+	/// Request
+	/// </summary>
+	[Route("/v1/locations/search")]
     public class LocationSearchRequest : Service
     {
         public string SearchValue { get; set; }
@@ -43,7 +43,7 @@ namespace triperoo.apis.endpoints.locations
 
     #endregion
 
-    #region Return locations by parent id
+    #region Return Child Locations By Parent Id
 
     /// <summary>
     /// Request
@@ -71,8 +71,8 @@ namespace triperoo.apis.endpoints.locations
             RuleSet(ApplyTo.Get, () =>
             {
                 RuleFor(r => r.parentLocationId).GreaterThan(0).WithMessage("Invalid parent location id have been supplied");
-                RuleFor(r => r.PageSize).NotNull().WithMessage("Invalid page size has been supplied");
-                RuleFor(r => r.PageNumber).NotNull().WithMessage("Invalid page number has been supplied");
+                RuleFor(r => r.PageSize).GreaterThan(0).WithMessage("Invalid page size has been supplied");
+                RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(0).WithMessage("Invalid page number has been supplied");
             });
         }
     }
@@ -93,12 +93,12 @@ namespace triperoo.apis.endpoints.locations
             _locationService = locationService;
         }
 
-        #region List Parent Location by Id
+		#region Return Child Locations By Parent Id
 
-        /// <summary>
-        /// Lists parent location by Id
-        /// </summary>
-        public object Get(ParentLocationRequest request)
+		/// <summary>
+		/// Lists parent location by Id
+		/// </summary>
+		public object Get(ParentLocationRequest request)
         {
             string cacheName = "parentLocations:" + request.parentLocationId;
             List<LocationDto> response = null;
@@ -130,23 +130,22 @@ namespace triperoo.apis.endpoints.locations
             return new HttpResult(response, HttpStatusCode.OK);
         }
 
-        #endregion
+		#endregion
 
-        #region List all locations for autocomplete
+		#region Return a List of Locations By Search Value
 
-        /// <summary>
-        /// Lists all locations for autocomplete
-        /// </summary>
-        public object Get(LocationSearchRequest request)
+		/// <summary>
+		/// Return a List of Locations By Search Value
+		/// </summary>
+		public object Get(LocationSearchRequest request)
         {
             LocationListDto response = new LocationListDto();
-            List<LocationDto> result = null;
-            List<LocationDto> locations = null;
+			List<LocationDto> result = null;
 
             try
             {
                 string search = request.SearchValue.ToLower();
-                string cacheName = "autocomplete:" + search.Substring(0, 3);
+                string cacheName = "searchLocations:" + search.Substring(0, 3);
 
                 result = Cache.Get<List<LocationDto>>(cacheName);
 
@@ -161,13 +160,11 @@ namespace triperoo.apis.endpoints.locations
 
                     if (request.SearchType.ToLower() == "all")
                     {
-                        locations = result.Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).ToList().Take(10).ToList();
+                        response.Locations = result.Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).ToList().Take(10).ToList();
                     }
                     else {
-                        locations = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).Take(10).ToList();
+                        response.Locations = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).Take(10).ToList();
                     }
-
-                    response.Locations = locations;
                 }
             }
             catch (Exception ex)

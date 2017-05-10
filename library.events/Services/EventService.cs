@@ -13,10 +13,13 @@ namespace library.events.services
 
             if (!string.IsNullOrEmpty(category))
             {
-                url += "&category=" + category;
+                url += "&category=" + category + "&date=Future";
+            }
+            else {
+                url += "&within=30&date=Future";
             }
 
-            var message = new HttpRequestMessage(HttpMethod.Get, url);
+                var message = new HttpRequestMessage(HttpMethod.Get, url);
 
             using (var client = new HttpClient())
             {

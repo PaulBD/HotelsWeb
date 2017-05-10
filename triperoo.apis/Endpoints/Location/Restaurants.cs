@@ -6,14 +6,14 @@ using core.places.services;
 using core.places.dtos;
 using System.Linq;
 
-namespace triperoo.apis.endpoints.locations
+namespace triperoo.apis.endpoints.location
 {
-    #region Return restaurants by parent id
+	#region List Restaurants By Location Id
 
-    /// <summary>
-    /// Request
-    /// </summary>
-    [Route("/v1/location/{id}/restaurants", "GET")]
+	/// <summary>
+	/// Request
+	/// </summary>
+	[Route("/v1/location/{id}/restaurants", "GET")]
     public class ParentRestaurantRequest
     {
         public int Id { get; set; }
@@ -58,14 +58,14 @@ namespace triperoo.apis.endpoints.locations
             _restaurantService = restaurantService;
         }
 
-        #region List restaurants by location Id
+		#region List Restaurants By Location Id
 
-        /// <summary>
-        /// Lists restaurants by location Id
-        /// </summary>
-        public object Get(ParentRestaurantRequest request)
+		/// <summary>
+		/// Lists restaurants by location Id
+		/// </summary>
+		public object Get(ParentRestaurantRequest request)
         {
-            string cacheName = "Restaurants:" + request.Id + request.CategoryName;
+            string cacheName = "restaurants:" + request.Id + request.CategoryName;
             LocationListDto response = null;
 
             try
@@ -83,8 +83,9 @@ namespace triperoo.apis.endpoints.locations
                     else
                     {
                         response.Locations = _restaurantService.ReturnRestaurantsByParentId(request.Id);
-                    }
-                    response.LocationCount = response.Locations.Count;
+					}
+
+					response.LocationCount = response.Locations.Count;
                     //base.Cache.Add(cacheName, response);
                 }
                 

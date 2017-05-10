@@ -4,19 +4,20 @@ using ServiceStack;
 using ServiceStack.FluentValidation;
 using library.weather.services;
 using library.weather.dtos;
+using core.places.services;
+using core.places.dtos;
 
-namespace triperoo.apis.endpoints.locations
+namespace triperoo.apis.endpoints.location
 {
-    #region Return a Weather by location id
+	#region Return Weather By Location Id
 
-    /// <summary>
-    /// Request
-    /// </summary>
-    [Route("/v1/weather", "GET")]
+	/// <summary>
+	/// Request
+	/// </summary>
+    [Route("/v1/location/{id}/weather", "GET")]
     public class WeatherRequest
     {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public int Id { get; set; }
         public string Lang { get; set; }
 
     }
@@ -33,9 +34,8 @@ namespace triperoo.apis.endpoints.locations
         {
             // Get
             RuleSet(ApplyTo.Get, () =>
-            {
-                RuleFor(r => r.Latitude).NotNull().WithMessage("Invalid latitude has been supplied");
-                RuleFor(r => r.Longitude).NotNull().WithMessage("Invalid longitude has been supplied");
+			{
+				RuleFor(r => r.Id).GreaterThan(0).WithMessage("Invalid location id have been supplied");
             });
 
         }
@@ -47,13 +47,15 @@ namespace triperoo.apis.endpoints.locations
 
     public class WeatherApi : Service
     {
-        private readonly IWeatherService _weatherService;
+		private readonly IWeatherService _weatherService;
+		private readonly ILocationService _locationService;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public WeatherApi(IWeatherService weatherService)
-        {
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		public WeatherApi(IWeatherService weatherService, ILocationService locationService)
+		{
+			_locationService = locationService;
             _weatherService = weatherService;
         }
 
@@ -63,18 +65,28 @@ namespace triperoo.apis.endpoints.locations
         /// Lists Weather by Id
         /// </summary>
         public object Get(WeatherRequest request)
-        {
+		{
+			LocationDto locationResponse = new LocationDto();
             WeatherDto response = new WeatherDto();
-            string cacheName = "places:" + request.Latitude + "," + request.Longitude + ":weather";
+			string cacheName = "weather:" + request.Id;
+			string locationCacheName = "location:" + request.Id;
 
             try
-            {
+			{
+				locationResponse = Cache.Get<LocationDto>(locationCacheName);
+
+				if (locationResponse == null)
+				{
+					locationResponse = _locationService.ReturnLocationById(request.Id);
+					base.Cache.Add(locationCacheName, locationResponse);
+				}
+
                 response = Cache.Get<WeatherDto>(cacheName);
 
                 if (response == null)
                 {
-                    response = _weatherService.ReturnWeatherByLocation(request.Latitude, request.Longitude, request.Lang);
-                    base.Cache.Add(cacheName, response);
+                    response = _weatherService.ReturnWeatherByLocation(locationResponse.Latitude, locationResponse.Longitude, request.Lang);
+                    //base.Cache.Add(cacheName, response);
                 }
             }
             catch (Exception ex)

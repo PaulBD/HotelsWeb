@@ -6,9 +6,9 @@ using core.places.services;
 using core.places.dtos;
 using System.Linq;
 
-namespace triperoo.apis.endpoints.locations
+namespace triperoo.apis.endpoints.location
 {
-    #region Return nightlife by location id
+    #region List Nightlife By Location Id
 
     /// <summary>
     /// Request
@@ -58,14 +58,14 @@ namespace triperoo.apis.endpoints.locations
             _nightlifeService = nightlifeService;
         }
 
-        #region List nightlife by location Id
+		#region List Nightlife By Location Id
 
-        /// <summary>
-        /// Lists nightlife by location Id
-        /// </summary>
-        public object Get(ParentNightlifeRequest request)
+		/// <summary>
+		/// List Nightlife By Location Id
+		/// </summary>
+		public object Get(ParentNightlifeRequest request)
         {
-            string cacheName = "Nightlife:" + request.Id + request.CategoryName;
+            string cacheName = "nightlife:" + request.Id + request.CategoryName;
             LocationListDto response = null;
 
             try
@@ -83,8 +83,9 @@ namespace triperoo.apis.endpoints.locations
                     else
                     {
                         response.Locations = _nightlifeService.ReturnNightlifeByParentId(request.Id);
-                    }
-                    response.LocationCount = response.Locations.Count;
+					}
+
+					response.LocationCount = response.Locations.Count;
                     //base.Cache.Add(cacheName, response);
                 }
 

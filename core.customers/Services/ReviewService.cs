@@ -37,7 +37,7 @@ namespace core.customers.services
                 return result;
             }
 
-            return null;
+            return new List<ReviewDto>();
         }
 
         public List<ReviewDto> ReturnReviewsByType(string type)

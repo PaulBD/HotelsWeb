@@ -7,14 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
-namespace triperoo.apis.endpoints.review
+namespace triperoo.apis.endpoints.location
 {
-    #region Customer Questions Endpoint
+	#region Return Location Questions By Id
 
-    /// <summary>
-    /// Request
-    /// </summary>
-    [Route("/v1/location/{id}/questions", "GET")]
+	/// <summary>
+	/// Request
+	/// </summary>
+	[Route("/v1/location/{id}/questions", "GET")]
     public class QuestionsRequest
     {
         public int Id { get; set; }
@@ -58,27 +58,38 @@ namespace triperoo.apis.endpoints.review
             _questionService = questionService;
         }
 
-        #region Return Questions By Id
+		#region Return Location Questions By Id
 
-        /// <summary>
-        /// Return Questions By Id
-        /// </summary>
-        public object Get(QuestionsRequest request)
+		/// <summary>
+		/// Return Location Questions By Id
+		/// </summary>
+		public object Get(QuestionsRequest request)
         {
-            var response = new List<QuestionDto>();
+			var response = new List<QuestionDto>();
+			string cacheName = "questions:" + request.Id;
 
             try
-            {
-                response = _questionService.ReturnQuestionsByLocationId(request.Id);
+			{
+				response = Cache.Get<List<QuestionDto>>(cacheName);
 
-                if (request.PageNumber > 0)
+                if (response == null)
                 {
-                    response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                    response = _questionService.ReturnQuestionsByLocationId(request.Id);
                 }
-                else
-                {
-                    response = response.Take(request.PageSize).ToList();
-                }
+
+				if (response != null)
+				{
+					if (request.PageNumber > 0)
+					{
+						response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+					}
+					else
+					{
+						response = response.Take(request.PageSize).ToList();
+					}
+
+					// base.Cache.Add(cacheName, response);
+				}
             }
             catch (Exception ex)
             {

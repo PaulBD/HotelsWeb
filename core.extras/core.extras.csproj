@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>core.extras</RootNamespace>
     <AssemblyName>core.extras</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -50,7 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTOs\Parking\AirportHotelResponseDto.cs" />
     <Compile Include="DTOs\Parking\ParkingCountDto.cs" />
     <Compile Include="DTOs\Parking\ParkingAvailabilityResponseDto.cs" />
     <Compile Include="DTOs\Parking\ParkingUpgradesDto.cs" />
@@ -61,9 +60,17 @@
     <Compile Include="Services\IAirportHotelService.cs" />
     <Compile Include="Services\IParkingService.cs" />
     <Compile Include="Services\ParkingService.cs" />
+    <Compile Include="Services\ILoungeService.cs" />
+    <Compile Include="Services\LoungeService.cs" />
+    <Compile Include="DTOs\Hotel\AirportHotelResponseDto.cs" />
+    <Compile Include="DTOs\Lounge\LoungeAvailabilityResponseDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DTOs\Hotel\" />
+    <Folder Include="DTOs\Lounge\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

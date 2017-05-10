@@ -5,26 +5,27 @@ using ServiceStack.FluentValidation;
 using core.extras.services;
 using core.extras.dtos;
 
-namespace triperoo.apis.endpoints.hotels
+namespace triperoo.apis.endpoints.airport
 {
     #region Airport Hotel Availability
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/airporthotels", "GET")]
+    [Route("/v1/airport/{airportName}/hotels", "GET")]
     public class AirportHotelRequest
     {
-        public string LocationName { get; set; }
+        public string AirportName { get; set; }
         public string ArrivalDate { get; set; }
-        public string DepartDate { get; set; }
+		public string DepartDate { get; set; }
+		public string Language { get; set; }
+
         public string DropOffCarDate { get; set; }
         public string CollectCarDate { get; set; }
         public int Nights { get; set; }
         public string RoomType { get; set; }
         public string SecondRoomType { get; set; }
         public int ParkingDays { get; set; }
-        public string Language { get; set; }
     }
 
     /// <summary>
@@ -40,7 +41,7 @@ namespace triperoo.apis.endpoints.hotels
             // Get
             RuleSet(ApplyTo.Get, () =>
             {
-                RuleFor(r => r.LocationName).NotNull().WithMessage("Supply a valid from location");
+                RuleFor(r => r.AirportName).NotNull().WithMessage("Supply a valid airport name");
                 RuleFor(r => r.ArrivalDate).NotNull().WithMessage("Supply a valid arrival date");
                 RuleFor(r => r.DepartDate).NotNull().WithMessage("Supply a valid depart date");
                 RuleFor(r => r.Language).NotNull().WithMessage("Supply a valid language");
@@ -64,10 +65,10 @@ namespace triperoo.apis.endpoints.hotels
             _airportHotelService = airportHotelService;
         }
 
-        #region Get Airport Hotel availability
+        #region Get Airport Hotel Availability
 
         /// <summary>
-        /// Get Airport Hotel availability
+        /// Get Airport Hotel Availability
         /// </summary>
         public object Get(AirportHotelRequest request)
         {
@@ -75,7 +76,7 @@ namespace triperoo.apis.endpoints.hotels
 
             try
             {
-                response = _airportHotelService.AvailabilityAtHotel(request.LocationName, request.ArrivalDate, request.DepartDate, request.CollectCarDate, request.Nights, request.RoomType, request.SecondRoomType, request.ParkingDays, request.Language);
+                response = _airportHotelService.AvailabilityAtHotel(request.AirportName, request.ArrivalDate, request.DepartDate, request.CollectCarDate, request.Nights, request.RoomType, request.SecondRoomType, request.ParkingDays, request.Language);
 
                 response.API_Reply.API_Header.Request.CollectCarDate = request.CollectCarDate;
                 response.API_Reply.API_Header.Request.DropOffCarDate = request.DropOffCarDate;
