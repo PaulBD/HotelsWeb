@@ -119,7 +119,7 @@
     <Compile Include="Endpoints\Location\Weather.cs" />
     <Compile Include="Endpoints\Question\Question.cs" />
     <Compile Include="Endpoints\Review\Review.cs" />
-    <Compile Include="Endpoints\Customer\Favourites.cs" />
+    <Compile Include="Endpoints\Customer\Bookmarks.cs" />
     <Compile Include="Endpoints\Customer\Customer.cs" />
     <Compile Include="Endpoints\Location\Location.cs" />
     <Compile Include="Global.asax.cs">

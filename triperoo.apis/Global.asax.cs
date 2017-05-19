@@ -84,8 +84,10 @@ namespace triperoo.apis
 
                 // Add the required Service Stack plugins
                 Plugins.Add(new RequestLogsFeature());
-                Plugins.Add(new CorsFeature());
-            }
+
+                Plugins.Add(new CorsFeature(allowedOrigins: "*", allowedMethods: "GET, POST, PUT, DELETE, OPTIONS", allowedHeaders: "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Token", allowCredentials: false));
+
+			}
         }
 
         /// <summary>

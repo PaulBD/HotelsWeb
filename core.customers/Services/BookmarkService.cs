@@ -6,35 +6,47 @@ using System;
 
 namespace core.customers.services
 {
-    public class FavouriteService : IFavouriteService
+    public class BookmarkService : IBookmarkService
     {
         private CouchBaseHelper _couchbaseHelper;
         private CustomerService _customerService;
 
-        public FavouriteService()
+        public BookmarkService()
         {
             _couchbaseHelper = new CouchBaseHelper();
             _customerService = new CustomerService();
         }
 
-        public void InsertNewFavourite(string token, FavouriteDto favourite)
+        /// <summary>
+        /// Inserts the new bookmark.
+        /// </summary>
+        public void InsertNewBookmark(string token, BookmarkDto bookmark)
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
             if ((customer != null) && (customer.TriperooCustomers != null))
             {
-                favourite.Id = customer.TriperooCustomers.Favourites.Count + 1;
-                customer.TriperooCustomers.Favourites.Add(favourite);
+                var foundBookmark = customer.TriperooCustomers.Bookmarks.FirstOrDefault(q => q.LocationId == bookmark.LocationId);
+
+                if (foundBookmark != null)
+                {
+                    customer.TriperooCustomers.Bookmarks.Remove(foundBookmark);
+                }
+
+				bookmark.Id = customer.TriperooCustomers.Bookmarks.Count + 1;
+				bookmark.DateCreated = DateTime.Now;
+                customer.TriperooCustomers.Bookmarks.Add(bookmark);
+
                 _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
             }
         }
 
         /// <summary>
-        /// Return Favourite By Id
+        /// Return Bookmarks By Id
         /// </summary>
-        public FavouriteDto ReturnFavouriteById(int id, string token)
+        public BookmarkDto ReturnBookmarkById(int id, string token)
         {
-            var list = ReturnFavouritesByToken(token);
+            var list = ReturnBookmarksByToken(token);
 
             if (list != null)
             {
@@ -45,15 +57,15 @@ namespace core.customers.services
         }
 
         /// <summary>
-        /// Archive Favourite Id
+        /// Archive Bookmark Id
         /// </summary>
-        public void ArchiveFavouriteById(int id, string token)
+        public void ArchiveBookmarkById(int id, string token)
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
             if ((customer != null) && (customer.TriperooCustomers != null))
             {
-                customer.TriperooCustomers.Favourites[id - 1].IsArchived = true;
+                customer.TriperooCustomers.Bookmarks[id - 1].IsArchived = true;
                 var newCustomer = _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
             }
         }
@@ -61,21 +73,16 @@ namespace core.customers.services
         /// <summary>
         /// Return Favourites by token
         /// </summary>
-        public List<FavouriteDto> ReturnFavouritesByToken(string token)
+        public List<BookmarkDto> ReturnBookmarksByToken(string token)
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
             if ((customer != null) && (customer.TriperooCustomers != null))
             {
-                return customer.TriperooCustomers.Favourites;
+                return customer.TriperooCustomers.Bookmarks;
             }
 
             return null;
-        }
-
-        public List<FavouriteDto> ReturnFavouritesByPlaceReference(string reference)
-        {
-            throw new NotImplementedException();
         }
     }
 }

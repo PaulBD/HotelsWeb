@@ -18,11 +18,12 @@ namespace core.customers.dtos
         public string ProfileUrl { get; set; }
     }
 
-    public class FavouriteDto
+    public class BookmarkDto
     {
         public int Id { get; set; }
-        public string PlaceType { get; set; }
-        public string PlaceReference { get; set; }
+		public string LocationType { get; set; }
+		public int LocationId { get; set; }
+        public string LocationName { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsArchived { get; set; }
     }
@@ -32,7 +33,7 @@ namespace core.customers.dtos
         public Customer()
         {
             Profile = new ProfileDto();
-            Favourites = new List<FavouriteDto>();
+            Bookmarks = new List<BookmarkDto>();
         }
 
         public bool IsFacebookSignup { get; set; }
@@ -42,7 +43,7 @@ namespace core.customers.dtos
         public DateTime DateCreated { get; set; }
         public DateTime? DateUpdate { get; set; }
         public ProfileDto Profile { get; set; }
-        public List<FavouriteDto> Favourites { get; set; }
+        public List<BookmarkDto> Bookmarks { get; set; }
     }
 
     public class CustomerDto

@@ -16,17 +16,29 @@ namespace core.customers.services
         }
 
         /// <summary>
-        /// Insert new review
+        /// Insert new question
         /// </summary>
-        public void InsertNewQuestion(string reference, QuestionDetailDto review)
+        public void InsertQuestion(string reference, QuestionDetailDto review)
         {
             _couchbaseHelper.AddRecordToCouchbase(reference, review, _bucketName);
-        }
+		}
 
-        /// <summary>
-        /// Process Query
-        /// </summary>
-        private List<QuestionDto> ProcessQuery(string q)
+		/// <summary>
+		/// Insert new answer
+		/// </summary>
+		public void InsertAnswer(string reference, QuestionDetailDto review)
+		{
+			//_couchbaseHelper.AddRecordToCouchbase(reference, review, _bucketName);
+		}
+
+
+
+
+
+		/// <summary>
+		/// Process Query
+		/// </summary>
+		private List<QuestionDto> ProcessQuery(string q)
         {
             var result = _couchbaseHelper.ReturnQuery<QuestionDto>(q, _bucketName);
 

@@ -91,16 +91,18 @@ namespace triperoo.apis.endpoints.location
                     response = _travelzooService.ReturnDeals(locationResponse.RegionName);
                     //base.Cache.Add(cacheName, response);
                 }
-                
-                if (request.PageNumber > 0)
-                {
-                    response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
-                }
-                else
-                {
-                    response = response.Take(request.PageSize).ToList();
-                }
 
+                if (response != null)
+                {
+                    if (request.PageNumber > 0)
+                    {
+                        response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                    }
+                    else
+                    {
+                        response = response.Take(request.PageSize).ToList();
+                    }
+                }
             }
             catch (Exception ex)
             {

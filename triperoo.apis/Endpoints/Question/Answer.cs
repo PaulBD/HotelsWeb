@@ -8,23 +8,23 @@ using System.Net;
 
 namespace triperoo.apis.endpoints.review
 {
-    #region Question Endpoint
+    #region Answer Endpoint
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/question", "POST")]
-    public class QuestionRequest
+    [Route("/v1/question/{questionId}/answer", "POST")]
+    public class AnswerRequest
     {
-        public string Guid { get; set; }
-        public QuestionDetailDto Question { get; set; }
+        public string QuestionId { get; set; }
+        public AnswerDto Answer { get; set; }
     }
 
     #endregion
 
     #region API logic
 
-    public class QuestionApi : Service
+    public class AnswerApi : Service
     {
         private readonly IQuestionService _questionService;
         private readonly ICustomerService _customerService;
@@ -33,7 +33,7 @@ namespace triperoo.apis.endpoints.review
         /// <summary>
         /// Constructor
         /// </summary>
-        public QuestionApi(IQuestionService questionService, ICustomerService customerService, ILocationService locationService)
+        public AnswerApi(IQuestionService questionService, ICustomerService customerService, ILocationService locationService)
         {
             _questionService = questionService;
             _customerService = customerService;
@@ -41,12 +41,12 @@ namespace triperoo.apis.endpoints.review
 
         }
 
-        #region Insert Question
+        #region Insert Answer
 
         /// <summary>
-        /// Insert Question
+        /// Insert Answer
         /// </summary>
-        public object Post(QuestionRequest request)
+        public object Post(AnswerRequest request)
         {
             try
             {
@@ -63,16 +63,14 @@ namespace triperoo.apis.endpoints.review
                 {
                     return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
                 }
-                
-                var reference = "question:" + Guid.NewGuid();
-                request.Question.QuestionReference = reference;
-                request.Question.InventoryReference = request.Question.InventoryReference;
-                request.Question.DateCreated = DateTime.Now;
-                request.Question.CustomerReference = customer.TriperooCustomers.CustomerReference;
 
-                _questionService.InsertQuestion(reference, request.Question);
+                //var reference = "question:" + Guid.NewGuid();
+                //request.Question.QuestionReference = reference;
+                //request.Question.InventoryReference = request.Question.InventoryReference;
+                //request.Question.DateCreated = DateTime.Now;
+                //request.Question.CustomerReference = customer.TriperooCustomers.CustomerReference;
 
-                //TODO: Clear Location Question Cache
+                _questionService.InsertNewAnswer(reference, request.Answer);
             }
             catch (Exception ex)
             {

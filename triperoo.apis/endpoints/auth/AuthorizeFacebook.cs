@@ -80,20 +80,25 @@ namespace triperoo.apis.endpoints.auth
                 token = _authorizeService.AssignToken(request.EmailAddress, request.FacebookId);
                 response = _customerService.ReturnCustomerByToken(token);
 
-                if (response == null)
+                if (response != null)
                 {
-                    customer.DateCreated = DateTime.Now;
-                    customer.IsFacebookSignup = true;
-                    customer.CustomerReference = "customer:" + guid;
-                    customer.Profile.Name = request.Name;
-                    customer.Profile.CurrentCity = request.CurrentCity;
-                    customer.Profile.EmailAddress = request.EmailAddress;
-                    customer.Token = token;
-                    customer.Profile.ImageUrl = request.ImageUrl;
-                    customer.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-").ToLower();
-
-                    _customerService.InsertUpdateCustomer(customer.CustomerReference, customer);
+                    customer = response.TriperooCustomers;
                 }
+				else
+				{
+					customer.DateCreated = DateTime.Now;
+					customer.CustomerReference = "customer:" + guid;
+					customer.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-").ToLower();
+				}
+
+                customer.IsFacebookSignup = true;
+                customer.Profile.Name = request.Name;
+                customer.Profile.CurrentCity = request.CurrentCity;
+                customer.Profile.EmailAddress = request.EmailAddress;
+                customer.Token = token;
+                customer.Profile.ImageUrl = request.ImageUrl;
+
+                _customerService.InsertUpdateCustomer(customer.CustomerReference, customer);
 
                 authorizationDto.Token = token;
                 authorizationDto.UserImage = customer.Profile.ImageUrl;

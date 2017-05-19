@@ -91,10 +91,10 @@
     <Compile Include="Services\IReviewService.cs" />
     <Compile Include="Services\QuestionService.cs" />
     <Compile Include="Services\ReviewService.cs" />
-    <Compile Include="Services\FavouriteService.cs" />
+    <Compile Include="Services\BookmarkService.cs" />
     <Compile Include="Services\CustomerService.cs" />
     <Compile Include="Services\IAuthorizeService.cs" />
-    <Compile Include="Services\IFavouriteService.cs" />
+    <Compile Include="Services\IBookmarkService.cs" />
     <Compile Include="Services\ICustomerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

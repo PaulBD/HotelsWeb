@@ -5,7 +5,8 @@ namespace core.customers.services
 {
     public interface IQuestionService
     {
-        void InsertNewQuestion(string reference, QuestionDetailDto review);
+		void InsertQuestion(string reference, QuestionDetailDto review);
+		void InsertAnswer(string reference, QuestionDetailDto review);
         List<QuestionDto> ReturnQuestionsByLocationId(int id);
     }
 }
