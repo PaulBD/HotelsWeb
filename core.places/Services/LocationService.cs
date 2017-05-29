@@ -1,6 +1,7 @@
 ﻿using core.places.dtos;
 using library.couchbase;
 using System.Collections.Generic;
+using library.foursquare.services;
 
 namespace core.places.services
 {
@@ -9,11 +10,13 @@ namespace core.places.services
         private CouchBaseHelper _couchbaseHelper;
         private readonly string _bucketName = "TriperooCommon";
         private string _query;
+        private VenueService _venueService;
 
         public LocationService()
         {
+            _venueService = new VenueService();
             _couchbaseHelper = new CouchBaseHelper();
-            _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, summary.en as summary, url FROM " + _bucketName;
+            _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, url, formattedAddress, contactDetails, tags, photos, locationCoordinates, summary, stats FROM " + _bucketName;
         }
 
         /// <summary>
@@ -66,38 +69,7 @@ namespace core.places.services
         /// </summary>
         public void UpdateLocation(string reference, LocationDto dto)
         {
-            var updatedLocation = new AutocompleteDto()
-            {
-                Doctype = dto.Doctype,
-                ListingPriority = dto.ListingPriority,
-                ParentRegionID = dto.ParentRegionID,
-                ParentRegionName = dto.ParentRegionName,
-                ParentRegionNameLong = dto.ParentRegionNameLong,
-                ParentRegionType = dto.ParentRegionType,
-                RegionID = dto.RegionID,
-                RegionName = dto.RegionName,
-                RegionNameLong = dto.RegionNameLong,
-                RegionType = dto.RegionType,
-                RelativeSignificance = dto.RelativeSignificance,
-                SubClass = dto.SubClass,
-                Summary = new Summary
-                {
-                    En = dto.Summary
-                },
-                Stats = new Stats
-                {
-                    AverageReviewScore = dto.AverageReviewScore,
-                    LikeCount = dto.LikeCount,
-                    ReviewCount = dto.ReviewCount
-                },
-                LocationCoordinates = new LocationCoordinates
-                {
-                    Latitude = dto.Latitude,
-                    Longitude = dto.Longitude
-                }
-            };
-
-            _couchbaseHelper.AddRecordToCouchbase(reference, updatedLocation, _bucketName);
+            _couchbaseHelper.AddRecordToCouchbase(reference, dto, _bucketName);
         }
     }
 }

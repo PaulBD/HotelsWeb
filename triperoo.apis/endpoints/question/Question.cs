@@ -16,7 +16,6 @@ namespace triperoo.apis.endpoints.review
     [Route("/v1/question", "POST")]
     public class QuestionRequest
     {
-        public string Guid { get; set; }
         public QuestionDetailDto Question { get; set; }
     }
 
@@ -69,6 +68,7 @@ namespace triperoo.apis.endpoints.review
                 request.Question.InventoryReference = request.Question.InventoryReference;
                 request.Question.DateCreated = DateTime.Now;
                 request.Question.CustomerReference = customer.TriperooCustomers.CustomerReference;
+                request.Question.CustomerImageUrl = customer.TriperooCustomers.Profile.ImageUrl;
 
                 _questionService.InsertQuestion(reference, request.Question);
 

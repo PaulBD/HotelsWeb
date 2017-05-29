@@ -16,10 +16,11 @@ namespace triperoo.apis.endpoints.auth
     public class AuthorizeFacebookRequest
     {
         public string EmailAddress { get; set; }
-        public string FacebookId { get; set; }
+        public int FacebookId { get; set; }
         public string Name { get; set; }
         public string ImageUrl { get; set; }
-        public string CurrentCity { get; set; }
+		public string CurrentCity { get; set; }
+		public int CurrentCityId { get; set; }
     }
 
     /// <summary>
@@ -33,11 +34,12 @@ namespace triperoo.apis.endpoints.auth
         public AuthorizeFacebookRequestValidator()
         {
             // Get
-            RuleSet(ApplyTo.Get, () =>
+            RuleSet(ApplyTo.Post, () =>
             {
                 RuleFor(r => r.EmailAddress).NotNull().WithMessage("Supply a valid email address");
                 RuleFor(r => r.FacebookId).NotNull().WithMessage("Supply a valid facebook id");
-                RuleFor(r => r.Name).NotNull().WithMessage("Supply a valid name");
+				RuleFor(r => r.Name).NotNull().WithMessage("Supply a valid name");
+				RuleFor(r => r.CurrentCityId).GreaterThan(0).WithMessage("Supply a valid city");
                 RuleFor(r => r.CurrentCity).NotNull().WithMessage("Supply a valid city");
             });
         }
@@ -71,39 +73,43 @@ namespace triperoo.apis.endpoints.auth
             CustomerDto response;
             string token = null;
             var authorizationDto = new AuthorizationDto();
-            var customer = new Customer();
+            var customer = new CustomerDto();
 
             try
 			{
 				var guid = Guid.NewGuid().ToString().ToLower();
 
-                token = _authorizeService.AssignToken(request.EmailAddress, request.FacebookId);
+                //TODO: WHAT HAPPENS IF A FACEBOOK USER SWITCHES EMAIL ADDRESS??
+                token = _authorizeService.AssignToken(request.EmailAddress, request.FacebookId.ToString());
                 response = _customerService.ReturnCustomerByToken(token);
 
                 if (response != null)
                 {
-                    customer = response.TriperooCustomers;
+                    customer = response;
                 }
 				else
 				{
-					customer.DateCreated = DateTime.Now;
-					customer.CustomerReference = "customer:" + guid;
-					customer.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-").ToLower();
+					customer.TriperooCustomers.DateCreated = DateTime.Now;
+					customer.TriperooCustomers.CustomerReference = "customer:" + guid;
+					customer.TriperooCustomers.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + request.Name.Replace(" ", "-").ToLower();
 				}
 
-                customer.IsFacebookSignup = true;
-                customer.Profile.Name = request.Name;
-                customer.Profile.CurrentCity = request.CurrentCity;
-                customer.Profile.EmailAddress = request.EmailAddress;
-                customer.Token = token;
-                customer.Profile.ImageUrl = request.ImageUrl;
+				customer.TriperooCustomers.IsFacebookSignup = true;
+				customer.TriperooCustomers.FacebookId = request.FacebookId;
+                customer.TriperooCustomers.Profile.Name = request.Name;
+				customer.TriperooCustomers.Profile.CurrentLocation = request.CurrentCity;
+				customer.TriperooCustomers.Profile.CurrentLocationId = request.CurrentCityId;
+                customer.TriperooCustomers.Profile.EmailAddress = request.EmailAddress;
+                customer.TriperooCustomers.Token = token;
+                customer.TriperooCustomers.Profile.ImageUrl = request.ImageUrl;
 
-                _customerService.InsertUpdateCustomer(customer.CustomerReference, customer);
+                _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
 
                 authorizationDto.Token = token;
-                authorizationDto.UserImage = customer.Profile.ImageUrl;
-                authorizationDto.UserName = customer.Profile.Name;
-                authorizationDto.BaseUrl = "/profile/" + guid.ToLower() + "/" + request.Name.Replace(" ", "-").ToLower();
+                authorizationDto.UserImage = customer.TriperooCustomers.Profile.ImageUrl;
+				authorizationDto.UserName = customer.TriperooCustomers.Profile.Name;
+				authorizationDto.UserId = customer.TriperooCustomers.CustomerReference.Replace("customer:", "");
+                authorizationDto.BaseUrl = "/profile/" + customer.TriperooCustomers.CustomerReference.Replace("customer:", "") + "/" + request.Name.Replace(" ", "-").ToLower();
             }
             catch (Exception ex)
             {

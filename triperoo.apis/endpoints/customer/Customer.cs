@@ -7,7 +7,7 @@ using System.Net;
 
 namespace triperoo.apis.endpoints.customer
 {
-    #region Customer Endpoint
+    #region Authorized Customer Endpoint
 
     /// <summary>
     /// Request
@@ -15,16 +15,29 @@ namespace triperoo.apis.endpoints.customer
     [Route("/v1/customer", "GET")]
     [Route("/v1/customer", "PUT")]
     [Route("/v1/customer", "POST")]
-    public class CustomerRequest
+    public class AuthorizedCustomerRequest
     {
-        public Customer Customer { get; set; }
+        public ProfileDto Profile { get; set; }
     }
 
-    #endregion
+	#endregion
 
-    #region API logic
+	#region Customer Endpoint
 
-    public class CustomerApi : Service
+	/// <summary>
+	/// Request
+	/// </summary>
+    [Route("/v1/customer/{customerReference}", "GET")]
+	public class CustomerRequest
+	{
+		public string CustomerReference { get; set; }
+	}
+
+	#endregion
+
+	#region API logic
+
+	public class CustomerApi : Service
     {
         private readonly ICustomerService _customerService;
         private readonly IAuthorizeService _authorizeService;
@@ -38,18 +51,49 @@ namespace triperoo.apis.endpoints.customer
             _authorizeService = authorizeService;
         }
 
-        #region Return Customer By Reference
+		#region Return Customer By Reference
 
-        /// <summary>
-        /// Return Customer
-        /// </summary>
-        public object Get(CustomerRequest request)
+		/// <summary>
+		/// Return Customer
+		/// </summary>
+		public object Get(CustomerRequest request)
+		{
+			CustomerDto response = new CustomerDto();
+
+			try
+			{
+				response = _customerService.ReturnCustomerByReference(request.CustomerReference);
+
+				if (response == null)
+				{
+					throw new HttpError(HttpStatusCode.BadRequest, "Bad Request");
+				}
+
+				response.TriperooCustomers.Token = "";
+				response.TriperooCustomers.Profile.Pass = "";
+			}
+			catch (Exception ex)
+			{
+				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+			}
+
+			return new HttpResult(response, HttpStatusCode.OK);
+		}
+
+		#endregion
+
+		#region Return Authroized Customer By Reference
+
+		/// <summary>
+		/// Return Customer
+		/// </summary>
+		public object Get(AuthorizedCustomerRequest request)
         {
             CustomerDto response = new CustomerDto();
 
             try
             {
-                var token = Request.Headers.Get("securityToken");
+                var token = Request.Headers.Get("token");
 
                 if (token == null)
                 {
@@ -61,50 +105,10 @@ namespace triperoo.apis.endpoints.customer
                 if (response == null)
                 {
                     throw new HttpError(HttpStatusCode.BadRequest, "Bad Request");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
-            }
+				}
 
-            return new HttpResult(response, HttpStatusCode.OK);
-        }
-
-        #endregion
-
-        #region Insert Customer
-
-        /// <summary>
-        /// Insert Customer
-        /// </summary>
-        public object Post(CustomerRequest request)
-        {
-            var response = new CustomerDto();
-
-            try
-            {
-                var guid = Guid.NewGuid().ToString();
-                var customer = request.Customer;
-                customer.DateCreated = DateTime.Now;
-                customer.CustomerReference = "customer:" + guid;
-
-                if (customer.Profile.FirstName.Length > 0)
-                {
-                    customer.Profile.ProfileUrl = "/profile/" + guid + "/" + request.Customer.Profile.FirstName.Replace(" ", "_").ToLower() + "-" + request.Customer.Profile.LastName.Replace(" ", "_").ToLower();
-                }
-                else
-                {
-                    customer.Profile.ProfileUrl = "/profile/" + guid + "/" + request.Customer.Profile.Name.Replace(" ", "_").ToLower();
-                }
-
-                if ((!string.IsNullOrEmpty(customer.Profile.EmailAddress)) && (!string.IsNullOrEmpty(customer.Profile.Pass)))
-                {
-                    customer.Token = _authorizeService.AssignToken(customer.Profile.EmailAddress, customer.CustomerReference);
-                    customer.Profile.Pass = "";
-                }
-
-                response = _customerService.InsertUpdateCustomer(customer.CustomerReference, customer);
+				response.TriperooCustomers.Token = "";
+				response.TriperooCustomers.Profile.Pass = "";
             }
             catch (Exception ex)
             {
@@ -121,32 +125,48 @@ namespace triperoo.apis.endpoints.customer
         /// <summary>
         /// Update Customer
         /// </summary>
-        public object Put(CustomerRequest request)
+        public object Put(AuthorizedCustomerRequest request)
         {
             var response = new CustomerDto();
 
             try
             {
-                var token = Request.Headers.Get("securityToken");
+                var token = Request.Headers.Get("token");
 
                 if (token == null)
                 {
-                    throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
+					throw HttpError.Unauthorized("You are unauthorized to access this page");
                 }
 
                 var r = _authorizeService.AuthorizeCustomer(token);
 
-                response = _customerService.ReturnCustomerByToken(token);
+				if (r == null)
+				{
+					throw HttpError.NotFound("Customer details cannot be found");
+				}
+
+                response = _customerService.ReturnCustomerByEmailAddress(r.EmailAddress);
 
                 if (response == null)
-                {
-                    throw new HttpError(HttpStatusCode.NotFound, "User not found");
+				{
+					throw HttpError.NotFound("Customer details cannot be found");
                 }
 
-                response.TriperooCustomers.Token = _authorizeService.AssignToken(request.Customer.Profile.EmailAddress, request.Customer.Profile.Pass);
-                response.TriperooCustomers.Profile = request.Customer.Profile;
+                if (response.TriperooCustomers.IsFacebookSignup)
+                {
+					response.TriperooCustomers.Token = _authorizeService.AssignToken(request.Profile.EmailAddress, response.TriperooCustomers.FacebookId.ToString());
+				}
+                else
+                {
+                    response.TriperooCustomers.Token = _authorizeService.AssignToken(request.Profile.EmailAddress, response.TriperooCustomers.Profile.Pass);
+                }
+                response.TriperooCustomers.Profile.Name = request.Profile.Name;
+                response.TriperooCustomers.Profile.DateOfBirth = request.Profile.DateOfBirth;
+                response.TriperooCustomers.Profile.CurrentLocation = request.Profile.CurrentLocation;
+                response.TriperooCustomers.Profile.CurrentLocationId = request.Profile.CurrentLocationId;
+				response.TriperooCustomers.Profile.Pass = request.Profile.Pass;
+				response.TriperooCustomers.Profile.PhoneNumber = request.Profile.PhoneNumber;
                 response.TriperooCustomers.DateUpdate = DateTime.Now;
-                response.TriperooCustomers.Profile.Pass = "";
 
                 response = _customerService.InsertUpdateCustomer(response.TriperooCustomers.CustomerReference, response.TriperooCustomers);
             }

@@ -114,6 +114,10 @@
       <Project>{96a89dbf-00fe-4079-ae95-195824745c91}</Project>
       <Name>library.couchbase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\library.foursquare\library.foursquare.csproj">
+      <Project>{724F8F2F-B182-4184-8CB4-5EFA77A0A98E}</Project>
+      <Name>library.foursquare</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

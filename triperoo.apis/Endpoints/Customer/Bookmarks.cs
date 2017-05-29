@@ -12,12 +12,12 @@ namespace triperoo.apis.endpoints.customer
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/customer/bookmark/{id}", "GET")]
-    [Route("/v1/customer/bookmark/{id}", "DELETE")]
+    [Route("/v1/customer/bookmark/{locationId}", "GET")]
+    [Route("/v1/customer/bookmark/{locationId}", "DELETE")]
     [Route("/v1/customer/bookmark", "POST")]
     public class BookmarkRequest
     {
-        public int Id { get; set; }
+        public int LocationId { get; set; }
         public BookmarkDto Bookmark { get; set; }
     }
 
@@ -60,18 +60,18 @@ namespace triperoo.apis.endpoints.customer
 
             try
             {
-                var token = Request.Headers.Get("securityToken");
+                var token = Request.Headers.Get("token");
 
                 if (token == null)
-                {
-                    throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
+				{
+					throw HttpError.Unauthorized("You are unauthorized to access this page");
                 }
 
                 response = _bookmarkService.ReturnBookmarksByToken(token);
 
                 if (response == null)
-                {
-                    throw new HttpError(HttpStatusCode.BadRequest, "Bad Request");
+				{
+					throw HttpError.NotFound("Customer details cannot be found");
                 }
             }
             catch (Exception ex)
@@ -98,15 +98,15 @@ namespace triperoo.apis.endpoints.customer
 				var token = Request.Headers["token"];
 
                 if (token == null)
-                {
-                    throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
+				{
+					throw HttpError.Unauthorized("You are unauthorized to access this page");
                 }
 
-                response = _bookmarkService.ReturnBookmarkById(request.Id, token);
+                response = _bookmarkService.ReturnBookmarkByLocationId(request.LocationId, token);
 
                 if (response == null)
-                {
-                    throw new HttpError(HttpStatusCode.BadRequest, "Bad Request");
+				{
+					throw HttpError.NotFound("Customer details cannot be found");
                 }
             }
             catch (Exception ex)
@@ -131,8 +131,8 @@ namespace triperoo.apis.endpoints.customer
 				var token = Request.Headers["token"];
 
                 if (token == null)
-                {
-                    throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
+				{
+					throw HttpError.Unauthorized("You are unauthorized to access this page");
                 }
 
                 _bookmarkService.InsertNewBookmark(token, request.Bookmark);
@@ -159,11 +159,11 @@ namespace triperoo.apis.endpoints.customer
 				var token = Request.Headers["token"];
 
                 if (token == null)
-                {
-                    throw new HttpError(HttpStatusCode.Unauthorized, "Unauthorized");
+				{
+					throw HttpError.Unauthorized("You are unauthorized to access this page");
                 }
 
-                _bookmarkService.ArchiveBookmarkById(request.Id, token);
+                _bookmarkService.ArchiveBookmarkByLocationId(request.LocationId, token);
             }
             catch (Exception ex)
             {

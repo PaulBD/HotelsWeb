@@ -131,6 +131,7 @@
     <Compile Include="Endpoints\Location\Deals.cs" />
     <Compile Include="Endpoints\Airport\AirportLounges.cs" />
     <Compile Include="Endpoints\Airport\AirportParking.cs" />
+    <Compile Include="Endpoints\Question\Answer.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

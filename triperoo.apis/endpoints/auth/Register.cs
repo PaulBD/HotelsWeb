@@ -17,9 +17,9 @@ namespace triperoo.apis.endpoints.auth
     {
         public string EmailAddress { get; set; }
         public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string CurrentCity { get; set; }
+        public string Name { get; set; }
+		public string CurrentCity { get; set; }
+		public int CurrentCityId { get; set; }
     }
 
     /// <summary>
@@ -37,8 +37,7 @@ namespace triperoo.apis.endpoints.auth
             {
                 RuleFor(r => r.EmailAddress).NotNull().WithMessage("Supply a valid email address");
                 RuleFor(r => r.Password).NotNull().WithMessage("Supply a valid password");
-                RuleFor(r => r.FirstName).NotNull().WithMessage("Supply a valid first name");
-                RuleFor(r => r.LastName).NotNull().WithMessage("Supply a valid last name");
+                RuleFor(r => r.Name).NotNull().WithMessage("Supply a valid name");
                 RuleFor(r => r.CurrentCity).NotNull().WithMessage("Supply a valid city");
             });
         }
@@ -75,25 +74,24 @@ namespace triperoo.apis.endpoints.auth
 
             try
             {
-                token = _authorizeService.AssignToken(request.EmailAddress, request.Password);
-                response = _customerService.ReturnCustomerByToken(token);
+                response = _customerService.ReturnCustomerByEmailAddress(request.EmailAddress);
 
                 if (response != null)
                 {
-                    return new HttpResult("You are already a member of Triperoo", HttpStatusCode.Conflict);
+					throw HttpError.Conflict("You are already a member of Triperoo");
                 }
 
-                var guid = Guid.NewGuid().ToString().ToLower(); ;
+				var guid = Guid.NewGuid().ToString().ToLower();
+				token = _authorizeService.AssignToken(request.EmailAddress, request.Password);
 
                 var customer = new Customer();
                 customer.DateCreated = DateTime.Now;
                 customer.IsFacebookSignup = false;
                 customer.CustomerReference = "customer:" + guid;
-                customer.Profile.Name = request.FirstName + " " + request.LastName;
-                customer.Profile.FirstName = request.FirstName;
-                customer.Profile.LastName = request.LastName;
-                customer.Profile.CurrentCity = request.CurrentCity;
-                customer.Profile.EmailAddress = request.EmailAddress;
+                customer.Profile.Name = request.Name;
+				customer.Profile.CurrentLocationId = request.CurrentCityId; //TODO: Fix this
+				customer.Profile.CurrentLocation = request.CurrentCity; //TODO: Fix this
+				customer.Profile.EmailAddress = request.EmailAddress;
                 customer.Profile.Pass = request.Password;
                 customer.Token = token;
                 customer.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-").ToLower();
@@ -102,8 +100,9 @@ namespace triperoo.apis.endpoints.auth
 
                 authorizationDto.Token = token;
                 authorizationDto.UserImage = "";
-                authorizationDto.UserName = customer.Profile.Name;
-                authorizationDto.BaseUrl = "/profile/" + guid + "/" + customer.Profile.Name.Replace(" ", "-");
+				authorizationDto.UserName = customer.Profile.Name;
+				authorizationDto.UserId = customer.CustomerReference.Replace("customer:", "");
+                authorizationDto.BaseUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-");
 
             }
             catch (Exception ex)

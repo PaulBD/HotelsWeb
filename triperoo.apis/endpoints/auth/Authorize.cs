@@ -72,13 +72,14 @@ namespace triperoo.apis.endpoints.auth
                 var response = _customerService.ReturnCustomerByToken(token);
 
                 if (response == null)
-                {
-                    return new HttpResult("Email Address or Password is invalid", HttpStatusCode.Unauthorized);
+				{
+					throw HttpError.NotFound("Email Address or Password is invalid");
                 }
 
                 authorizationDto.Token = token;
                 authorizationDto.UserImage = response.TriperooCustomers.Profile.ImageUrl;
                 authorizationDto.UserName = response.TriperooCustomers.Profile.Name;
+                authorizationDto.UserId = response.TriperooCustomers.CustomerReference.Replace("customer:", "");
                 authorizationDto.BaseUrl = "/profile/" + response.TriperooCustomers.CustomerReference.Replace("customer:", "") + " / " + response.TriperooCustomers.Profile.Name.Replace(" ", "-");
             }
             catch (Exception ex)

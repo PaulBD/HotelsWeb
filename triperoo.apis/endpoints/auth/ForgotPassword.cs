@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Net;
 using ServiceStack;
 using ServiceStack.FluentValidation;
@@ -67,7 +68,7 @@ namespace triperoo.apis.endpoints.auth
 
                 if (response == null)
                 {
-                    return new HttpResult("Email address not found", HttpStatusCode.NotFound);
+                    throw HttpError.NotFound("Email Address not found");
                 }
 
                 //TODO: Send password reset

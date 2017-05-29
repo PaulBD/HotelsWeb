@@ -24,18 +24,6 @@ namespace core.customers.services
 		}
 
 		/// <summary>
-		/// Insert new answer
-		/// </summary>
-		public void InsertAnswer(string reference, QuestionDetailDto review)
-		{
-			//_couchbaseHelper.AddRecordToCouchbase(reference, review, _bucketName);
-		}
-
-
-
-
-
-		/// <summary>
 		/// Process Query
 		/// </summary>
 		private List<QuestionDto> ProcessQuery(string q)
@@ -51,16 +39,51 @@ namespace core.customers.services
         }
 
         /// <summary>
+        /// HACK: Make this generic
+        /// </summary>
+        /// <returns>The detail query.</returns>
+        /// <param name="q">Q.</param>
+        private List<QuestionDetailDto> ProcessDetailQuery(string q)
+		{
+			var result = _couchbaseHelper.ReturnQuery<QuestionDetailDto>(q, _bucketName);
+
+			if (result.Count > 0)
+			{
+				return result;
+			}
+
+			return null;
+		}
+
+        /// <summary>
         /// Return Questions By Location Id
         /// </summary>
         public List<QuestionDto> ReturnQuestionsByLocationId(int id)
         {
-            var q = "SELECT tr.question, tr.questionReference, tr.customerReference, tr.dateCreated, tr.inventoryReference, tr.isArchived, tr.type, tc.profile.name as customerName, tc.profile.imageUrl as customerImageUrl, tc.profile.profileUrl as customerProfileUrl FROM TriperooCustomers tr JOIN TriperooCustomers tc ON KEYS tr.customerReference";
+            var q = "SELECT tr.question, tr.questionReference, tr.customerReference, tr.dateCreated, tr.inventoryReference, tr.isArchived, tr.type, tr.answers, tc.profile.name as customerName, tc.profile.imageUrl as customerImageUrl, tc.profile.profileUrl as customerProfileUrl FROM TriperooCustomers tr JOIN TriperooCustomers tc ON KEYS tr.customerReference";
 
             q += " WHERE tr.type = 'question' AND tr.inventoryReference = " + id + " ORDER BY tr.dateCreated DESC";
 
             return ProcessQuery(q);
+		}
 
-        }
+		/// <summary>
+		/// Return Question By Question Reference
+		/// </summary>
+		public QuestionDetailDto ReturnQuestionById(string reference)
+		{
+			var q = "SELECT customerReference, dateCreated, inventoryReference, isArchived, question, questionReference, type, answers FROM TriperooCustomers";
+
+			q += " WHERE type = 'question' AND questionReference = '" + reference + "' ORDER BY dateCreated DESC";
+
+			var questionList = ProcessDetailQuery(q);
+
+            if (questionList.Count > 0)
+            {
+                return questionList[0];
+            }
+
+            return null;
+		}
     }
 }

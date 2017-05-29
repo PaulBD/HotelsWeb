@@ -24,9 +24,9 @@ namespace core.customers.services
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
-            if ((customer != null) && (customer.TriperooCustomers != null))
+            if (customer != null)
             {
-                var foundBookmark = customer.TriperooCustomers.Bookmarks.FirstOrDefault(q => q.LocationId == bookmark.LocationId);
+                var foundBookmark = customer.TriperooCustomers.Bookmarks.FirstOrDefault(q => q.RegionID == bookmark.RegionID);
 
                 if (foundBookmark != null)
                 {
@@ -44,13 +44,13 @@ namespace core.customers.services
         /// <summary>
         /// Return Bookmarks By Id
         /// </summary>
-        public BookmarkDto ReturnBookmarkById(int id, string token)
+        public BookmarkDto ReturnBookmarkByLocationId(int locationId, string token)
         {
             var list = ReturnBookmarksByToken(token);
 
             if (list != null)
             {
-                return list.FirstOrDefault(q => q.Id == id);
+                return list.FirstOrDefault(q => q.RegionID == locationId);
             }
 
             return null;
@@ -59,13 +59,13 @@ namespace core.customers.services
         /// <summary>
         /// Archive Bookmark Id
         /// </summary>
-        public void ArchiveBookmarkById(int id, string token)
+        public void ArchiveBookmarkByLocationId(int locationId, string token)
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
-            if ((customer != null) && (customer.TriperooCustomers != null))
+            if (customer != null)
             {
-                customer.TriperooCustomers.Bookmarks[id - 1].IsArchived = true;
+                customer.TriperooCustomers.Bookmarks.FirstOrDefault(q => q.RegionID == locationId).IsArchived = true;
                 var newCustomer = _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
             }
         }
@@ -77,9 +77,9 @@ namespace core.customers.services
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
-            if ((customer != null) && (customer.TriperooCustomers != null))
+            if (customer != null)
             {
-                return customer.TriperooCustomers.Bookmarks;
+                return customer.TriperooCustomers.Bookmarks.Where(q => q.IsArchived == false).ToList();
             }
 
             return null;

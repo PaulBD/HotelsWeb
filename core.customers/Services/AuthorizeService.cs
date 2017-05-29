@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using core.customers.dtos;
 
 namespace core.customers.services
 {
@@ -18,11 +19,18 @@ namespace core.customers.services
             return JWT.JsonWebToken.Encode(payload, _secretKey, JWT.JwtHashAlgorithm.HS256);
         }
 
-        public string AuthorizeCustomer(string token)
+        public TokenDto AuthorizeCustomer(string token)
         {
             try
             {
-                return JWT.JsonWebToken.Decode(token, _secretKey);
+                var json = JWT.JsonWebToken.Decode(token, _secretKey);
+
+                if (json != null)
+                {
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject<TokenDto>(json);
+                }
+
+                return null;
             }
             catch (JWT.SignatureVerificationException)
             {

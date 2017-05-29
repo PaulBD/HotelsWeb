@@ -1,32 +1,46 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="triperoo.apis/Endpoints/Auth/AuthorizeFacebook.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="core.places/DTOs/LocationListDto.cs">
     <Files>
-      <File FileName="triperoo.apis/Endpoints/Customer/Bookmarks.cs" Line="138" Column="1" />
-      <File FileName="core.customers/Services/IBookmarkService.cs" Line="9" Column="14" />
-      <File FileName="core.customers/Services/BookmarkService.cs" Line="41" Column="1" />
-      <File FileName="triperoo.apis/Configuration/Services.cs" Line="27" Column="76" />
-      <File FileName="core.customers/DTOs/CustomerDto.cs" Line="21" Column="18" />
-      <File FileName="triperoo.apis/Endpoints/Customer/Newsletter.cs" Line="1" Column="1" />
-      <File FileName="triperoo.apis/Endpoints/Location/Reviews.cs" Line="144" Column="1" />
-      <File FileName="triperoo.apis/Endpoints/Review/Review.cs" Line="66" Column="14" />
-      <File FileName="core.customers/Services/QuestionService.cs" Line="29" Column="44" />
-      <File FileName="triperoo.apis/Endpoints/Location/Questions.cs" Line="73" Column="1" />
-      <File FileName="triperoo.apis/Endpoints/Question/Answer.cs" Line="73" Column="77" />
-      <File FileName="core.customers/Services/IQuestionService.cs" Line="8" Column="14" />
-      <File FileName="triperoo.apis/Endpoints/Question/Question.cs" Line="70" Column="42" />
-      <File FileName="core.customers/Services/ReviewService.cs" Line="53" Column="1" />
-      <File FileName="triperoo.apis/Endpoints/Location/Locations.cs" Line="103" Column="1" />
-      <File FileName="core.places/Services/LocationService.cs" Line="46" Column="1" />
-      <File FileName="triperoo.apis/Endpoints/Location/Events.cs" Line="73" Column="1" />
-      <File FileName="library.events/Services/EventService.cs" Line="22" Column="1" />
-      <File FileName="triperoo.apis/Endpoints/Auth/AuthorizeFacebook.cs" Line="72" Column="1" />
-      <File FileName="triperoo.apis/Endpoints/Location/Deals.cs" Line="72" Column="1" />
+      <File FileName="triperoo.apis/Web.config" Line="38" Column="146" />
+      <File FileName="core.places/Services/ILocationService.cs" Line="1" Column="1" />
+      <File FileName="core.places/Services/LocationService.cs" Line="55" Column="25" />
+      <File FileName="core.places/DTOs/LocationListDto.cs" Line="37" Column="15" />
+      <File FileName="library.foursquare/packages.config" Line="1" Column="1" />
+      <File FileName="library.3rdParty.foursquare/MyClass.cs" Line="2" Column="26" />
+      <File FileName="triperoo.apis/Endpoints/Location/Location.cs" Line="111" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Triperoo" expanded="True">
+            <Node name="Core" expanded="True">
+              <Node name="core.places" expanded="True">
+                <Node name="DTOs" expanded="True">
+                  <Node name="LocationListDto.cs" selected="True" />
+                </Node>
+                <Node name="Services" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="libraries" expanded="True" />
+            <Node name="triperoo.apis" expanded="True">
+              <Node name="Endpoints" expanded="True">
+                <Node name="Location" expanded="True" />
+              </Node>
+              <Node name="Global.asax" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/endpoints/review/Reviews.cs" relfile="triperoo.apis/endpoints/review/Reviews.cs" line="92" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Question/Answer.cs" relfile="triperoo.apis/Endpoints/Question/Answer.cs" line="76" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Auth/Register.cs" relfile="triperoo.apis/Endpoints/Auth/Register.cs" line="71" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Customer/Customer.cs" relfile="triperoo.apis/Endpoints/Customer/Customer.cs" line="96" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Location/Location.cs" relfile="triperoo.apis/Endpoints/Location/Location.cs" line="97" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

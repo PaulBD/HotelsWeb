@@ -1,6 +1,5 @@
 ﻿using core.customers.dtos;
 using core.customers.services;
-using core.hotels.services;
 using core.places.services;
 using ServiceStack;
 using System;
@@ -13,10 +12,9 @@ namespace triperoo.apis.endpoints.review
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/question/{questionId}/answer", "POST")]
+    [Route("/v1/question/answer", "POST")]
     public class AnswerRequest
     {
-        public string QuestionId { get; set; }
         public AnswerDto Answer { get; set; }
     }
 
@@ -64,13 +62,15 @@ namespace triperoo.apis.endpoints.review
                     return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
                 }
 
-                //var reference = "question:" + Guid.NewGuid();
-                //request.Question.QuestionReference = reference;
-                //request.Question.InventoryReference = request.Question.InventoryReference;
-                //request.Question.DateCreated = DateTime.Now;
-                //request.Question.CustomerReference = customer.TriperooCustomers.CustomerReference;
+                var question = _questionService.ReturnQuestionById(request.Answer.QuestionReference);
 
-                _questionService.InsertNewAnswer(reference, request.Answer);
+                request.Answer.DateCreated = DateTime.Now;
+				request.Answer.CustomerReference = customer.TriperooCustomers.CustomerReference;
+				request.Answer.CustomerImageUrl = customer.TriperooCustomers.Profile.ImageUrl;
+
+                question.Answers.Add(request.Answer);
+
+                _questionService.InsertQuestion(question.QuestionReference, question);
             }
             catch (Exception ex)
             {
