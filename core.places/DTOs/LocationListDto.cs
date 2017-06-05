@@ -29,8 +29,12 @@ namespace core.places.dtos
 
 	public class Photos
 	{
-		public int photoCount { get; set; }
-		public List<PhotoList> photoList { get; set; }
+        public Photos()
+        {
+            PhotoList = new List<PhotoList>();
+        }
+		public int PhotoCount { get; set; }
+		public List<PhotoList> PhotoList { get; set; }
 	}
 
 	public class LocationCoordinatesDto

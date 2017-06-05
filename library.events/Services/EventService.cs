@@ -7,6 +7,9 @@ namespace library.events.services
 {
     public class EventService : IEventService
     {
+        /// <summary>
+        /// Return events by location (i.e London)
+        /// </summary>
         public EventDto ReturnEventsByLocation(string location, string category, int pageSize, int pageNumber)
         {
             var url = string.Format(ConfigurationManager.AppSettings["events.eventful.url"], location, pageSize, pageNumber);
@@ -19,7 +22,7 @@ namespace library.events.services
                 url += "&within=30&date=Future";
             }
 
-                var message = new HttpRequestMessage(HttpMethod.Get, url);
+            var message = new HttpRequestMessage(HttpMethod.Get, url);
 
             using (var client = new HttpClient())
             {
@@ -32,6 +35,28 @@ namespace library.events.services
             }
 
             return null;
-        }
+		}
+
+        /// <summary>
+        /// Return events by location name (i.e Kensington Palace)
+        /// </summary>
+		public EventDto ReturnEventsByLocationName(string locationName, int pageSize, int pageNumber)
+		{
+			var url = string.Format(ConfigurationManager.AppSettings["location.eventful.url"], locationName, pageSize, pageNumber);
+
+			var message = new HttpRequestMessage(HttpMethod.Get, url);
+
+			using (var client = new HttpClient())
+			{
+				var result = client.SendAsync(message).Result;
+
+				if (result.IsSuccessStatusCode)
+				{
+					return JsonSerializer.DeserializeFromString<EventDto>(result.Content.ReadAsStringAsync().Result);
+				}
+			}
+
+			return null;
+		}
     }
 }

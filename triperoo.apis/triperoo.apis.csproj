@@ -132,6 +132,9 @@
     <Compile Include="Endpoints\Airport\AirportLounges.cs" />
     <Compile Include="Endpoints\Airport\AirportParking.cs" />
     <Compile Include="Endpoints\Question\Answer.cs" />
+    <Compile Include="Endpoints\Customer\Trips.cs" />
+    <Compile Include="Endpoints\Customer\Locations.cs" />
+    <Compile Include="Endpoints\Customer\Likes.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -169,6 +172,9 @@
       <Project>{2d10c643-cd6c-4bfc-bca5-71da19abb93d}</Project>
       <Name>library.weather</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Endpoints\Hotel\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

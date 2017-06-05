@@ -20,22 +20,27 @@ namespace core.customers.services
         /// <summary>
         /// Inserts the new bookmark.
         /// </summary>
-        public void InsertNewBookmark(string token, BookmarkDto bookmark)
+        public void InsertNewBookmark(string token, int tripId, CustomerLocationDto bookmark)
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
             if (customer != null)
             {
-                var foundBookmark = customer.TriperooCustomers.Bookmarks.FirstOrDefault(q => q.RegionID == bookmark.RegionID);
+                CustomerLocationDto foundBookmark = null;
 
-                if (foundBookmark != null)
+                var trips = customer.TriperooCustomers.Trips.FirstOrDefault(q => q.Id == tripId);
+
+                if (trips != null)
                 {
-                    customer.TriperooCustomers.Bookmarks.Remove(foundBookmark);
+                    foundBookmark = trips.Bookmarks.FirstOrDefault(q => q.RegionID == bookmark.RegionID);
                 }
 
-				bookmark.Id = customer.TriperooCustomers.Bookmarks.Count + 1;
-				bookmark.DateCreated = DateTime.Now;
-                customer.TriperooCustomers.Bookmarks.Add(bookmark);
+                if (foundBookmark == null)
+                {
+                    bookmark.Id = customer.TriperooCustomers.Trips.FirstOrDefault(q => q.Id == tripId).Bookmarks.Count + 1;
+                    bookmark.DateCreated = DateTime.Now;
+                    customer.TriperooCustomers.Trips.FirstOrDefault(q => q.Id == tripId).Bookmarks.Add(bookmark);
+                }
 
                 _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
             }
@@ -44,9 +49,9 @@ namespace core.customers.services
         /// <summary>
         /// Return Bookmarks By Id
         /// </summary>
-        public BookmarkDto ReturnBookmarkByLocationId(int locationId, string token)
+        public CustomerLocationDto ReturnBookmarkByLocationId(int locationId, int tripId, string token)
         {
-            var list = ReturnBookmarksByToken(token);
+            var list = ReturnBookmarksByToken(token, tripId);
 
             if (list != null)
             {
@@ -59,13 +64,13 @@ namespace core.customers.services
         /// <summary>
         /// Archive Bookmark Id
         /// </summary>
-        public void ArchiveBookmarkByLocationId(int locationId, string token)
+        public void ArchiveBookmarkByLocationId(int locationId, int tripId, string token)
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
             if (customer != null)
             {
-                customer.TriperooCustomers.Bookmarks.FirstOrDefault(q => q.RegionID == locationId).IsArchived = true;
+                customer.TriperooCustomers.Trips.FirstOrDefault(q => q.Id == tripId).Bookmarks.FirstOrDefault(q => q.RegionID == locationId).IsArchived = true;
                 var newCustomer = _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
             }
         }
@@ -73,13 +78,13 @@ namespace core.customers.services
         /// <summary>
         /// Return Favourites by token
         /// </summary>
-        public List<BookmarkDto> ReturnBookmarksByToken(string token)
+        public List<CustomerLocationDto> ReturnBookmarksByToken(string token, int tripId)
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
             if (customer != null)
             {
-                return customer.TriperooCustomers.Bookmarks.Where(q => q.IsArchived == false).ToList();
+                return customer.TriperooCustomers.Trips.FirstOrDefault(q => q.Id == tripId).Bookmarks.Where(q => q.IsArchived == false).ToList();
             }
 
             return null;

@@ -1,37 +1,10 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="core.places/DTOs/LocationListDto.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="triperoo.apis/Endpoints/Customer/Trips.cs">
     <Files>
-      <File FileName="triperoo.apis/Web.config" Line="38" Column="146" />
-      <File FileName="core.places/Services/ILocationService.cs" Line="1" Column="1" />
-      <File FileName="core.places/Services/LocationService.cs" Line="55" Column="25" />
-      <File FileName="core.places/DTOs/LocationListDto.cs" Line="37" Column="15" />
-      <File FileName="library.foursquare/packages.config" Line="1" Column="1" />
-      <File FileName="library.3rdParty.foursquare/MyClass.cs" Line="2" Column="26" />
-      <File FileName="triperoo.apis/Endpoints/Location/Location.cs" Line="111" Column="1" />
+      <File FileName="core.customers/Services/TripService.cs" Line="59" Column="95" />
+      <File FileName="core.customers/DTOs/CustomerDto.cs" Line="37" Column="34" />
+      <File FileName="triperoo.apis/Endpoints/Customer/Trips.cs" Line="129" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Triperoo" expanded="True">
-            <Node name="Core" expanded="True">
-              <Node name="core.places" expanded="True">
-                <Node name="DTOs" expanded="True">
-                  <Node name="LocationListDto.cs" selected="True" />
-                </Node>
-                <Node name="Services" expanded="True" />
-              </Node>
-            </Node>
-            <Node name="libraries" expanded="True" />
-            <Node name="triperoo.apis" expanded="True">
-              <Node name="Endpoints" expanded="True">
-                <Node name="Location" expanded="True" />
-              </Node>
-              <Node name="Global.asax" expanded="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -40,7 +13,7 @@
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Question/Answer.cs" relfile="triperoo.apis/Endpoints/Question/Answer.cs" line="76" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Auth/Register.cs" relfile="triperoo.apis/Endpoints/Auth/Register.cs" line="71" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Customer/Customer.cs" relfile="triperoo.apis/Endpoints/Customer/Customer.cs" line="96" column="1" />
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Location/Location.cs" relfile="triperoo.apis/Endpoints/Location/Location.cs" line="97" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Customer/Likes.cs" relfile="triperoo.apis/Endpoints/Customer/Likes.cs" line="58" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

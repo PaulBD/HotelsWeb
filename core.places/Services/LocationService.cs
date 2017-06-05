@@ -2,6 +2,9 @@
 using library.couchbase;
 using System.Collections.Generic;
 using library.foursquare.services;
+using library.foursquare.dtos;
+using System.Net.Http;
+using ServiceStack.Text;
 
 namespace core.places.services
 {
@@ -36,8 +39,95 @@ namespace core.places.services
         {
             var q = _query + " WHERE regionID = " + locationId;
 
-            return ProcessQuery(q)[0];
+            var result = ProcessQuery(q)[0];
+
+
+            if (result.FormattedAddress.Count == 0)
+            {
+                // Go to Foresquare and add this extra detail
+
+                var foresquareResult = _venueService.ReturnVenuesByLocation(result.RegionName, result.ParentRegionName);
+
+                if (foresquareResult != null){
+                    result = FindLocation(result, foresquareResult);
+
+                    var foresquarePhotos = _venueService.UpdatePhotos(result.SourceData.ForesquareId);
+
+                    result = AttachPhotos(result, foresquarePhotos);
+
+                    UpdateLocation("location:" + result.RegionID, result);
+                }
+			}
+
+
+            return result;
         }
+
+        private LocationDto AttachPhotos(LocationDto locationDto, ForesquarePhotosDto photoDto)
+        {
+			locationDto.Photos.PhotoCount = photoDto.response.photos.count;
+
+			foreach (var item in photoDto.response.photos.items)
+			{
+				locationDto.Photos.PhotoList.Add(new PhotoList
+				{
+					height = item.height,
+					prefix = item.prefix,
+					suffix = item.suffix,
+					width = item.width
+				});
+			}
+
+            return locationDto;
+        }
+
+        private LocationDto FindLocation(LocationDto locationDto, VenueDto venueDto)
+        {
+			Venue firstLocation = null;
+			foreach (var v in venueDto.Response.Venues)
+			{
+				if (utilities.Common.DoesStringMatch(locationDto.RegionName, v.Name))
+				{
+					firstLocation = v;
+					break;
+				}
+			}
+
+			if (firstLocation != null)
+			{
+				locationDto.SourceData.ForesquareId = firstLocation.Id;
+
+				if (firstLocation.Location != null)
+				{
+				    locationDto.LocationCoordinates.Latitude = firstLocation.Location.Lat;
+					locationDto.LocationCoordinates.Longitude = firstLocation.Location.Lng;
+					locationDto.FormattedAddress = firstLocation.Location.FormattedAddress;
+				}
+
+				if (firstLocation.Categories != null)
+				{
+					foreach (var cat in firstLocation.Categories)
+					{
+						locationDto.Tags.Add(cat.ShortName);
+					}
+				}
+
+				if (firstLocation.Contact != null)
+				{
+					locationDto.ContactDetails.facebook = firstLocation.Contact.Facebook;
+					locationDto.ContactDetails.facebookName = firstLocation.Contact.FacebookName;
+					locationDto.ContactDetails.facebookUsername = firstLocation.Contact.FacebookUsername;
+					locationDto.ContactDetails.formattedPhone = firstLocation.Contact.FormattedPhone;
+					locationDto.ContactDetails.instagram = firstLocation.Contact.Instagram;
+					locationDto.ContactDetails.phone = firstLocation.Contact.Phone;
+					locationDto.ContactDetails.twitter = firstLocation.Contact.Twitter;
+				}
+			}
+
+            return locationDto;
+        }
+
+
 
         /// <summary>
         /// Return a child locations by parent Id

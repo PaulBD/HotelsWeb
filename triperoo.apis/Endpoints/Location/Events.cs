@@ -45,11 +45,48 @@ namespace triperoo.apis.endpoints.location
         }
     }
 
-    #endregion
+	#endregion
 
-    #region API logic
+	#region Return Events By Location Id and Keyword
 
-    public class EventApi : Service
+	/// <summary>
+	/// Request
+	/// </summary>
+    [Route("/v1/location/{id}/events/{keyword}", "GET")]
+	public class EventLocationRequest
+	{
+		public int Id { get; set; }
+		public int PageSize { get; set; }
+		public int PageNumber { get; set; }
+		public string Keyword { get; set; }
+	}
+
+	/// <summary>
+	/// Validator
+	/// </summary>
+	public class EventLocationRequestValidator : AbstractValidator<EventLocationRequest>
+	{
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		public EventLocationRequestValidator()
+		{
+			// Get
+			RuleSet(ApplyTo.Get, () =>
+			{
+				RuleFor(r => r.Id).GreaterThan(0).WithMessage("Invalid location id has been supplied");
+				RuleFor(r => r.PageSize).GreaterThan(0).WithMessage("Invalid page size has been supplied");
+				RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(0).WithMessage("Invalid page number has been supplied");
+			});
+
+		}
+	}
+
+	#endregion
+
+	#region API logic
+
+	public class EventApi : Service
     {
         private readonly IEventService _eventService;
         private readonly ILocationService _locationService;
@@ -114,8 +151,44 @@ namespace triperoo.apis.endpoints.location
             return new HttpResult(eventResponse, HttpStatusCode.OK);
         }
 
-        #endregion
-    }
+		#endregion
+
+		#region Return Events By Location Id and Location Name
+
+		/// <summary>
+		/// Return Events By Location Id and Location Name
+		/// </summary>
+		public object Get(EventLocationRequest request)
+		{
+			EventDto eventResponse = new EventDto();
+			string cacheName = "events:" + request.Id + ":" + request.Keyword;
+
+			try
+			{
+				eventResponse = Cache.Get<EventDto>(cacheName);
+
+				if (eventResponse == null)
+				{
+					eventResponse = _eventService.ReturnEventsByLocationName(request.Keyword, 12, request.PageNumber + 1);
+
+					// base.Cache.Add(cacheName, response);
+				}
+
+				if (eventResponse.events != null)
+				{
+					eventResponse.events.Event = eventResponse.events.Event.Take(request.PageSize).ToList();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+			}
+
+			return new HttpResult(eventResponse, HttpStatusCode.OK);
+		}
+
+		#endregion
+	}
 
     #endregion
 }

@@ -28,5 +28,25 @@ namespace library.foursquare.services
 
             return null;
         }
+
+		public ForesquarePhotosDto UpdatePhotos(string foresquareId)
+		{
+			if (!string.IsNullOrEmpty(foresquareId))
+			{
+				var url = "https://api.foursquare.com/v2/venues/" + foresquareId + "/photos?client_id=LR5CRGKSYR2L0DEL2RZMLYOYPUM5AFN3P0JXZO4IAGD5QZBV&client_secret=1N5TJBE35HP55X0NJCVEP15VTNMFMHAQJGVB2MC55KKAPWPX&v=20160608";
+
+				var message = new HttpRequestMessage(HttpMethod.Get, url);
+
+				var client = new HttpClient();
+				var response = client.SendAsync(message).Result;
+
+				if (response.IsSuccessStatusCode)
+				{
+					return JsonSerializer.DeserializeFromString<ForesquarePhotosDto>(response.Content.ReadAsStringAsync().Result);
+				}
+			}
+
+			return null;
+		}
     }
 }
