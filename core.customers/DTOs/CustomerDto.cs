@@ -17,7 +17,8 @@ namespace core.customers.dtos
         public string Pass { get; set; }
         public string PhoneNumber { get; set; }
         public string ImageUrl { get; set; }
-        public string ProfileUrl { get; set; }
+		public string ProfileUrl { get; set; }
+		public string Bio { get; set; }
     }
 
     public class TripDto
@@ -51,6 +52,19 @@ namespace core.customers.dtos
         public bool IsArchived { get; set; }
     }
 
+    public class StatsDto
+    {
+		public int FollowerCount { get; set; }
+		public int FollowingCount { get; set; }
+        public int ReviewCount { get; set; }
+    }
+
+    public class CustomerFollowsDto
+    {
+        public string CustomerReference { get; set; }
+        public DateTime DateAdded { get; set; }
+    }
+
     public class Customer
     {
         public Customer()
@@ -59,6 +73,8 @@ namespace core.customers.dtos
             Trips = new List<TripDto>();
 			Likes = new List<CustomerLocationDto>();
 			VisitedLocations = new List<CustomerLocationDto>();
+			Follows = new List<CustomerFollowsDto>();
+			Stats = new StatsDto();
         }
 
         public bool IsFacebookSignup { get; set; }
@@ -72,6 +88,8 @@ namespace core.customers.dtos
 		public List<TripDto> Trips { get; set; }
 		public List<CustomerLocationDto> VisitedLocations { get; set; }
 		public List<CustomerLocationDto> Likes { get; set; }
+		public List<CustomerFollowsDto> Follows { get; set; }
+		public StatsDto Stats { get; set; }
     }
 
     public class CustomerDto

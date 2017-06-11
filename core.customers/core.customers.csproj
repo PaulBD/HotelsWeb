@@ -103,6 +103,9 @@
     <Compile Include="Services\ILikeService.cs" />
     <Compile Include="Services\VisitedService.cs" />
     <Compile Include="Services\IVisitedService.cs" />
+    <Compile Include="Services\FollowService.cs" />
+    <Compile Include="Services\IFollowService.cs" />
+    <Compile Include="DTOs\FriendDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core.couchbase\library.couchbase.csproj">

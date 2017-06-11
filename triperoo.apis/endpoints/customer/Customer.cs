@@ -165,6 +165,7 @@ namespace triperoo.apis.endpoints.customer
                 response.TriperooCustomers.Profile.CurrentLocation = request.Profile.CurrentLocation;
                 response.TriperooCustomers.Profile.CurrentLocationId = request.Profile.CurrentLocationId;
 				response.TriperooCustomers.Profile.Pass = request.Profile.Pass;
+				response.TriperooCustomers.Profile.Bio = request.Profile.Bio;
 				response.TriperooCustomers.Profile.PhoneNumber = request.Profile.PhoneNumber;
                 response.TriperooCustomers.DateUpdate = DateTime.Now;
 

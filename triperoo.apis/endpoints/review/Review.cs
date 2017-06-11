@@ -102,12 +102,23 @@ namespace triperoo.apis.endpoints.review
 
                 _reviewService.InsertNewReview(reference, request.Review);
 
-                location.ReviewCount += 1;
-                location.AverageReviewScore = (location.AverageReviewScore + request.Review.StarRating) / location.ReviewCount;
+                if (location.Stats.ReviewCount > 0)
+                {
+                    location.Stats.ReviewCount += 1;
+                    location.Stats.AverageReviewScore = (location.Stats.AverageReviewScore + request.Review.StarRating) / location.Stats.ReviewCount;
+                }
+				else
+				{
+					location.Stats.ReviewCount += 1;
+                    location.Stats.AverageReviewScore = request.Review.StarRating;
+                }
 
                 var key = "location:" + location.RegionID;
                 _locationService.UpdateLocation(key, location);
                 base.Cache.Add(key, location);
+
+                customer.TriperooCustomers.Stats.ReviewCount += 1;
+                _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
             }
             catch (Exception ex)
             {

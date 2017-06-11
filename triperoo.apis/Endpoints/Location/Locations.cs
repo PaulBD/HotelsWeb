@@ -101,7 +101,7 @@ namespace triperoo.apis.endpoints.location
 		public object Get(ParentLocationRequest request)
         {
             string cacheName = "parentLocations:" + request.parentLocationId;
-            List<LocationDto> response = null;
+            List<LocationDto> response = new List<LocationDto>();
 
             try
             {

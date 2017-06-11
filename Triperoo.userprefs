@@ -1,9 +1,20 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="triperoo.apis/Endpoints/Customer/Trips.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="triperoo.apis/Endpoints/Customer/Customer.cs">
     <Files>
-      <File FileName="core.customers/Services/TripService.cs" Line="59" Column="95" />
-      <File FileName="core.customers/DTOs/CustomerDto.cs" Line="37" Column="34" />
-      <File FileName="triperoo.apis/Endpoints/Customer/Trips.cs" Line="129" Column="1" />
+      <File FileName="core.customers/Services/FollowService.cs" Line="14" Column="9" />
+      <File FileName="core.customers/Services/IFollowService.cs" Line="4" Column="3" />
+      <File FileName="core.customers/Services/BookmarkService.cs" Line="44" Column="1" />
+      <File FileName="core.customers/Services/CustomerService.cs" Line="46" Column="10" />
+      <File FileName="core.customers/DTOs/FriendDto.cs" Line="6" Column="27" />
+      <File FileName="triperoo.apis/Endpoints/Location/Locations.cs" Line="103" Column="1" />
+      <File FileName="core.places/Services/LocationService.cs" Line="68" Column="23" />
+      <File FileName="triperoo.apis/Endpoints/Location/Location.cs" Line="72" Column="1" />
+      <File FileName="library.foursquare/Services/VenueService.cs" Line="30" Column="1" />
+      <File FileName="core.places/DTOs/LocationListDto.cs" Line="59" Column="16" />
+      <File FileName="core.customers/Services/ReviewService.cs" Line="1" Column="1" />
+      <File FileName="triperoo.apis/Endpoints/Review/Review.cs" Line="116" Column="59" />
+      <File FileName="core.customers/DTOs/CustomerDto.cs" Line="21" Column="20" />
+      <File FileName="triperoo.apis/Endpoints/Customer/Customer.cs" Line="168" Column="72" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

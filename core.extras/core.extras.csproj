@@ -64,6 +64,8 @@
     <Compile Include="Services\LoungeService.cs" />
     <Compile Include="DTOs\Hotel\AirportHotelResponseDto.cs" />
     <Compile Include="DTOs\Lounge\LoungeAvailabilityResponseDto.cs" />
+    <Compile Include="Services\BookingService.cs" />
+    <Compile Include="Services\IBookingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

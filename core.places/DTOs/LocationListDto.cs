@@ -73,7 +73,6 @@ namespace core.places.dtos
             LocationCoordinates = new LocationCoordinatesDto();
         }
 
-        public int AverageReviewScore { get; set; }
         public string Doctype { get; set; }
         public string Image { get; set; }
         public double Latitude { get; set; }
@@ -90,7 +89,6 @@ namespace core.places.dtos
         public string RegionNameLong { get; set; }
         public string RegionType { get; set; }
         public string RelativeSignificance { get; set; }
-        public int ReviewCount { get; set; }
         public int SearchPriority { get; set; }
         public string SubClass { get; set; }
         public SummaryDto Summary { get; set; }

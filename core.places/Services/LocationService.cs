@@ -51,9 +51,11 @@ namespace core.places.services
                 if (foresquareResult != null){
                     result = FindLocation(result, foresquareResult);
 
-                    var foresquarePhotos = _venueService.UpdatePhotos(result.SourceData.ForesquareId);
-
-                    result = AttachPhotos(result, foresquarePhotos);
+                    if (result.SourceData.ForesquareId != null)
+                    {
+                        var foresquarePhotos = _venueService.UpdatePhotos(result.SourceData.ForesquareId);
+                        result = AttachPhotos(result, foresquarePhotos);
+                    }
 
                     UpdateLocation("location:" + result.RegionID, result);
                 }
