@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "library.events", "library.e
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "library.foursquare", "library.foursquare\library.foursquare.csproj", "{724F8F2F-B182-4184-8CB4-5EFA77A0A98E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "library.wikipedia", "library.wikipedia\library.wikipedia.csproj", "{9DAA9E24-01CC-4105-8638-6918C8C86A5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{724F8F2F-B182-4184-8CB4-5EFA77A0A98E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{724F8F2F-B182-4184-8CB4-5EFA77A0A98E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{724F8F2F-B182-4184-8CB4-5EFA77A0A98E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DAA9E24-01CC-4105-8638-6918C8C86A5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DAA9E24-01CC-4105-8638-6918C8C86A5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DAA9E24-01CC-4105-8638-6918C8C86A5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DAA9E24-01CC-4105-8638-6918C8C86A5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,5 +109,6 @@ Global
 		{21899B8B-EDF5-4DE8-A2DC-5F320D02966B} = {032F2F96-ED7D-41F1-84B8-B5A645CE88F0}
 		{624F8F2F-B182-4184-8CB4-5EFA77A0A98E} = {13388920-71FB-4B9A-8E48-5CCB5D1F7285}
 		{724F8F2F-B182-4184-8CB4-5EFA77A0A98E} = {13388920-71FB-4B9A-8E48-5CCB5D1F7285}
+		{9DAA9E24-01CC-4105-8638-6918C8C86A5F} = {13388920-71FB-4B9A-8E48-5CCB5D1F7285}
 	EndGlobalSection
 EndGlobal

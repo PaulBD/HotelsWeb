@@ -8,6 +8,6 @@ namespace core.places.services
         LocationDto ReturnLocationById(int locationId);
         List<LocationDto> ReturnLocationsForAutocomplete(string searchValue);
         List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type);
-        void UpdateLocation(string reference, LocationDto dto);
+        void UpdateLocation(string reference, LocationDto dto, bool isStaging);
     }
 }

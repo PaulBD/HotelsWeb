@@ -55,6 +55,7 @@ namespace core.customers.services
                 existingTrip.RegionName = trip.RegionName;
                 existingTrip.StartDate = trip.StartDate;
                 existingTrip.EndDate = trip.EndDate;
+				existingTrip.Description = trip.Description;
 				existingTrip.ListName = trip.ListName;
 				existingTrip.Url = customer.TriperooCustomers.Profile.ProfileUrl + "/trips/" + existingTrip.Id + "/" + trip.ListName.Replace(" ", "-");
 

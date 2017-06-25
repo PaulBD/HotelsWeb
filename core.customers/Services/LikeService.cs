@@ -27,6 +27,8 @@ namespace core.customers.services
 			if (customer != null)
 			{
 				customer.TriperooCustomers.Likes.FirstOrDefault(q => q.RegionID == locationId).IsArchived = true;
+
+				customer.TriperooCustomers.Stats.LikeCount -= 1;
 				var newCustomer = _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
 			}
         }
@@ -50,6 +52,8 @@ namespace core.customers.services
 				location.Id = customer.TriperooCustomers.Likes.Count + 1;
 				location.DateCreated = DateTime.Now;
 				customer.TriperooCustomers.Likes.Add(location);
+
+                customer.TriperooCustomers.Stats.LikeCount += 1;
 
 				_customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
 			}

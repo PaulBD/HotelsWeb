@@ -4,7 +4,6 @@ using ServiceStack;
 using ServiceStack.FluentValidation;
 using core.places.services;
 using core.places.dtos;
-using System.Collections.Generic;
 
 namespace triperoo.apis.endpoints.location
 {
@@ -41,11 +40,11 @@ namespace triperoo.apis.endpoints.location
         }
     }
 
-    #endregion
+	#endregion
 
-    #region API logic
+	#region API logic
 
-    public class LocationApi : Service
+	public class LocationApi : Service
     {
         private readonly ILocationService _locationService;
 
@@ -64,7 +63,7 @@ namespace triperoo.apis.endpoints.location
 		/// </summary>
 		public object Get(LocationRequest request)
         {
-            LocationDto response = null;
+			LocationDto response = null;
             string cacheName = "location:" + request.id;
 
             try
@@ -107,15 +106,19 @@ namespace triperoo.apis.endpoints.location
 					base.Cache.Add(cacheName, response);
 				}
 
-                response.FormattedAddress = request.Location.FormattedAddress;
-                _locationService.UpdateLocation(cacheName, response);
+				response.FormattedAddress = request.Location.FormattedAddress;
+				response.Summary = request.Location.Summary;
+				response.LocationCoordinates = request.Location.LocationCoordinates;
+				response.ContactDetails = request.Location.ContactDetails;
+				response.Tags = request.Location.Tags;
+                _locationService.UpdateLocation(cacheName, response, true);
 			}
 			catch (Exception ex)
 			{
 				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
 			}
 
-			return new HttpResult(response, HttpStatusCode.OK);
+			return new HttpResult(HttpStatusCode.OK);
 		}
 
 		#endregion

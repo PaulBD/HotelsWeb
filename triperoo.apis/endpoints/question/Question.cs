@@ -62,17 +62,25 @@ namespace triperoo.apis.endpoints.review
                 {
                     return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
                 }
-                
-                var reference = "question:" + Guid.NewGuid();
+
+				var location = _locationService.ReturnLocationById(request.Question.InventoryReference);
+
+				if (location == null)
+				{
+					return new HttpResult("Location not found" + token, HttpStatusCode.Unauthorized);
+				}
+
+                var guid = Guid.NewGuid();
+
+                var reference = "question:" + guid;
                 request.Question.QuestionReference = reference;
+                request.Question.QuestionUrl = location.Url + "/" + guid + "/question"; 
                 request.Question.InventoryReference = request.Question.InventoryReference;
                 request.Question.DateCreated = DateTime.Now;
                 request.Question.CustomerReference = customer.TriperooCustomers.CustomerReference;
                 request.Question.CustomerImageUrl = customer.TriperooCustomers.Profile.ImageUrl;
 
                 _questionService.InsertQuestion(reference, request.Question);
-
-                //TODO: Clear Location Question Cache
             }
             catch (Exception ex)
             {

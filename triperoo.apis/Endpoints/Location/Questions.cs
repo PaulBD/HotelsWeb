@@ -64,31 +64,29 @@ namespace triperoo.apis.endpoints.location
 		/// Return Location Questions By Id
 		/// </summary>
 		public object Get(QuestionsRequest request)
-        {
-			var response = new List<QuestionDto>();
+		{
+			var response = new QuestionListDto();
 			string cacheName = "questions:" + request.Id;
 
             try
 			{
-				response = Cache.Get<List<QuestionDto>>(cacheName);
+				response = Cache.Get<QuestionListDto>(cacheName);
 
                 if (response == null)
-                {
-                    response = _questionService.ReturnQuestionsByLocationId(request.Id);
+				{
+					response = new QuestionListDto();
+                    response.QuestionDto = _questionService.ReturnQuestionsByLocationId(request.Id);
                 }
 
-				if (response != null)
-				{
-					if (request.PageNumber > 0)
-					{
-						response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
-					}
-					else
-					{
-						response = response.Take(request.PageSize).ToList();
-					}
+				response.QuestionCount = response.QuestionDto.Count;
 
-					// base.Cache.Add(cacheName, response);
+				if (request.PageNumber > 0)
+				{
+					response.QuestionDto = response.QuestionDto.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+				}
+				else
+				{
+					response.QuestionDto = response.QuestionDto.Take(request.PageSize).ToList();
 				}
             }
             catch (Exception ex)

@@ -3,6 +3,8 @@ using library.couchbase;
 using System.Collections.Generic;
 using library.foursquare.services;
 using library.foursquare.dtos;
+using library.wikipedia.services;
+using library.wikipedia.dtos;
 using System.Net.Http;
 using ServiceStack.Text;
 
@@ -11,13 +13,16 @@ namespace core.places.services
     public class LocationService : ILocationService
     {
         private CouchBaseHelper _couchbaseHelper;
-        private readonly string _bucketName = "TriperooCommon";
+		private readonly string _bucketName = "TriperooCommon";
+		private readonly string _tempBucketName = "TriperooCommonStaging";
         private string _query;
-        private VenueService _venueService;
+		private IVenueService _venueService;
+		private IContentService _contentService;
 
         public LocationService()
         {
             _venueService = new VenueService();
+            _contentService = new ContentService();
             _couchbaseHelper = new CouchBaseHelper();
             _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, url, formattedAddress, contactDetails, tags, photos, locationCoordinates, summary, stats FROM " + _bucketName;
         }
@@ -37,11 +42,30 @@ namespace core.places.services
         /// </summary>
         public LocationDto ReturnLocationById(int locationId)
         {
+            bool requiresUpdate = false;
             var q = _query + " WHERE regionID = " + locationId;
 
             var result = ProcessQuery(q)[0];
 
+            // Wikepedia
+            if (result.Summary != null)
+            {
+                if (string.IsNullOrEmpty(result.Summary.En))
+                {
+                    var wikipediaResult = _contentService.ReturnContentByLocation(result.RegionName);
 
+                    if (!string.IsNullOrEmpty(wikipediaResult))
+                    {
+                        if (!wikipediaResult.Contains("From a page move") && !wikipediaResult.Contains("This is a redirect"))
+                        {
+                            result.Summary.En = wikipediaResult;
+                            requiresUpdate = true;
+                        }
+                    }
+                }
+            }
+
+            // Foresquare
             if (result.FormattedAddress.Count == 0)
             {
                 // Go to Foresquare and add this extra detail
@@ -49,22 +73,28 @@ namespace core.places.services
                 var foresquareResult = _venueService.ReturnVenuesByLocation(result.RegionName, result.ParentRegionName);
 
                 if (foresquareResult != null){
-                    result = FindLocation(result, foresquareResult);
+                    result = FindForesquareLocation(result, foresquareResult);
 
                     if (result.SourceData.ForesquareId != null)
                     {
                         var foresquarePhotos = _venueService.UpdatePhotos(result.SourceData.ForesquareId);
-                        result = AttachPhotos(result, foresquarePhotos);
+						result = AttachPhotos(result, foresquarePhotos);
+						requiresUpdate = true;
                     }
 
-                    UpdateLocation("location:" + result.RegionID, result);
                 }
 			}
 
+            if (requiresUpdate){
+				UpdateLocation("location:" + result.RegionID, result, false);
+            }
 
             return result;
         }
 
+        /// <summary>
+        /// Attachs location photos
+        /// </summary>
         private LocationDto AttachPhotos(LocationDto locationDto, ForesquarePhotosDto photoDto)
         {
 			locationDto.Photos.PhotoCount = photoDto.response.photos.count;
@@ -83,7 +113,13 @@ namespace core.places.services
             return locationDto;
         }
 
-        private LocationDto FindLocation(LocationDto locationDto, VenueDto venueDto)
+        /// <summary>
+        /// Finds Foresquare location.
+        /// </summary>
+        /// <returns>The location.</returns>
+        /// <param name="locationDto">Location dto.</param>
+        /// <param name="venueDto">Venue dto.</param>
+        private LocationDto FindForesquareLocation(LocationDto locationDto, VenueDto venueDto)
         {
 			Venue firstLocation = null;
 			foreach (var v in venueDto.Response.Venues)
@@ -159,9 +195,16 @@ namespace core.places.services
         /// <summary>
         /// Update Location
         /// </summary>
-        public void UpdateLocation(string reference, LocationDto dto)
+        public void UpdateLocation(string reference, LocationDto dto, bool isStaging)
         {
-            _couchbaseHelper.AddRecordToCouchbase(reference, dto, _bucketName);
+            if (isStaging)
+            {
+                _couchbaseHelper.AddRecordToCouchbase(reference, dto, _tempBucketName);
+            }
+			else
+			{
+				_couchbaseHelper.AddRecordToCouchbase(reference, dto, _bucketName);
+            }
         }
     }
 }

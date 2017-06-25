@@ -11,7 +11,8 @@ namespace core.customers.dtos
         }
 
         public string Type { get { return "review"; } }
-        public string ReviewReference { get; set; }
+		public string ReviewReference { get; set; }
+		public string ReviewUrl { get; set; }
         public string CustomerReference { get; set; }
         public int InventoryReference { get; set; }
         public string ReviewType { get; set; }
@@ -42,7 +43,8 @@ namespace core.customers.dtos
         public string CustomerLocation { get; set; }
         public string CustomerProfileUrl { get; set; }
         public string CustomerReference { get; set; }
-        public string ReviewReference { get; set; }
+		public string ReviewReference { get; set; }
+		public string ReviewUrl { get; set; }
         public string DateCreated { get; set; }
         public string ImageUrl { get; set; }
         public int InventoryReference { get; set; }

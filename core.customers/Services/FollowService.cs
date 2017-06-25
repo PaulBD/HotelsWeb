@@ -25,13 +25,27 @@ namespace core.customers.services
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
-            customer.TriperooCustomers.Follows.Add(
+            customer.TriperooCustomers.Following.Add(
                 new CustomerFollowsDto{
                  CustomerReference = reference,
                 DateAdded = DateTime.Now
 				});
 
+			customer.TriperooCustomers.Stats.FollowingCount += 1;
 			_customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
+
+            // Update the customer I want to follow showing that I'm following them
+			var followcustomer = _customerService.ReturnCustomerByReference(reference);
+
+			followcustomer.TriperooCustomers.FollowedBy.Add(
+				new CustomerFollowsDto
+				{
+					CustomerReference = reference,
+					DateAdded = DateTime.Now
+				});
+
+			followcustomer.TriperooCustomers.Stats.FollowerCount += 1;
+			_customerService.InsertUpdateCustomer(followcustomer.TriperooCustomers.CustomerReference, followcustomer.TriperooCustomers);
         }
 
         /// <summary>
@@ -50,10 +64,20 @@ namespace core.customers.services
 		{
 			var customer = _customerService.ReturnCustomerByToken(token);
 
-            var friend = customer.TriperooCustomers.Follows.FirstOrDefault(q => q.CustomerReference == reference);
-            customer.TriperooCustomers.Follows.Remove(friend);
+            var friend = customer.TriperooCustomers.Following.FirstOrDefault(q => q.CustomerReference == reference);
+            customer.TriperooCustomers.Following.Remove(friend);
 
+            customer.TriperooCustomers.Stats.FollowingCount -= 1;
 			_customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
+
+
+			var followcustomer = _customerService.ReturnCustomerByReference(reference);
+
+			var followFriend = followcustomer.TriperooCustomers.FollowedBy.FirstOrDefault(q => q.CustomerReference == reference);
+			followcustomer.TriperooCustomers.FollowedBy.Remove(followFriend);
+
+			followcustomer.TriperooCustomers.Stats.FollowerCount -= 1;
+			_customerService.InsertUpdateCustomer(followcustomer.TriperooCustomers.CustomerReference, followcustomer.TriperooCustomers);
         }
 
 		/// <summary>

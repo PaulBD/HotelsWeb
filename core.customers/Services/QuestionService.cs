@@ -60,7 +60,7 @@ namespace core.customers.services
         /// </summary>
         public List<QuestionDto> ReturnQuestionsByLocationId(int id)
         {
-            var q = "SELECT tr.question, tr.questionReference, tr.customerReference, tr.dateCreated, tr.inventoryReference, tr.isArchived, tr.type, tr.answers, tc.profile.name as customerName, tc.profile.imageUrl as customerImageUrl, tc.profile.profileUrl as customerProfileUrl FROM TriperooCustomers tr JOIN TriperooCustomers tc ON KEYS tr.customerReference";
+            var q = "SELECT tr.question, tr.questionReference, tr.questionUrl, tr.customerReference, tr.dateCreated, tr.inventoryReference, tr.isArchived, tr.type, tr.answers, tc.profile.name as customerName, tc.profile.imageUrl as customerImageUrl, tc.profile.profileUrl as customerProfileUrl FROM TriperooCustomers tr JOIN TriperooCustomers tc ON KEYS tr.customerReference";
 
             q += " WHERE tr.type = 'question' AND tr.inventoryReference = " + id + " ORDER BY tr.dateCreated DESC";
 
@@ -72,7 +72,7 @@ namespace core.customers.services
 		/// </summary>
 		public QuestionDetailDto ReturnQuestionById(string reference)
 		{
-			var q = "SELECT customerReference, dateCreated, inventoryReference, isArchived, question, questionReference, type, answers FROM TriperooCustomers";
+			var q = "SELECT customerReference, dateCreated, inventoryReference, isArchived, question, questionReference, type, answers, questionUrl FROM TriperooCustomers";
 
 			q += " WHERE type = 'question' AND questionReference = '" + reference + "' ORDER BY dateCreated DESC";
 

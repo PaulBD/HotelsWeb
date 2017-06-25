@@ -4,6 +4,7 @@ using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using core.places.services;
 
 namespace triperoo.apis.endpoints.customer
 {
@@ -38,14 +39,16 @@ namespace triperoo.apis.endpoints.customer
 
 	public class LikeApi : Service
 	{
-		private readonly ILikeService _likeService;
+		private readonly ILikeService _customerLikeService;
+		private readonly ILocationService _locationService;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public LikeApi(ILikeService likeService)
+		public LikeApi(ILikeService customerLikeService, ILocationService locationService)
 		{
-			_likeService = likeService;
+			_customerLikeService = customerLikeService;
+            _locationService = locationService;
 		}
 
 		#region Return Likes By Token
@@ -66,7 +69,7 @@ namespace triperoo.apis.endpoints.customer
 					throw HttpError.Unauthorized("You are unauthorized to access this page");
 				}
 
-				response = _likeService.ReturnLikesByToken(token);
+				response = _customerLikeService.ReturnLikesByToken(token);
 
 				if (response == null)
 				{
@@ -94,12 +97,15 @@ namespace triperoo.apis.endpoints.customer
 			{
 				var token = Request.Headers["token"];
 
-				if (token == null)
-				{
-					throw HttpError.Unauthorized("You are unauthorized to access this page");
-				}
+                if (token != null)
+                {
+                    _customerLikeService.InsertNewLike(token, request.Location);
+                }
 
-				_likeService.InsertNewLike(token, request.Location);
+				var locationResponse = _locationService.ReturnLocationById(request.Location.Id);
+
+				locationResponse.Stats.LikeCount += 1;
+				_locationService.UpdateLocation("location:" + request.Location.Id, locationResponse, false);
 			}
 			catch (Exception ex)
 			{
@@ -122,12 +128,15 @@ namespace triperoo.apis.endpoints.customer
 			{
 				var token = Request.Headers["token"];
 
-				if (token == null)
-				{
-					throw HttpError.Unauthorized("You are unauthorized to access this page");
-				}
+                if (token != null)
+                {
+                    _customerLikeService.ArchiveLikeByLocationId(request.LocationId, token);
+                }
 
-				_likeService.ArchiveLikeByLocationId(request.LocationId, token);
+				var locationResponse = _locationService.ReturnLocationById(request.LocationId);
+
+				locationResponse.Stats.LikeCount -= 1;
+				_locationService.UpdateLocation("location:" + request.LocationId, locationResponse, false);
 			}
 			catch (Exception ex)
 			{

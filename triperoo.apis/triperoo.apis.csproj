@@ -135,6 +135,8 @@
     <Compile Include="Endpoints\Customer\Trips.cs" />
     <Compile Include="Endpoints\Customer\Locations.cs" />
     <Compile Include="Endpoints\Customer\Likes.cs" />
+    <Compile Include="Endpoints\Location\LikeLocation.cs" />
+    <Compile Include="Endpoints\Customer\Follow.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

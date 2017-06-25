@@ -12,11 +12,18 @@ namespace core.customers.dtos
         public string DateOfBirth { get; set; }
         public string Locale { get; set; }
         public int CurrentLocationId { get; set; }
-        public string CurrentLocation { get; set; }
+		public string CurrentLocation { get; set; }
         public string EmailAddress { get; set; }
         public string Pass { get; set; }
         public string PhoneNumber { get; set; }
-        public string ImageUrl { get; set; }
+		public string ImageUrl { get; set; }
+		public string BackgroundImageUrl
+        {
+            get
+            {
+                return "/static/img/locations/" + CurrentLocation.Replace(" ", "-").Replace(",", "").ToLower() + ".png";
+            }
+        }
 		public string ProfileUrl { get; set; }
 		public string Bio { get; set; }
     }
@@ -30,7 +37,8 @@ namespace core.customers.dtos
         }
         public int RegionId { get; set; }
         public string RegionName { get; set; }
-        public string ListName { get; set; }
+		public string ListName { get; set; }
+		public string Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public List<CustomerLocationDto> Bookmarks { get; set; }
@@ -56,7 +64,8 @@ namespace core.customers.dtos
     {
 		public int FollowerCount { get; set; }
 		public int FollowingCount { get; set; }
-        public int ReviewCount { get; set; }
+		public int ReviewCount { get; set; }
+		public int LikeCount { get; set; }
     }
 
     public class CustomerFollowsDto
@@ -73,7 +82,8 @@ namespace core.customers.dtos
             Trips = new List<TripDto>();
 			Likes = new List<CustomerLocationDto>();
 			VisitedLocations = new List<CustomerLocationDto>();
-			Follows = new List<CustomerFollowsDto>();
+			Following = new List<CustomerFollowsDto>();
+			FollowedBy = new List<CustomerFollowsDto>();
 			Stats = new StatsDto();
         }
 
@@ -88,7 +98,8 @@ namespace core.customers.dtos
 		public List<TripDto> Trips { get; set; }
 		public List<CustomerLocationDto> VisitedLocations { get; set; }
 		public List<CustomerLocationDto> Likes { get; set; }
-		public List<CustomerFollowsDto> Follows { get; set; }
+		public List<CustomerFollowsDto> Following { get; set; }
+		public List<CustomerFollowsDto> FollowedBy { get; set; }
 		public StatsDto Stats { get; set; }
     }
 

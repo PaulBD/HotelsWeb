@@ -12,11 +12,12 @@ namespace core.places.dtos
 	{
 		public string phone { get; set; }
 		public string formattedPhone { get; set; }
-		public object twitter { get; set; }
-		public object facebook { get; set; }
-		public object facebookUsername { get; set; }
-		public object facebookName { get; set; }
-		public object instagram { get; set; }
+		public string twitter { get; set; }
+		public string facebook { get; set; }
+		public string facebookUsername { get; set; }
+		public string facebookName { get; set; }
+		public string instagram { get; set; }
+		public string websiteUrl { get; set; }
 	}
 
 	public class PhotoList
@@ -77,7 +78,6 @@ namespace core.places.dtos
         public string Image { get; set; }
         public double Latitude { get; set; }
         public string LetterIndex { get; set; }
-        public int LikeCount { get; set; }
         public int ListingPriority { get; set; }
         public double Longitude { get; set; }
         public int ParentRegionID { get; set; }

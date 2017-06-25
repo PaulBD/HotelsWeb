@@ -94,9 +94,10 @@ namespace triperoo.apis.endpoints.review
                     request.Review.Place.ImageUrl = location.Image;
                     request.Review.Place.Type = location.RegionType;
                 }
-
-                var reference = "review:" + Guid.NewGuid();
-                request.Review.ReviewReference = reference;
+                var guid = Guid.NewGuid();
+                var reference = "review:" + guid;
+				request.Review.ReviewReference = reference;
+				request.Review.ReviewUrl = "/" + guid + "/review";
                 request.Review.DateCreated = DateTime.Now;
                 request.Review.CustomerReference = customer.TriperooCustomers.CustomerReference;
 
@@ -114,7 +115,7 @@ namespace triperoo.apis.endpoints.review
                 }
 
                 var key = "location:" + location.RegionID;
-                _locationService.UpdateLocation(key, location);
+                _locationService.UpdateLocation(key, location, false);
                 base.Cache.Add(key, location);
 
                 customer.TriperooCustomers.Stats.ReviewCount += 1;

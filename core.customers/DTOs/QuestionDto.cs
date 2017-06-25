@@ -12,7 +12,8 @@ namespace core.customers.dtos
         }
 
         public string Type { get { return "question"; } }
-        public string QuestionReference { get; set; }
+		public string QuestionReference { get; set; }
+		public string QuestionUrl { get; set; }
 		public string CustomerReference { get; set; }
 		public string CustomerImageUrl { get; set; }
         public int InventoryReference { get; set; }
@@ -55,10 +56,20 @@ namespace core.customers.dtos
         public int InventoryReference { get; set; }
         public bool IsArchived { get; set; }
         public string Question { get; set; }
-        public string QuestionReference { get; set; }
+		public string QuestionReference { get; set; }
+		public string QuestionUrl { get; set; }
 		public string Type { get; set; }
 		public List<AnswerDto> Answers { get; set; }
     }
 
+	public class QuestionListDto
+	{
+		public QuestionListDto()
+		{
+			QuestionDto = new List<QuestionDto>();
+		}
 
+		public List<QuestionDto> QuestionDto { get; set; }
+		public int QuestionCount { get; set; }
+	}
 }

@@ -14,7 +14,7 @@ namespace core.customers.services
         public ReviewService()
         {
             _couchbaseHelper = new CouchBaseHelper();
-            _query = "SELECT tr.likeCount, tr.comment, tr.reviewReference, tr.customerReference, tr.dateCreated, tr.inventoryReference, tr.isArchived, tr.place.imageUrl, tr.place.name as placeName, tr.place.nameShort as placeNameShort, tr.place.address as placeAddress, tr.place.profileUrl as placeUrl, tr.profile.type as reviewType, tr.placeType, tr.starRating, tr.tags, tr.type, tc.profile.name as customerName, tc.profile.imageUrl as customerImageUrl, tc.profile.profileUrl as customerProfileUrl, tc.profile.currentCity as customerLocation FROM " + _bucketName + " tr JOIN " + _bucketName + " tc ON KEYS tr.customerReference";
+            _query = "SELECT tr.likeCount, tr.comment, tr.reviewReference, tr.reviewUrl, tr.customerReference, tr.dateCreated, tr.inventoryReference, tr.isArchived, tr.place.imageUrl, tr.place.name as placeName, tr.place.nameShort as placeNameShort, tr.place.address as placeAddress, tr.place.profileUrl as placeUrl, tr.profile.type as reviewType, tr.placeType, tr.starRating, tr.tags, tr.type, tc.profile.name as customerName, tc.profile.imageUrl as customerImageUrl, tc.profile.profileUrl as customerProfileUrl, tc.profile.currentCity as customerLocation FROM " + _bucketName + " tr JOIN " + _bucketName + " tc ON KEYS tr.customerReference";
         }
 
         /// <summary>
