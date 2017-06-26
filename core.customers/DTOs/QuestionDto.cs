@@ -21,14 +21,25 @@ namespace core.customers.dtos
         public bool IsArchived { get; set; }
         public DateTime DateCreated { get; set; }
         public List<AnswerDto> Answers { get; set; }
+        public int LikeCount { get; set; }
     }
 
 	public class AnswerDto
 	{
+		public string AnswerReference { get; set; }
 		public string QuestionReference { get; set; }
 		public string CustomerReference { get; set; }
+		public string CustomerName { get; set; }
 		public string CustomerImageUrl { get; set; }
+        public string CustomerProfileUrl { get; set; }
 		public DateTime DateCreated { get; set; }
+		public string FriendlyDate
+		{
+			get
+			{
+				return DateHelper.TimeAgo(DateCreated);
+			}
+		}
 		public string Answer { get; set; }
 		public int LikeCount { get; set; }
 		public bool IsArchived { get; set; }
@@ -59,6 +70,7 @@ namespace core.customers.dtos
 		public string QuestionReference { get; set; }
 		public string QuestionUrl { get; set; }
 		public string Type { get; set; }
+		public int LikeCount { get; set; }
 		public List<AnswerDto> Answers { get; set; }
     }
 

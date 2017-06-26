@@ -1,17 +1,24 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="triperoo.apis/Endpoints/Question/Question.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="core.customers/Services/TripService.cs">
     <Files>
-      <File FileName="core.customers/Services/QuestionService.cs" Line="63" Column="80" />
-      <File FileName="core.customers/Services/ReviewService.cs" Line="33" Column="58" />
-      <File FileName="triperoo.apis/Endpoints/Question/Question.cs" Line="75" Column="78" />
-      <File FileName="triperoo.apis/Endpoints/Review/Review.cs" Line="81" Column="1" />
+      <File FileName="triperoo.apis/Endpoints/Review/Review.cs" Line="167" Column="19" />
+      <File FileName="triperoo.apis/Endpoints/Question/Question.cs" Line="124" Column="1" />
+      <File FileName="core.customers/Services/ReviewService.cs" Line="63" Column="10" />
+      <File FileName="core.customers/Services/QuestionService.cs" Line="123" Column="40" />
+      <File FileName="core.customers/Services/IQuestionService.cs" Line="13" Column="49" />
+      <File FileName="triperoo.apis/Endpoints/Question/Answer.cs" Line="66" Column="17" />
+      <File FileName="core.customers/Services/CustomerService.cs" Line="1" Column="1" />
+      <File FileName="core.customers/Services/FollowService.cs" Line="1" Column="1" />
+      <File FileName="core.customers/Services/BookmarkService.cs" Line="1" Column="1" />
+      <File FileName="core.customers/Services/VisitedService.cs" Line="1" Column="1" />
+      <File FileName="core.customers/Services/TripService.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/endpoints/review/Reviews.cs" relfile="triperoo.apis/endpoints/review/Reviews.cs" line="92" column="1" />
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Question/Answer.cs" relfile="triperoo.apis/Endpoints/Question/Answer.cs" line="76" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Question/Answer.cs" relfile="triperoo.apis/Endpoints/Question/Answer.cs" line="82" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Auth/Register.cs" relfile="triperoo.apis/Endpoints/Auth/Register.cs" line="71" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Customer/Customer.cs" relfile="triperoo.apis/Endpoints/Customer/Customer.cs" line="96" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Customer/Likes.cs" relfile="triperoo.apis/Endpoints/Customer/Likes.cs" line="61" column="1" />

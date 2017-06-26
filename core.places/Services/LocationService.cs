@@ -47,6 +47,7 @@ namespace core.places.services
 
             var result = ProcessQuery(q)[0];
 
+            /*
             // Wikepedia
             if (result.Summary != null)
             {
@@ -84,6 +85,7 @@ namespace core.places.services
 
                 }
 			}
+            */
 
             if (requiresUpdate){
 				UpdateLocation("location:" + result.RegionID, result, false);

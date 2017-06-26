@@ -8,22 +8,37 @@ using System.Net;
 
 namespace triperoo.apis.endpoints.review
 {
-    #region Question Endpoint
+	#region Question Endpoint
 
-    /// <summary>
-    /// Request
-    /// </summary>
+	/// <summary>
+	/// Request
+	/// </summary>
+    [Route("/v1/question/{id}", "GET")]
     [Route("/v1/question", "POST")]
     public class QuestionRequest
     {
+        public string Id { get; set; }
         public QuestionDetailDto Question { get; set; }
     }
 
-    #endregion
+	#endregion
 
-    #region API logic
+	#region Like Question Endpoint
 
-    public class QuestionApi : Service
+	/// <summary>
+	/// Request
+	/// </summary>
+    [Route("/v1/question/{questionReference}/like", "PUT")]
+	public class LikeQuestionRequest
+	{
+		public string QuestionReference { get; set; }
+	}
+
+	#endregion
+
+	#region API logic
+
+	public class QuestionApi : Service
     {
         private readonly IQuestionService _questionService;
         private readonly ICustomerService _customerService;
@@ -43,9 +58,45 @@ namespace triperoo.apis.endpoints.review
         #region Insert Question
 
         /// <summary>
-        /// Insert Question
+        /// Get Question By Id
         /// </summary>
-        public object Post(QuestionRequest request)
+        public object Get(QuestionRequest request)
+        {
+            QuestionDto response = new QuestionDto();
+            try
+            {
+				var token = Request.Headers["token"];
+
+				if (string.IsNullOrEmpty(token))
+				{
+					return new HttpResult("Token not found", HttpStatusCode.Unauthorized);
+				}
+
+				var customer = _customerService.ReturnCustomerByToken(token);
+
+				if (customer == null)
+				{
+					return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
+				}
+
+                response = _questionService.ReturnFullQuestionById("question:" + request.Id);
+			}
+			catch (Exception ex)
+			{
+				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+			}
+
+			return new HttpResult(response, HttpStatusCode.OK);
+		}
+
+		#endregion
+
+		#region Insert Question
+
+		/// <summary>
+		/// Insert Question
+		/// </summary>
+		public object Post(QuestionRequest request)
         {
             try
             {
@@ -90,8 +141,43 @@ namespace triperoo.apis.endpoints.review
             return new HttpResult(HttpStatusCode.OK);
         }
 
-        #endregion
-    }
+		#endregion
+
+		#region Like Question
+
+		/// <summary>
+		/// Like Question
+		/// </summary>
+		public object Put(LikeQuestionRequest request)
+		{
+			try
+			{
+				var token = Request.Headers["token"];
+
+				if (string.IsNullOrEmpty(token))
+				{
+					return new HttpResult("Token not found", HttpStatusCode.Unauthorized);
+				}
+
+				var customer = _customerService.ReturnCustomerByToken(token);
+
+				if (customer == null)
+				{
+					return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
+				}
+
+				_questionService.LikeQuestion(request.QuestionReference);
+			}
+			catch (Exception ex)
+			{
+				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+			}
+
+			return new HttpResult(HttpStatusCode.OK);
+		}
+
+		#endregion
+	}
 
     #endregion
 }

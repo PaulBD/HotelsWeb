@@ -7,6 +7,9 @@ namespace core.customers.services
     {
 		void InsertQuestion(string reference, QuestionDetailDto review);
         List<QuestionDto> ReturnQuestionsByLocationId(int id);
+        QuestionDto ReturnFullQuestionById(string reference);
         QuestionDetailDto ReturnQuestionById(string reference);
+        void LikeQuestion(string questionReference);
+        void LikeAnswer(string questionReference, string answerReference);
     }
 }
