@@ -7,6 +7,9 @@ namespace library.foursquare.services
 {
     public class VenueService : IVenueService
     {
+        /// <summary>
+        /// Returns the venues by location.
+        /// </summary>
         public VenueDto ReturnVenuesByLocation(string venueName, string location)
         {
             var url = string.Format(ConfigurationManager.AppSettings["foursquare.url"]

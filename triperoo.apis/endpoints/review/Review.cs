@@ -9,14 +9,17 @@ using System.Net;
 
 namespace triperoo.apis.endpoints.review
 {
-    #region Insert Review Endpoint
+	#region Insert Review Endpoint
 
-    /// <summary>
-    /// Request
-    /// </summary>
+	/// <summary>
+	/// Request
+	/// </summary>
+	[Route("/v1/review/{reviewReference}", "DELETE")]
+    [Route("/v1/review/{reviewReference}", "PUT")]
     [Route("/v1/review", "POST")]
     public class ReviewRequest
     {
+        public string ReviewReference { get; set; }
         public ReviewDetailDto Review { get; set; }
     }
 
@@ -91,7 +94,18 @@ namespace triperoo.apis.endpoints.review
                     request.Review.Place.Name = location.RegionNameLong;
                     request.Review.Place.Address = location.RegionNameLong.Replace(location.RegionName + ",", "").Trim();
                     request.Review.Place.ProfileUrl = location.Url;
-                    request.Review.Place.ImageUrl = location.Image;
+
+                    var image = location.Image;
+
+                    if (location.Photos != null)
+                    {
+                        if (location.Photos.PhotoCount > 0)
+                        {
+                            image = location.Photos.PhotoList[0].prefix + "400x400" + location.Photos.PhotoList[0].suffix;
+                        }
+                    }
+
+                    request.Review.Place.ImageUrl = image;
                     request.Review.Place.Type = location.RegionType;
                 }
                 var guid = Guid.NewGuid();
@@ -101,7 +115,7 @@ namespace triperoo.apis.endpoints.review
                 request.Review.DateCreated = DateTime.Now;
                 request.Review.CustomerReference = customer.TriperooCustomers.CustomerReference;
 
-                _reviewService.InsertNewReview(reference, request.Review);
+                _reviewService.InsertUpdateReview(reference, request.Review);
 
                 if (location.Stats.ReviewCount > 0)
                 {
@@ -129,14 +143,98 @@ namespace triperoo.apis.endpoints.review
 			return new HttpResult(HttpStatusCode.OK);
         }
 
-        #endregion
+		#endregion
 
-        #region Like Review
+		#region Update Existing Review
 
-        /// <summary>
-        /// Like Review
-        /// </summary>
-        public object Put(LikeReviewRequest request)
+		/// <summary>
+		/// Update Existing Review
+		/// </summary>
+		public object Put(ReviewRequest request)
+		{
+
+			try
+			{
+				var token = Request.Headers["token"];
+
+				if (string.IsNullOrEmpty(token))
+				{
+					return new HttpResult("Token not found", HttpStatusCode.Unauthorized);
+				}
+
+				var customer = _customerService.ReturnCustomerByToken(token);
+
+				if (customer == null)
+				{
+					return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
+				}
+
+                var review = _reviewService.ReturnReviewByReference(request.ReviewReference);
+
+                if (review == null)
+				{
+					return new HttpResult("Review not found" + token, HttpStatusCode.NotFound);
+                }
+
+                review.Comment = request.Review.Comment;
+                review.StarRating = request.Review.StarRating;
+                review.Tags = request.Review.Tags;
+
+                _reviewService.InsertUpdateReview(review.ReviewReference, review);
+
+			}
+			catch (Exception ex)
+			{
+				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+			}
+
+			return new HttpResult(HttpStatusCode.OK);
+		}
+
+		#endregion
+
+		#region Remove Existing Review
+
+		/// <summary>
+		/// Remove Existing Review
+		/// </summary>
+		public object Delete(ReviewRequest request)
+		{
+
+			try
+			{
+				var token = Request.Headers["token"];
+
+				if (string.IsNullOrEmpty(token))
+				{
+					return new HttpResult("Token not found", HttpStatusCode.Unauthorized);
+				}
+
+				var customer = _customerService.ReturnCustomerByToken(token);
+
+				if (customer == null)
+				{
+					return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
+				}
+
+                _reviewService.RemoveExistingReview(request.ReviewReference);
+			}
+			catch (Exception ex)
+			{
+				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+			}
+
+			return new HttpResult(HttpStatusCode.OK);
+		}
+
+		#endregion
+
+		#region Like Review
+
+		/// <summary>
+		/// Like Review
+		/// </summary>
+		public object Put(LikeReviewRequest request)
         {
             try
             {

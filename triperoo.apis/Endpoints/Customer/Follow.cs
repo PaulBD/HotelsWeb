@@ -21,18 +21,31 @@ namespace triperoo.apis.endpoints.customer
 
 	#endregion
 
-	#region Follows Endpoint
+	#region Following Endpoint
 
 	/// <summary>
 	/// Request
 	/// </summary>
-	[Route("/v1/customer/{customerId}/follows", "GET")]
-	public class FollowsRequest
+	[Route("/v1/customer/{customerId}/following", "GET")]
+	public class FollowingRequest
 	{
 		public string customerId { get; set; }
 	}
 
-    #endregion
+	#endregion
+
+	#region Followed By Endpoint
+
+	/// <summary>
+	/// Request
+	/// </summary>
+	[Route("/v1/customer/{customerId}/followedBy", "GET")]
+	public class FollowedByRequest
+	{
+		public string customerId { get; set; }
+	}
+
+	#endregion
 
 	#region API logic
 
@@ -48,18 +61,41 @@ namespace triperoo.apis.endpoints.customer
 			_customerFollowService = customerFollowService;
 		}
 
-		#region Get all follows by customer
+		#region Get all people following customer
 
 		/// <summary>
-		/// Get all follows by customer
+		/// Get all people followed by customer
 		/// </summary>
-		public object Get(FollowsRequest request)
+		public object Get(FollowingRequest request)
 		{
-            var response = new List<FriendDto>();
+            var response = new List<FollowerDto>();
 
 			try
 			{
-				response = _customerFollowService.ListFriends(request.customerId);
+				response = _customerFollowService.ListFriendsFollowingCustomer(request.customerId);
+			}
+			catch (Exception ex)
+			{
+				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+			}
+
+			return new HttpResult(response, HttpStatusCode.OK);
+		}
+
+		#endregion
+
+		#region Get all people followed by customer
+
+		/// <summary>
+		/// Get all people followed by customer
+		/// </summary>
+		public object Get(FollowedByRequest request)
+		{
+			var response = new List<FollowerDto>();
+
+			try
+			{
+				response = _customerFollowService.ListFriendsFollowedByCustomer(request.customerId);
 			}
 			catch (Exception ex)
 			{

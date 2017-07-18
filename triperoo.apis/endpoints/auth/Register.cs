@@ -94,6 +94,7 @@ namespace triperoo.apis.endpoints.auth
 				customer.Profile.EmailAddress = request.EmailAddress;
                 customer.Profile.Pass = request.Password;
                 customer.Token = token;
+                customer.LastLoginDate = DateTime.Now;
                 customer.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-").ToLower();
 
                 _customerService.InsertUpdateCustomer(customer.CustomerReference, customer);

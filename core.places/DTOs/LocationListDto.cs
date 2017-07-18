@@ -26,6 +26,7 @@ namespace core.places.dtos
 		public string suffix { get; set; }
 		public int width { get; set; }
 		public int height { get; set; }
+        public string customerReference { get; set; }
 	}
 
 	public class Photos
@@ -97,7 +98,7 @@ namespace core.places.dtos
         {
             get
             {
-                return "/" + ParentRegionID + "/visit/" + ParentRegionNameLong.Replace(",", "").Replace(" ", "-");
+                return "/" + ParentRegionID + "/visit/" + ParentRegionNameLong.Replace(",", "").Replace(" ", "-").Replace("&", "and").ToLower();
             }
         }
 

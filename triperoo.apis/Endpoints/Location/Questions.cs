@@ -78,16 +78,19 @@ namespace triperoo.apis.endpoints.location
                     response.QuestionDto = _questionService.ReturnQuestionsByLocationId(request.Id);
                 }
 
-				response.QuestionCount = response.QuestionDto.Count;
+                if (response.QuestionDto != null)
+                {
+                    response.QuestionCount = response.QuestionDto.Count;
 
-				if (request.PageNumber > 0)
-				{
-					response.QuestionDto = response.QuestionDto.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
-				}
-				else
-				{
-					response.QuestionDto = response.QuestionDto.Take(request.PageSize).ToList();
-				}
+                    if (request.PageNumber > 0)
+                    {
+                        response.QuestionDto = response.QuestionDto.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                    }
+                    else
+                    {
+                        response.QuestionDto = response.QuestionDto.Take(request.PageSize).ToList();
+                    }
+                }
             }
             catch (Exception ex)
             {

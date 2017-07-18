@@ -81,8 +81,11 @@ namespace triperoo.apis.endpoints.auth
                 authorizationDto.UserName = response.TriperooCustomers.Profile.Name;
                 authorizationDto.UserId = response.TriperooCustomers.CustomerReference.Replace("customer:", "");
                 authorizationDto.BaseUrl = "/profile/" + response.TriperooCustomers.CustomerReference.Replace("customer:", "") + " / " + response.TriperooCustomers.Profile.Name.Replace(" ", "-");
-            }
-            catch (Exception ex)
+
+                response.TriperooCustomers.LastLoginDate = DateTime.Now;
+				_customerService.InsertUpdateCustomer(response.TriperooCustomers.CustomerReference, response.TriperooCustomers);
+			}
+			catch (Exception ex)
             {
                 throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
             }

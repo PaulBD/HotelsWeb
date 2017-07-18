@@ -24,7 +24,7 @@ namespace core.places.services
             var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Point of Interest Shadow'";
 
             return ProcessQuery(q);
-        }
+		}
 
         /// <summary>
         /// Return attractions by location Id and category

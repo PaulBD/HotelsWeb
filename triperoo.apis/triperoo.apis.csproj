@@ -137,6 +137,9 @@
     <Compile Include="Endpoints\Customer\Likes.cs" />
     <Compile Include="Endpoints\Location\LikeLocation.cs" />
     <Compile Include="Endpoints\Customer\Follow.cs" />
+    <Compile Include="Endpoints\Customer\Reviews.cs" />
+    <Compile Include="Endpoints\Location\Hotels.cs" />
+    <Compile Include="Endpoints\Location\Photos.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -174,9 +177,6 @@
       <Project>{2d10c643-cd6c-4bfc-bca5-71da19abb93d}</Project>
       <Name>library.weather</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Endpoints\Hotel\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "library.events", "library.e
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "library.foursquare", "library.foursquare\library.foursquare.csproj", "{724F8F2F-B182-4184-8CB4-5EFA77A0A98E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "library.wikipedia", "library.wikipedia\library.wikipedia.csproj", "{9DAA9E24-01CC-4105-8638-6918C8C86A5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "library.azure", "library.azure\library.azure.csproj", "{9DAA9E24-01CC-4105-8638-6918C8C86A5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

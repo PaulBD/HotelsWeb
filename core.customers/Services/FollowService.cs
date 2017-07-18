@@ -22,7 +22,12 @@ namespace core.customers.services
         /// Follows a friend
         /// </summary>
         public void FollowFriend(string reference, string token)
-        {
+		{
+			if (!reference.Contains("customer:"))
+			{
+				reference = "customer:" + reference;
+			}
+
             var customer = _customerService.ReturnCustomerByToken(token);
 
             customer.TriperooCustomers.Following.Add(
@@ -51,17 +56,41 @@ namespace core.customers.services
         /// <summary>
         /// List all friends
         /// </summary>
-        public List<FriendDto> ListFriends(string token)
+        public List<FollowerDto> ListFriendsFollowedByCustomer(string customerReference)
 		{
-			var q = "SELECT * FROM " + _bucketName + " WHERE token = '" + token + "'";
+            if (!customerReference.Contains("customer:"))
+            {
+                customerReference = "customer:" + customerReference;
+            }
+
+			var q = "SELECT profile.bio, profile.name, profile.profileUrl, profile.imageUrl, profile.currentLocation, profile.backgroundImageUrl  FROM " + _bucketName + " USE INDEX(followedBy_customers) WHERE type = \"customer\" AND ANY v IN followedBy SATISFIES v.customerReference = '" + customerReference + "' END;";
 			return ProcessQuery(q);
-        }
+		}
+
+		/// <summary>
+		/// List all friends
+		/// </summary>
+		public List<FollowerDto> ListFriendsFollowingCustomer(string customerReference)
+		{
+			if (!customerReference.Contains("customer:"))
+			{
+				customerReference = "customer:" + customerReference;
+			}
+
+			var q = "SELECT profile.bio, profile.name, profile.profileUrl, profile.imageUrl, profile.currentLocation, profile.backgroundImageUrl FROM " + _bucketName + " USE INDEX(following_customers) WHERE type = \"customer\" AND ANY v IN following SATISFIES v.customerReference = '" + customerReference + "' END;";
+			return ProcessQuery(q);
+		}
 
         /// <summary>
         /// Unfollows a friend
         /// </summary>
         public void UnfollowFriend(string reference, string token)
 		{
+            if (!reference.Contains("customer:"))
+            {
+                reference = "customer:" + reference;
+            }
+
 			var customer = _customerService.ReturnCustomerByToken(token);
 
             var friend = customer.TriperooCustomers.Following.FirstOrDefault(q => q.CustomerReference == reference);
@@ -83,9 +112,9 @@ namespace core.customers.services
 		/// <summary>
 		/// Process Query
 		/// </summary>
-		private List<FriendDto> ProcessQuery(string q)
+		private List<FollowerDto> ProcessQuery(string q)
 		{
-			var result = _couchbaseHelper.ReturnQuery<FriendDto>(q, _bucketName);
+			var result = _couchbaseHelper.ReturnQuery<FollowerDto>(q, _bucketName);
 
 			if (result.Count > 0)
 			{

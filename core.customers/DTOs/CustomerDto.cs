@@ -92,7 +92,8 @@ namespace core.customers.dtos
         public string Token { get; set; }
         public string Type { get { return "customer"; } }
         public string CustomerReference { get; set; }
-        public DateTime DateCreated { get; set; }
+		public DateTime DateCreated { get; set; }
+		public DateTime LastLoginDate { get; set; }
         public DateTime? DateUpdate { get; set; }
         public ProfileDto Profile { get; set; }
 		public List<TripDto> Trips { get; set; }

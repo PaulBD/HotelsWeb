@@ -102,6 +102,7 @@ namespace triperoo.apis.endpoints.auth
                 customer.TriperooCustomers.Profile.EmailAddress = request.EmailAddress;
                 customer.TriperooCustomers.Token = token;
                 customer.TriperooCustomers.Profile.ImageUrl = request.ImageUrl;
+                customer.TriperooCustomers.LastLoginDate = DateTime.Now;
 
                 _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
 

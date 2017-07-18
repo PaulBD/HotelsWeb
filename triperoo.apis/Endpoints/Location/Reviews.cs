@@ -5,6 +5,7 @@ using ServiceStack.FluentValidation;
 using System;
 using System.Linq;
 using System.Net;
+using System.Collections.Generic;
 
 namespace triperoo.apis.endpoints.location
 {
@@ -16,7 +17,8 @@ namespace triperoo.apis.endpoints.location
 	[Route("/v1/location/{id}/reviews", "GET")]
     public class ReviewsLocationRequest
     {
-        public int Id { get; set; }
+		public int Id { get; set; }
+		public string Tags { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
     }
@@ -107,11 +109,33 @@ namespace triperoo.apis.endpoints.location
 			{
 				response = Cache.Get<ReviewListDto>(cacheName);
 
+
 				if (response == null)
 				{
                     response = new ReviewListDto();
 					response.ReviewDto = _reviewService.ReturnReviewsByLocationId(request.Id);
 				}
+
+				var tags = request.Tags;
+
+                if (!string.IsNullOrEmpty(tags))
+                {
+                    var list = new List<ReviewDto>();
+
+                    if (tags.Contains(","))
+                    {
+                        foreach (var s in tags.Split(','))
+                        {
+                            list.AddRange(response.ReviewDto.Where(q => q.Tags.Contains(s)).ToList());
+                        }
+                    }
+					else
+					{
+						list.AddRange(response.ReviewDto.Where(q => q.Tags.Contains(tags)).ToList());
+                    }
+
+                    response.ReviewDto = list;
+                }
 
                 response.ReviewCount = response.ReviewDto.Count;
 

@@ -19,7 +19,8 @@ namespace triperoo.apis.endpoints.locations
         public int Id { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
-        public string CategoryName { get; set; }
+		public string CategoryName { get; set; }
+		public string Name { get; set; }
     }
 
     /// <summary>
@@ -86,8 +87,14 @@ namespace triperoo.apis.endpoints.locations
                     }
 
                     response.LocationCount = response.Locations.Count;
+                   // Cache.Add(cacheName, response, new DateTime().AddHours(24));
+                }
 
-                    //base.Cache.Add(cacheName, response);
+                if (!string.IsNullOrEmpty(request.Name))
+                {
+                    var list = response.Locations.Where(q => q.RegionName.ToLower().Contains(request.Name.ToLower())).ToList();
+                    response.Locations = list;
+					response.LocationCount = list.Count;
                 }
 
                 if (response.LocationCount > request.PageSize)

@@ -62,11 +62,11 @@ namespace core.hotels.dtos
     {
         public HotelListDto()
         {
-            HotelList = new List<HotelDetailDto>();
+            HotelList = new List<HotelDto>();
         }
 
-        public List<HotelDetailDto> HotelList { get; set; }
-        public int Count { get { return HotelList.Count;  } }
+        public List<HotelDto> HotelList { get; set; }
+        public int HotelCount { get; set; }
     }
 
 }

@@ -106,6 +106,7 @@
     <Compile Include="Services\FollowService.cs" />
     <Compile Include="Services\IFollowService.cs" />
     <Compile Include="DTOs\FriendDto.cs" />
+    <Compile Include="DTOs\FollowerDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\core.couchbase\library.couchbase.csproj">

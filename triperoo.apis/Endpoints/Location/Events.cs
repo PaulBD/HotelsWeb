@@ -141,7 +141,14 @@ namespace triperoo.apis.endpoints.location
                 if (eventResponse.events != null)
                 {
                     eventResponse.events.Event = eventResponse.events.Event.Take(request.PageSize).ToList();
-                }
+				}
+				else
+				{
+					eventResponse.events = new EventsDto()
+					{
+						Event = new System.Collections.Generic.List<Event>()
+					};
+				}
             }
             catch (Exception ex)
             {
@@ -178,6 +185,11 @@ namespace triperoo.apis.endpoints.location
 				{
 					eventResponse.events.Event = eventResponse.events.Event.Take(request.PageSize).ToList();
 				}
+                else {
+                    eventResponse.events = new EventsDto(){
+                        Event = new System.Collections.Generic.List<Event>()
+                    };
+                }
 			}
 			catch (Exception ex)
 			{

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using library.common;
+using System;
 using System.Collections.Generic;
 
 namespace core.customers.dtos
@@ -20,9 +21,17 @@ namespace core.customers.dtos
         public string Comment { get; set; }
         public List<string> Tags { get; set; }
         public bool IsArchived { get; set; }
-        public DateTime DateCreated { get; set; }
+		public DateTime DateCreated { get; set; }
+		public DateTime DateArchived { get; set; }
         public PlaceDto Place { get; set; }
-        public int LikeCount { get; set; }
+		public int LikeCount { get; set; }
+		public string FriendlyDate
+		{
+			get
+			{
+				return DateHelper.TimeAgo(DateCreated);
+			}
+		}
     }
 
     public class PlaceDto
@@ -45,7 +54,7 @@ namespace core.customers.dtos
         public string CustomerReference { get; set; }
 		public string ReviewReference { get; set; }
 		public string ReviewUrl { get; set; }
-        public string DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }
         public string ImageUrl { get; set; }
         public int InventoryReference { get; set; }
         public bool IsArchived { get; set; }
@@ -58,6 +67,13 @@ namespace core.customers.dtos
         public List<string> Tags { get; set; }
         public string Type { get; set; }
         public int LikeCount { get; set; }
+		public string FriendlyDate
+		{
+			get
+			{
+				return DateHelper.TimeAgo(DateCreated);
+			}
+		}
     }
 
     public class ReviewListDto

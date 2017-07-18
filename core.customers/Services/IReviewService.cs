@@ -5,9 +5,12 @@ namespace core.customers.services
 {
     public interface IReviewService
     {
-        void InsertNewReview(string reference, ReviewDetailDto review);
+        void InsertUpdateReview(string reference, ReviewDetailDto review);
+        void RemoveExistingReview(string reference);
         List<ReviewDto> ReturnReviewsByType(string type);
-        List<ReviewDto> ReturnReviewsByLocationId(int id);
+		List<ReviewDto> ReturnReviewsByLocationId(int id);
+        ReviewDetailDto ReturnReviewByReference(string reference);
         void LikeReview(string reviewReference);
+        List<ReviewDto> ReturnReviewsByCustomer(string customerReference);
     }
 }

@@ -79,6 +79,7 @@
     <Compile Include="Services\IHotelService.cs" />
     <Compile Include="Services\RoomAvailabilityService.cs" />
     <Compile Include="Utility\Common.cs" />
+    <Compile Include="Utility\Location.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using library.foursquare.services;
 using library.foursquare.dtos;
 using library.wikipedia.services;
-using library.wikipedia.dtos;
-using System.Net.Http;
-using ServiceStack.Text;
+using System.IO;
+using System;
 
 namespace core.places.services
 {
@@ -35,7 +34,7 @@ namespace core.places.services
             var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'Neighborhood'  AND regionType != 'Point of Interest' AND regionType != 'Point of Interest Shadow' ORDER BY searchPriority DESC";
 
             return ProcessQuery(q);
-       }
+        }
 
         /// <summary>
         /// Return a location by Id
@@ -47,8 +46,8 @@ namespace core.places.services
 
             var result = ProcessQuery(q)[0];
 
-            /*
             // Wikepedia
+            /*
             if (result.Summary != null)
             {
                 if (string.IsNullOrEmpty(result.Summary.En))
@@ -78,14 +77,13 @@ namespace core.places.services
 
                     if (result.SourceData.ForesquareId != null)
                     {
-                        var foresquarePhotos = _venueService.UpdatePhotos(result.SourceData.ForesquareId);
-						result = AttachPhotos(result, foresquarePhotos);
+						result = AttachPhotos(result.SourceData.ForesquareId, result);
 						requiresUpdate = true;
                     }
 
                 }
 			}
-            */
+			*/
 
             if (requiresUpdate){
 				UpdateLocation("location:" + result.RegionID, result, false);
@@ -97,20 +95,25 @@ namespace core.places.services
         /// <summary>
         /// Attachs location photos
         /// </summary>
-        private LocationDto AttachPhotos(LocationDto locationDto, ForesquarePhotosDto photoDto)
-        {
-			locationDto.Photos.PhotoCount = photoDto.response.photos.count;
+        public LocationDto AttachPhotos(string foreSquareId, LocationDto locationDto)
+		{
+			var foresquarePhotos = _venueService.UpdatePhotos(foreSquareId);
 
-			foreach (var item in photoDto.response.photos.items)
-			{
-				locationDto.Photos.PhotoList.Add(new PhotoList
-				{
-					height = item.height,
-					prefix = item.prefix,
-					suffix = item.suffix,
-					width = item.width
-				});
-			}
+            if (foresquarePhotos != null)
+            {
+                locationDto.Photos.PhotoCount = foresquarePhotos.response.photos.count;
+
+                foreach (var item in foresquarePhotos.response.photos.items)
+                {
+                    locationDto.Photos.PhotoList.Add(new PhotoList
+                    {
+                        height = item.height,
+                        prefix = item.prefix,
+                        suffix = item.suffix,
+                        width = item.width
+                    });
+                }
+            }
 
             return locationDto;
         }
@@ -167,8 +170,6 @@ namespace core.places.services
             return locationDto;
         }
 
-
-
         /// <summary>
         /// Return a child locations by parent Id
         /// </summary>
@@ -208,5 +209,33 @@ namespace core.places.services
 				_couchbaseHelper.AddRecordToCouchbase(reference, dto, _bucketName);
             }
         }
+
+        /// <summary>
+        /// Uploads the photo.
+        /// </summary>
+        public void UploadPhoto(int locationId, Stream fileStream, string fileName, string contentType, string customerReference)
+        {
+            string containerName = "customerimages";
+            var dateStamp = DateTime.Now.Year + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "_" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
+
+            var newFileName = customerReference.Replace("customer:", "") + "/" + dateStamp + "-" + fileName;
+            // Store URL against Location with User Id / Name
+            var storage = new library.azure.services.StorageService();
+            storage.UploadToStorage(containerName, fileStream, newFileName, contentType);
+
+            var location = ReturnLocationById(locationId);
+
+            location.Photos.PhotoList.Add(new PhotoList() {
+                customerReference = customerReference,
+                prefix = "https://triperoostorage.blob.core.windows.net/",
+                suffix = containerName + "/" + newFileName,
+                height = 0,
+                width = 0
+            });
+
+			UpdateLocation("location:" + location.RegionID, location, false);
+
+        }
+
     }
 }

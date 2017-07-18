@@ -1,5 +1,6 @@
 ﻿using core.places.dtos;
 using System.Collections.Generic;
+using System.IO;
 
 namespace core.places.services
 {
@@ -9,5 +10,7 @@ namespace core.places.services
         List<LocationDto> ReturnLocationsForAutocomplete(string searchValue);
         List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type);
         void UpdateLocation(string reference, LocationDto dto, bool isStaging);
+		LocationDto AttachPhotos(string foreSquareId, LocationDto locationDto);
+        void UploadPhoto(int locationId, Stream fileStream, string fileName, string contentType, string customerReference);
     }
 }

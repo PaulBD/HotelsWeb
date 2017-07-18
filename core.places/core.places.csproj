@@ -91,6 +91,21 @@
       <HintPath>..\3rdParty\FuzzyString.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="Microsoft.Azure.KeyVault.Core">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.8.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Spatial">
+      <HintPath>..\packages\System.Spatial.5.8.2\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData">
+      <HintPath>..\packages\Microsoft.Data.OData.5.8.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.8.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\AutocompleteDto.cs" />
@@ -106,6 +121,7 @@
     <Compile Include="Services\LocationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Common.cs" />
+    <Compile Include="DTOs\PhotoDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -126,6 +142,10 @@
     <ProjectReference Include="..\library.wikipedia\library.wikipedia.csproj">
       <Project>{9DAA9E24-01CC-4105-8638-6918C8C86A5F}</Project>
       <Name>library.wikipedia</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\library.azure\library.azure.csproj">
+      <Project>{9DAA9E24-01CC-4105-8638-6918C8C86A5F}</Project>
+      <Name>library.azure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

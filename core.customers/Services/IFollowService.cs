@@ -8,6 +8,7 @@ namespace core.customers.services
     {
 		void FollowFriend(string reference, string token);
         void UnfollowFriend(string reference, string token);
-        List<FriendDto> ListFriends(string token);
+		List<FollowerDto> ListFriendsFollowedByCustomer(string customerReference);
+		List<FollowerDto> ListFriendsFollowingCustomer(string customerReference);
     }
 }
