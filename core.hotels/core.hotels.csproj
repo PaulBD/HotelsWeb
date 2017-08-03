@@ -80,6 +80,7 @@
     <Compile Include="Services\RoomAvailabilityService.cs" />
     <Compile Include="Utility\Common.cs" />
     <Compile Include="Utility\Location.cs" />
+    <Compile Include="DTOs\HotelAPIListDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -90,10 +91,6 @@
     <ProjectReference Include="..\core.couchbase\library.couchbase.csproj">
       <Project>{96A89DBF-00FE-4079-AE95-195824745C91}</Project>
       <Name>library.couchbase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\library.common\library.common.csproj">
-      <Project>{84b36479-f642-4a11-ac93-36c016765fd2}</Project>
-      <Name>library.common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

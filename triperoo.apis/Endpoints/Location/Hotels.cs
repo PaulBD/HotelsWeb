@@ -20,7 +20,25 @@ namespace triperoo.apis.endpoints.location
 		public int Id { get; set; }
 		public int PageSize { get; set; }
 		public int PageNumber { get; set; }
-        
+
+	}  
+
+    /// <summary>
+	   /// Request
+	   /// </summary>
+    [Route("/v1/location/{id}/hotels/{arrivalTime}/{nights}", "GET")]
+	public class HotelRealTimeRequest
+	{
+		public int Id { get; set; }
+		public DateTime ArrivalDate { get; set; }
+		public int Nights { get; set; }
+		public string SessionId { get; set; }
+		public string Locale { get; set; }
+		public string CurrencyCode { get; set; }
+		public string Room1 { get; set; }
+		public string Room2 { get; set; }
+		public string Room3 { get; set; }
+
 	}
 
 	/// <summary>
@@ -42,6 +60,24 @@ namespace triperoo.apis.endpoints.location
 			});
 		}
 	}
+
+    /// <summary>
+    /// Validator
+    /// </summary>
+    public class HotelRealTimeRequestValidator : AbstractValidator<HotelRealTimeRequest>
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public HotelRealTimeRequestValidator()
+        {
+            // Get
+            RuleSet(ApplyTo.Get, () =>
+            {
+                RuleFor(r => r.Id).NotNull().WithMessage("Supply a valid location id");
+            });
+        }
+    }
 
 	#endregion
 
@@ -116,7 +152,7 @@ namespace triperoo.apis.endpoints.location
                 if (response == null)
                 {
                     response = new HotelListDto();
-                    response.HotelList = _hotelService.ReturnHotelsByPlaceId(request.Id);
+                    response.HotelList = _hotelService.ReturnHotelsByLocationId(178279);
                     response.HotelCount = response.HotelList.Count;
                 }
 
@@ -133,15 +169,39 @@ namespace triperoo.apis.endpoints.location
             return new HttpResult(response, HttpStatusCode.OK);
         }
 
+        #endregion
+
+        #region Get Hotels By Location (Real Time)
+
+        /// <summary>
+        /// Get Hotels By location (Real Time)
+        /// </summary>
+        public object Get(HotelRealTimeRequest request)
+		{
+			var response = new HotelAPIListDto();
+
+            try
+            {
+                response = _hotelService.ReturnHotelsByLocationId(request.SessionId, request.Locale, request.CurrencyCode, request.Id, request.ArrivalDate, request.Nights, request.Room1, request.Room2, request.Room3);
+                response.HotelCount = response.HotelListResponse.HotelList.size;
+            }
+			catch (Exception ex)
+			{
+				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+			}
+
+			return new HttpResult(response, HttpStatusCode.OK);
+		}
+
 		#endregion
 
 
-        #region Get Hotels By Location Proximity
+		#region Get Hotels By Location Proximity
 
-        /// <summary>
-        /// Get Hotels By location
-        /// </summary>
-        public object Get(HotelProximityRequest request)
+		/// <summary>
+		/// Get Hotels By location
+		/// </summary>
+		public object Get(HotelProximityRequest request)
         {
             string cacheName = "hotels:" + request.Latitude + ":" + request.Longitude;
             HotelListDto response;

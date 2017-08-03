@@ -2,61 +2,71 @@
 
 namespace core.hotels.dtos
 {
-    public class HotelDetailDto
-    {
-        public int HotelId { get; set; }
-        public int PlaceId { get; set; }
-        public string Type { get; set; }
-        public string Url { get; set; }
-        public string Reference { get; set; }
-        public string HotelName { get; set; }
-        public string HotelStar { get; set; }
-        public string Address1 { get; set; }
-        public string HotelCity { get; set; }
-        public string HotelCounty { get; set; }
-        public string HotelPostcode { get; set; }
-        public string HotelCountry { get; set; }
-        public int CountryId { get; set; }
-        public string CountryIso { get; set; }
-        public string HotelDescription { get; set; }
-        public string HotelDirections { get; set; }
-        public string HotelImage { get; set; }
-        public List<string> HotelImages { get; set; }
-        public string Longitude { get; set; }
-        public string Latitude { get; set; }
-        public string HotelUrl { get; set; }
-        public string PricesFrom { get; set; }
-        public string MaxPrice { get; set; }
-        public string CurrencyCode { get; set; }
-        public int ScoreOutOf6 { get; set; }
-        public int NoOfReviews { get; set; }
-        public string ReviewUrl { get; set; }
-        public List<string> Facilities { get; set; }
-        public string AccommodationType { get; set; }
-        public List<string> Appeals { get; set; }
-        public string HotelStarAccreditor { get; set; }
-        public string HotelCreatedDate { get; set; }
-        public int TotalRooms { get; set; }
-        public string CancellationPolicy { get; set; }
-        public int CancellationDays { get; set; }
-        public string CancellationTerms { get; set; }
-        public string CityTaxType { get; set; }
-        public object CityTaxValue { get; set; }
-        public string CityTaxOptedIn { get; set; }
-        public bool IsCityTaxArea { get; set; }
-        public string CheckInTime { get; set; }
-        public string CheckOutTime { get; set; }
-        public string LatestCheckInTime { get; set; }
-        public string Telephone { get; set; }
-        public string Fax { get; set; }
-        public bool WifiAvailable { get; set; }
-        public string HotelArea { get; set; }
-    }
+	public class Address
+	{
+		public string Address1 { get; set; }
+		public string Address2 { get; set; }
+		public string City { get; set; }
+		public string Country { get; set; }
+		public string PostalCode { get; set; }
+		public string StateProvince { get; set; }
+	}
 
-    public class HotelDto
-    {
-        public HotelDetailDto TriperooHotels { get; set; }
-    }
+	public class Text
+	{
+		public string En { get; set; }
+	}
+
+	public class Chain
+	{
+		public int Id { get; set; }
+		public string Name { get; set; }
+	}
+
+	public class LocationCoordinates
+	{
+		public double latitude { get; set; }
+		public double longitude { get; set; }
+	}
+
+	public class HotelDto
+	{
+		public Address address { get; set; }
+		public string airportCode { get; set; }
+		public Text amenitiesDescription { get; set; }
+		public Chain chain { get; set; }
+		public long? chainCodeID { get; set; }
+		public string checkInTime { get; set; }
+		public string checkOutTime { get; set; }
+		public long confidence { get; set; }
+		public Text description { get; set; }
+		public Text diningDescription { get; set; }
+		public string doctype { get; set; }
+		public long eanHotelID { get; set; }
+		public double highRate { get; set; }
+		public string lastUpdatedDate { get; set; }
+		public string location { get; set; }
+		public LocationCoordinates locationCoordinates { get; set; }
+		public Text locationDescription { get; set; }
+		public Text locationSummary { get; set; }
+		public double lowRate { get; set; }
+		public Text mandatoryFeesDescription { get; set; }
+		public string name { get; set; }
+		public Text nationalRatingsDescription { get; set; }
+		public Text policyDescription { get; set; }
+		public int propertyCategory { get; set; }
+		public string propertyCurrency { get; set; }
+		public Text propertyFeesDescription { get; set; }
+		public Text recreationDescription { get; set; }
+		public long regionID { get; set; }
+		public Text renovationDescription { get; set; }
+		public Text roomDescription { get; set; }
+		public int sequenceNumber { get; set; }
+		public Text spaDescription { get; set; }
+		public decimal starRating { get; set; }
+		public string supplierType { get; set; }
+		public Text whatToExpect { get; set; }
+	}
 
     public class HotelListDto
     {

@@ -66,7 +66,13 @@ namespace triperoo.apis.endpoints.locations
 		/// </summary>
 		public object Get(ParentAttractionRequest request)
         {
-            string cacheName = "attractions:" + request.Id + request.CategoryName;
+            string cacheName = "attractions:" + request.Id;
+
+            if (!string.IsNullOrEmpty(request.CategoryName))
+            {
+                cacheName += request.CategoryName;
+            }
+
             LocationListDto response = null;
 
             try

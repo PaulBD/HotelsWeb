@@ -14,11 +14,11 @@ namespace core.flights.services
 
         public FlightService()
         {
-            _serviceKey = ConfigurationManager.AppSettings["flights.skyscanner.key"];
+            _serviceKey = ConfigurationManager.AppSettings["flights.kiwi.key"];
 
             _client = new HttpClient
             {
-                BaseAddress = new Uri(ConfigurationManager.AppSettings["flights.skyscanner.baseUrl"])
+                BaseAddress = new Uri(ConfigurationManager.AppSettings["flights.kiwi.baseUrl"])
             };
         }
 
@@ -26,16 +26,15 @@ namespace core.flights.services
         /// <summary>
         /// Return cached flights
         /// </summary>
-        public FlightListDto ReturnCachedFlights(string from, string to, string outboundDate, string inboundDate, string marketCountry = "gb", string currency = "gbp", string locale = "en")
+        public FlightListDto ReturnFlights(string flyFrom, string flyTo, string dateFrom, string dateTo, string returnFrom, string returnTo, string flightType, int passengerTotal, int adultTotal, int childTotal, int infantTotal, decimal priceFrom, decimal priceTo, string departureTimeFrom, string departureTimeTo, string arrivalTimeFrom, string arrivalTimeTo, string returnDepartureTimeFrom, string returnDepartureTimeTo, string returnArrivalTimeFrom, string returnArrivalTimeTo, string stopOverFrom, string stopOverTo, string sortBy, string asc, int offset = 0, int limit = 30, int directFlightsOnly = 1, string marketCountry = "gb", string currency = "gbp", string locale = "en")
         {
-            var request = "browsequotes/v1.0/" + marketCountry + "/" + currency + "/" + locale + "/" + from + "/" + to + "/" + outboundDate;
+            var request = "flights?flyFrom=" + flyFrom + "&to=" + flyTo + "&dateFrom=" + dateFrom + "&dateTo=" + dateTo + "&returnFrom=" + returnFrom + "&returnTo=" + returnTo + "&typeFlight=" + flightType + "&oneforcity=0&one_per_date=0&passengers=" + passengerTotal + "&adults=" + adultTotal + "&children=" + childTotal + "&infants=" + infantTotal;
+            request += "&directFlights=" + directFlightsOnly + "&partner=" + _serviceKey + "&partner_market=" + marketCountry + "&v=2&xml=0&curr=" + currency + "&locale=" + locale;
+            request += "&price_from=" + priceFrom + "&price_to=" + priceTo + "&dtimefrom=" + departureTimeFrom + "&dtimeto=" + departureTimeTo + "&atimefrom=" + arrivalTimeFrom;
+            request += "&atimeto=" + arrivalTimeTo + "&returndtimefrom=" + returnDepartureTimeFrom + "&returndtimeto=" + returnDepartureTimeTo + "&returnatimefrom=" + returnArrivalTimeFrom;
+            request += "&returnatimeto=" + returnArrivalTimeTo + "&stopoverfrom=" + stopOverFrom + "&stopoverto=" + stopOverTo + "&offset=" + offset + "&limit=" + limit + "&sort=" + sortBy + "&asc=" + asc;
 
-            if (inboundDate != null)
-            {
-                request += "/" + inboundDate;
-            }
-                
-            request += "?apiKey=" + _serviceKey;
+
             
             var response = _client.GetAsync(request).Result;
             var result = response.Content.ReadAsStringAsync().Result;

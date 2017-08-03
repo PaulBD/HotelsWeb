@@ -141,7 +141,7 @@
     </ProjectReference>
     <ProjectReference Include="..\library.wikipedia\library.wikipedia.csproj">
       <Project>{9DAA9E24-01CC-4105-8638-6918C8C86A5F}</Project>
-      <Name>library.wikipedia</Name>
+      <Name>library.azure</Name>
     </ProjectReference>
     <ProjectReference Include="..\library.azure\library.azure.csproj">
       <Project>{9DAA9E24-01CC-4105-8638-6918C8C86A5F}</Project>

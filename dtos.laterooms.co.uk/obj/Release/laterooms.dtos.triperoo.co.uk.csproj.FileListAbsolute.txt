@@ -1,8 +1,0 @@
-C:\Personal\TriperooCore\laterooms.dtos.triperoo.co.uk\bin\Release\laterooms.dtos.triperoo.co.uk.dll
-C:\Personal\TriperooCore\laterooms.dtos.triperoo.co.uk\bin\Release\laterooms.dtos.triperoo.co.uk.pdb
-C:\Personal\TriperooCore\laterooms.dtos.triperoo.co.uk\bin\Release\Newtonsoft.Json.dll
-C:\Personal\TriperooCore\laterooms.dtos.triperoo.co.uk\bin\Release\ServiceStack.Text.dll
-C:\Personal\TriperooCore\laterooms.dtos.triperoo.co.uk\bin\Release\Newtonsoft.Json.xml
-C:\Personal\TriperooCore\laterooms.dtos.triperoo.co.uk\bin\Release\ServiceStack.Text.xml
-C:\Personal\TriperooCore\laterooms.dtos.triperoo.co.uk\obj\Release\laterooms.dtos.triperoo.co.uk.dll
-C:\Personal\TriperooCore\laterooms.dtos.triperoo.co.uk\obj\Release\laterooms.dtos.triperoo.co.uk.pdb

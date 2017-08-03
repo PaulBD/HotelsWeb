@@ -86,7 +86,9 @@ namespace core.places.dtos
         public string ParentRegionNameLong { get; set; }
         public string ParentRegionType { get; set; }
         public int RegionID { get; set; }
-        public string RegionName { get; set; }
+		public string RegionName { get; set; }
+        public string CountryCode { get; set; }
+		public string StateProvinceCode { get; set; }
         public string RegionNameLong { get; set; }
         public string RegionType { get; set; }
         public string RelativeSignificance { get; set; }
@@ -98,7 +100,7 @@ namespace core.places.dtos
         {
             get
             {
-                return "/" + ParentRegionID + "/visit/" + ParentRegionNameLong.Replace(",", "").Replace(" ", "-").Replace("&", "and").ToLower();
+                return "/" + ParentRegionID + "/visit/" + ParentRegionNameLong.Replace("(", "").Replace(")","").Replace(",", "").Replace(" ", "-").Replace("&", "and").ToLower();
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using library.common;
-using System;
+﻿using System;
 using System.Net.Http;
 
 namespace core.hotels.Services
@@ -10,13 +9,13 @@ namespace core.hotels.Services
         private string _cid = "406390";
         private string _apiKey = "8a6ql3j1010cnihnpfbf6j1ad";
         private string _secret = "2s4g8jjsimsmv";
-        private Encryption _encryption;
+        //private Encryption _encryption;
         private string _hash = "";
 
         public RoomAvailabilityService()
         {
-            _encryption = new Encryption();
-            _hash = _encryption.CalculateMD5Hash(_apiKey + _secret + (Int32)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
+            //_encryption = new Encryption();
+            //_hash = _encryption.CalculateMD5Hash(_apiKey + _secret + (Int32)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
         }
 
         public void CheckRoomAvailability(string hotelId, string arrivalDate, string departDate, int nummberOfAdults, int numberOfChildren, string locale, string currency)
