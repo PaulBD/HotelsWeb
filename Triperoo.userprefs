@@ -1,12 +1,13 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="triperoo.apis/Endpoints/Location/Locations.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="triperoo.apis/Endpoints/Location/Deals.cs">
     <Files>
-      <File FileName="core.flights/Services/FlightService.cs" Line="31" Column="1" />
-      <File FileName="core.flights/Services/IFlightService.cs" Line="7" Column="249" />
-      <File FileName="triperoo.apis/Web.config" Line="22" Column="45" />
-      <File FileName="triperoo.apis/Endpoints/Flight/Flights.cs" Line="101" Column="1" />
-      <File FileName="core.flights/DTOs/FlightListDto.cs" Line="170" Column="33" />
-      <File FileName="triperoo.apis/Endpoints/Location/Locations.cs" Line="112" Column="1" />
+      <File FileName="core.hotels/Services/HotelService.cs" Line="218" Column="71" />
+      <File FileName="triperoo.apis/Endpoints/Location/Hotels.cs" Line="61" Column="37" />
+      <File FileName="core.hotels/DTOs/HotelAPIListDto.cs" Line="133" Column="41" />
+      <File FileName="core.hotels/DTOs/HotelListDto.cs" Line="34" Column="49" />
+      <File FileName="core.hotels/DTOs/RoomAvailabilityDto.cs" Line="23" Column="6" />
+      <File FileName="core.hotels/DTOs/HotelPriceDto.cs" Line="1" Column="1" />
+      <File FileName="triperoo.apis/Endpoints/Location/Deals.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

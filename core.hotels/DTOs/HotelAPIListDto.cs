@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace core.hotels.dtos
 {
-public class CachedSupplierResponse
+	public class CachedSupplierResponse
 	{
 		public string supplierCacheTolerance { get; set; }
 		public string cachedTime { get; set; }
@@ -75,18 +75,6 @@ public class CachedSupplierResponse
 		public Surcharges Surcharges { get; set; }
 	}
 
-	public class HotelFee
-	{
-		public string description { get; set; }
-		public string amount { get; set; }
-	}
-
-	public class HotelFees
-	{
-		public string size { get; set; }
-		public HotelFee HotelFee { get; set; }
-	}
-
 	public class RateInfo
 	{
 		public string priceBreakdown { get; set; }
@@ -97,7 +85,6 @@ public class CachedSupplierResponse
 		public bool nonRefundable { get; set; }
 		public string rateType { get; set; }
 		public object currentAllotment { get; set; }
-		public HotelFees HotelFees { get; set; }
 		public int? promoId { get; set; }
 		public string promoDescription { get; set; }
 		public string promoType { get; set; }
@@ -143,8 +130,7 @@ public class CachedSupplierResponse
 		public string name { get; set; }
 		public string address1 { get; set; }
 		public string city { get; set; }
-		public string stateProvinceCode { get; set; }
-		public object postalCode { get; set; }
+		public string postalCode { get; set; }
 		public string countryCode { get; set; }
 		public string airportCode { get; set; }
 		public string supplierType { get; set; }
@@ -169,29 +155,42 @@ public class CachedSupplierResponse
 		public string thumbNailUrl { get; set; }
 		public string deepLink { get; set; }
 		public RoomRateDetailsList RoomRateDetailsList { get; set; }
+		public string address2 { get; set; }
 	}
 
 	public class HotelList
 	{
-		public int size { get; set; }
-		public int activePropertyCount { get; set; }
-		public List<HotelSummary> HotelSummary { get; set; }
+        public HotelList()
+        {
+            hotelSummary = new List<HotelSummary>();
+        }
+
+		public string size { get; set; }
+		public string activePropertyCount { get; set; }
+		public List<HotelSummary> hotelSummary { get; set; }
 	}
 
 	public class HotelListResponse
 	{
+        public HotelListResponse()
+        {
+            hotelList = new HotelList();
+        }
 		public string customerSessionId { get; set; }
 		public int numberOfRoomsRequested { get; set; }
 		public bool moreResultsAvailable { get; set; }
 		public string cacheKey { get; set; }
 		public string cacheLocation { get; set; }
 		public CachedSupplierResponse cachedSupplierResponse { get; set; }
-		public HotelList HotelList { get; set; }
+		public HotelList hotelList { get; set; }
 	}
 
 	public class HotelAPIListDto
 	{
-		public int HotelCount { get; set; }
-		public HotelListResponse HotelListResponse { get; set; }
+        public HotelAPIListDto()
+        {
+            hotelListResponse = new HotelListResponse();
+        }
+		public HotelListResponse hotelListResponse { get; set; }
 	}
 }

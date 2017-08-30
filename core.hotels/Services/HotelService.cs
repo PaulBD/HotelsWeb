@@ -16,88 +16,189 @@ namespace core.hotels.services
         private string _url = "https://book.api.ean.com";
         private string _query;
 
-
-		private CouchBaseHelper _couchbaseHelper;
-		private readonly string _bucketName = "TriperooHotels";
-
-		public HotelService()
-		{
-			_couchbaseHelper = new CouchBaseHelper();
-            _query = "SELECT address, airportCode, amenitiesDescription, chain, chainCodeID, checkInTime, checkOutTime, confidence, diningDescription, doctype, eanHotelID, highRate, lastUpdatedDate, location,locationCoordinates, locationDescription, locationSummary, lowRate, mandatoryFeesDescription, name, nationalRatingsDescription, policyDescription, propertyCategory, propertyCurrency, propertyFeesDescription, recreationDescription, regionID, renovationDescription, roomDescription, sequenceNumber, spaDescription, supplierType, starRating, whatToExpect FROM " + _bucketName;
-		}
-
         public string Authenticate()
         {
             return MD5GenerateHash(_apiKey + _secret + (Int32)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
-        }
-
-		/// <summary>         /// Return a list of hotels by place id         /// </summary>         public List<HotelDto> ReturnHotelsByLocationId(int locationId)
-		{
-			var q = _query + " WHERE regionID = " + locationId + " ORDER BY sequenceNumber";
-
-			return ProcessQuery(q);
 		}
 
-		/// <summary>         /// Return a list of hotels by proximity         /// </summary>         public List<HotelDto> ReturnHotelsByProximity(double longitude, double latitude, double radius)
-		{
-			var degLat = utility.Location.Deg2rad(latitude);
-			var degLon = utility.Location.Deg2rad(longitude);
+		#region Get Hotel By Id
 
-			var mapPoint = new utility.Location.MapPoint { Latitude = latitude, Longitude = longitude };
+		/// <summary>         /// Return a single hotel By id         /// </summary>         public HotelDto ReturnHotelById(int hotelId, string locale, string currencyCode)         {             var url = _url + "/ean-services/rs/hotel/v3/info?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
 
-			var boundingBox = utility.Location.GetBoundingBox(mapPoint, radius);
+            var xml = "<HotelInformationRequest>";
+            xml += "<hotelId>" + hotelId + "</hotelId>";
+            xml += "<options>0</options>";
+            xml += "</HotelInformationRequest>";
 
-			var meridian180condition = " AND ";
+			url += xml;
 
-			if (boundingBox.MinPoint.Longitude > boundingBox.MaxPoint.Longitude)
+			var message = new HttpRequestMessage(HttpMethod.Get, url);
+
+			using (var client = new HttpClient())
 			{
-				meridian180condition = " OR ";
+				var result = client.SendAsync(message).Result;
+
+				if (result.IsSuccessStatusCode)
+				{
+					var r = CleanUpResult(result.Content.ReadAsStringAsync().Result);
+					return JsonSerializer.DeserializeFromString<HotelDto>(r);
+				}
 			}
 
-			var q = _query + " WHERE (RADIANS(locationCoordinates.latitude) >= " + boundingBox.MinPoint.Latitude + " and RADIANS(locationCoordinates.latitude) <= " + boundingBox.MaxPoint.Latitude + ") and ";
-			q += "(RADIANS(locationCoordinates.longitude) >= " + boundingBox.MinPoint.Longitude + meridian180condition + " RADIANS(locationCoordinates.longitude) <= " + boundingBox.MaxPoint.Longitude + ")";
-			q += " AND acos(sin( RADIANS(" + degLat + ")) * sin (RADIANS(locationCoordinates.latitude)) + cos( RADIANS(" + degLat + " )) ";
-			q += " * cos(RADIANS(locationCoordinates.latitude)) * cos (RADIANS(locationCoordinates.longitude) - RADIANS( " + degLon + "))) <= " + radius / 6371.0;
-
-			return ProcessQuery(q);
+			return null;
 		}
 
-		/// <summary>         /// Return a single hotel By id         /// </summary>         public HotelDto ReturnHotelById(int id)         {             var q = _query + " WHERE eanHotelID = '" + id + "'";              var result = ProcessQuery(q);              if (result.Count > 0)             {                 return result[0];             }              return null;         }
+		#endregion
 
-		/// <summary>         /// Process Query         /// </summary>         private List<HotelDto> ProcessQuery(string q)
+		#region Return room availability
+
+		/// <summary>
+		/// Return room availability
+		/// </summary>
+		public RoomAvailabilityDto ReturnRoomAvailability(int hotelId, string locale, string currencyCode, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3)
 		{
-			return _couchbaseHelper.ReturnQuery<HotelDto>(q, _bucketName);
+			var url = _url + "/ean-services/rs/hotel/v3/list?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
+
+			var xml = "";
+
+			var departureDate = arrivalDate.AddDays(nights);
+
+            xml += "<HotelRoomAvailabilityRequest>";
+			xml += " <hotelId>" + hotelId + "</hotelId>";
+			xml += " <arrivalDate>" + arrivalDate.Month + "/" + arrivalDate.Day + "/" + arrivalDate.Year + "</arrivalDate>";
+			xml += " <departureDate>" + departureDate.Month + "/" + departureDate.Day + "/" + departureDate.Year + "</departureDate>";
+            xml += " <includeDetails>true</includeDetails>";
+			xml += " <RoomGroup>";
+
+			if (!string.IsNullOrEmpty(rooms1))
+			{
+				xml += "  <Room>";
+				xml += "   <numberOfAdults>2</numberOfAdults>";
+				xml += "  </Room>";
+			}
+
+			if (!string.IsNullOrEmpty(rooms2))
+			{
+				xml += "  <Room>";
+				xml += "   <numberOfAdults>2</numberOfAdults>";
+				xml += "  </Room>";
+			}
+
+			if (!string.IsNullOrEmpty(rooms3))
+			{
+				xml += "  <Room>";
+				xml += "   <numberOfAdults>2</numberOfAdults>";
+				xml += "  </Room>";
+			}
+
+			xml += " </RoomGroup>";
+            xml += "</HotelRoomAvailabilityRequest>";
+			url += xml;
+
+			var message = new HttpRequestMessage(HttpMethod.Get, url);
+
+			using (var client = new HttpClient())
+			{
+				var result = client.SendAsync(message).Result;
+
+				if (result.IsSuccessStatusCode)
+				{
+					var r = CleanUpResult(result.Content.ReadAsStringAsync().Result);
+					return JsonSerializer.DeserializeFromString<RoomAvailabilityDto>(r);
+				}
+			}
+
+			return null;
 		}
 
-        /// <summary>
-        /// Return Hotel List
-        /// </summary>
-        public HotelAPIListDto ReturnHotelsByLocationId(string sessionId, string locale, string currencyCode, int locationId, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3)
+		#endregion
+
+		#region Return a list of hotels by proximity
+
+		/// <summary>
+		/// Return a list of hotels by proximity
+		/// </summary>
+		public HotelAPIListDto ReturnHotelsByProximity(string locale, string currencyCode, double longitude, double latitude, double radius)
+		{
+			var url = _url + "/ean-services/rs/hotel/v3/list?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
+
+			var xml = "";
+
+			xml += "<HotelListRequest>";
+			xml += "<latitude>" + latitude + "</latitude>";
+			xml += "<longitude>" + longitude + "</longitude>";
+			xml += "<searchRadius>" + radius + "</searchRadius>";
+			xml += "<searchRadiusUnit>MI</searchRadiusUnit>";
+			xml += "<sort>PROXIMITY</sort>";
+			xml += "<numberOfResults>25</numberOfResults>";
+			xml += "</HotelListRequest>";
+			url += xml;
+
+			var message = new HttpRequestMessage(HttpMethod.Get, url);
+
+			using (var client = new HttpClient())
+			{
+				var result = client.SendAsync(message).Result;
+
+				if (result.IsSuccessStatusCode)
+				{
+					var r = CleanUpResult(result.Content.ReadAsStringAsync().Result);
+					return JsonSerializer.DeserializeFromString<HotelAPIListDto>(r);
+				}
+			}
+
+			return null;
+		}
+
+		#endregion
+
+		#region Get Hotel By Location Id
+
+		/// <summary>
+		/// Return Hotel List
+		/// </summary>
+		public HotelAPIListDto ReturnHotelsByLocationId(string locale, string currencyCode, string city, string country, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3)
         {
-            var city = "";
-            var countryCode = "";
 
+            var departureDate = arrivalDate.AddDays(nights);
 
-            var url = _url + "/ean-services/rs/hotel/v3/list?sig=" + Authenticate();
-            url += "&apiKey=" + _apiKey + "&cid=" + _accountId;
-            url += "&customerSessionId=" + sessionId;
-            url += "&minorRev=30&locale=" + locale;
-            url += "&currencyCode=" + currencyCode;
-            url += "&city=" + city + "&countryCode=" + countryCode;
-			url += "&arrivalDate=" + arrivalDate + "&departureDate=" + arrivalDate.AddDays(nights);
-			url += "&room1=" + rooms1;
+            var url = _url + "/ean-services/rs/hotel/v3/list?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
+
+            var xml = "";
+
+            xml += "<HotelListRequest>";
+            xml += " <city>" + city + "</city>";
+            xml += " <country>" + country + "</country>";
+            xml += " <arrivalDate>" + arrivalDate.Month + "/" + arrivalDate.Day + "/" + arrivalDate.Year + "</arrivalDate>";
+            xml += " <departureDate>" + departureDate.Month + "/" + departureDate.Day + "/" + departureDate.Year + "</departureDate>";
+            xml += " <RoomGroup>";
+
+			if (!string.IsNullOrEmpty(rooms1))
+			{
+				xml += "  <Room>";
+				xml += "   <numberOfAdults>2</numberOfAdults>";
+				xml += "  </Room>";
+			}
 
             if (!string.IsNullOrEmpty(rooms2))
-            {
-				url += "&room2=" + rooms2;
-            }
+			{
+				xml += "  <Room>";
+				xml += "   <numberOfAdults>2</numberOfAdults>";
+				xml += "  </Room>";
+			}
 
-            if (!string.IsNullOrEmpty(rooms3))
-            {
-                url += "&room3=" + rooms3;
-            }
+			if (!string.IsNullOrEmpty(rooms3))
+			{
+				xml += "  <Room>";
+				xml += "   <numberOfAdults>2</numberOfAdults>";
+				xml += "  </Room>";
+			}
 
-            url += "&apiExperience=PARTNER_AFFILIATE";
+            xml += " </RoomGroup>";
+            xml += " <numberOfResults>25</numberOfResults>";
+            xml += "</HotelListRequest>";
+
+            url += xml;
 
             var message = new HttpRequestMessage(HttpMethod.Get, url);
 
@@ -107,18 +208,23 @@ namespace core.hotels.services
 
                 if (result.IsSuccessStatusCode)
                 {
-                    return JsonSerializer.DeserializeFromString<HotelAPIListDto>(CleanUpResult(result.Content.ReadAsStringAsync().Result));
+                    var r = CleanUpResult(result.Content.ReadAsStringAsync().Result);
+                    return JsonSerializer.DeserializeFromString<HotelAPIListDto>(r);
                 }
             }
 
             return null;
-        }
+		}
 
-        #region Security
+        #endregion
 
-        private string CleanUpResult(string result)
+		#region Security
+
+		private string CleanUpResult(string result)
         {
-            return result.Replace("\"@", "");
+			result = result.Replace("&gt;", ">");
+			result = result.Replace("&lt;", "<");
+            return result.Replace("\"@", "\"");
         }
 
         #endregion

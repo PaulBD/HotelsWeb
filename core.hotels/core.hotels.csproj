@@ -81,6 +81,7 @@
     <Compile Include="Utility\Common.cs" />
     <Compile Include="Utility\Location.cs" />
     <Compile Include="DTOs\HotelAPIListDto.cs" />
+    <Compile Include="DTOs\RoomAvailabilityDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
