@@ -119,19 +119,84 @@ namespace core.hotels.services
 		/// <summary>
 		/// Return a list of hotels by proximity
 		/// </summary>
-		public HotelAPIListDto ReturnHotelsByProximity(string locale, string currencyCode, double longitude, double latitude, double radius)
+		public HotelAPIListDto ReturnHotelsByProximity(string locale, string currencyCode, double longitude, double latitude, double radius, int propertyCategory, float minRate, float maxRate, float minStarRating, float maxStarRating, int numberOfBedRooms, bool checkDates, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3)
 		{
 			var url = _url + "/ean-services/rs/hotel/v3/list?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
 
 			var xml = "";
 
 			xml += "<HotelListRequest>";
-			xml += "<latitude>" + latitude + "</latitude>";
-			xml += "<longitude>" + longitude + "</longitude>";
-			xml += "<searchRadius>" + radius + "</searchRadius>";
-			xml += "<searchRadiusUnit>MI</searchRadiusUnit>";
-			xml += "<sort>PROXIMITY</sort>";
-			xml += "<numberOfResults>25</numberOfResults>";
+			xml += " <latitude>" + latitude + "</latitude>";
+			xml += " <longitude>" + longitude + "</longitude>";
+			xml += " <searchRadius>" + radius + "</searchRadius>";
+			xml += " <searchRadiusUnit>MI</searchRadiusUnit>";
+			xml += " <sort>PROXIMITY</sort>";
+			xml += " <numberOfResults>25</numberOfResults>"; 
+            xml += " <includeDetails>true</includeDetails>";
+			xml += " <includeRoomImages>true</includeRoomImages>";
+
+            if (checkDates)
+			{
+				var departureDate = arrivalDate.AddDays(nights);
+
+                if (propertyCategory > 0)
+                {
+                    xml += "<propertyCategory>" + propertyCategory + "</propertyCategory>";
+                }
+
+				if (minRate > 0)
+				{
+					xml += "<minRate>" + minRate + "</minRate>";
+				}
+
+				if (maxRate > 0)
+				{
+					xml += "<maxRate>" + maxRate + "</maxRate>";
+				}
+
+				if (minStarRating > 0)
+				{
+					xml += "<minStarRating>" + minStarRating + "</minStarRating>";
+				}
+
+				if (maxStarRating > 0)
+				{
+					xml += "<maxStarRating>" + maxStarRating + "</maxStarRating>";
+				}
+
+				if (numberOfBedRooms > 0)
+				{
+					xml += "<numberOfBedRooms>" + numberOfBedRooms + "</numberOfBedRooms>";
+				}
+
+				xml += " <arrivalDate>" + arrivalDate.Month + "/" + arrivalDate.Day + "/" + arrivalDate.Year + "</arrivalDate>";
+				xml += " <departureDate>" + departureDate.Month + "/" + departureDate.Day + "/" + departureDate.Year + "</departureDate>";
+				xml += " <RoomGroup>";
+
+				if (!string.IsNullOrEmpty(rooms1))
+				{
+					xml += "  <Room>";
+					xml += "   <numberOfAdults>2</numberOfAdults>";
+					xml += "  </Room>";
+				}
+
+				if (!string.IsNullOrEmpty(rooms2))
+				{
+					xml += "  <Room>";
+					xml += "   <numberOfAdults>2</numberOfAdults>";
+					xml += "  </Room>";
+				}
+
+				if (!string.IsNullOrEmpty(rooms3))
+				{
+					xml += "  <Room>";
+					xml += "   <numberOfAdults>2</numberOfAdults>";
+					xml += "  </Room>";
+				}
+
+				xml += " </RoomGroup>";
+            }
+
 			xml += "</HotelListRequest>";
 			url += xml;
 
@@ -158,7 +223,7 @@ namespace core.hotels.services
 		/// <summary>
 		/// Return Hotel List
 		/// </summary>
-		public HotelAPIListDto ReturnHotelsByLocationId(string locale, string currencyCode, string city, string country, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3)
+		public HotelAPIListDto ReturnHotelsByLocationId(string locale, string currencyCode, string city, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3)
         {
 
             var departureDate = arrivalDate.AddDays(nights);
@@ -169,7 +234,6 @@ namespace core.hotels.services
 
             xml += "<HotelListRequest>";
             xml += " <city>" + city + "</city>";
-            xml += " <country>" + country + "</country>";
             xml += " <arrivalDate>" + arrivalDate.Month + "/" + arrivalDate.Day + "/" + arrivalDate.Year + "</arrivalDate>";
             xml += " <departureDate>" + departureDate.Month + "/" + departureDate.Day + "/" + departureDate.Year + "</departureDate>";
             xml += " <RoomGroup>";

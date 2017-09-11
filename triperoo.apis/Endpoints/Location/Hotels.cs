@@ -19,7 +19,6 @@ namespace triperoo.apis.endpoints.location
 		public DateTime ArrivalDate { get; set; }
 		public int Nights { get; set; }
 		public string City { get; set; }
-		public string Country { get; set; }
 		public string Locale { get; set; }
 		public string CurrencyCode { get; set; }
 		public string Room1 { get; set; }
@@ -67,6 +66,18 @@ namespace triperoo.apis.endpoints.location
 		public double Radius { get; set; }
 		public string Locale { get; set; }
 		public string CurrencyCode { get; set; }
+		public int PropertyCategory { get; set; }
+        public float MinRate { get; set; }
+		public float MaxRate { get; set; }
+		public float MinStarRating { get; set; }
+		public float MaxStarRating { get; set; }
+		public int NumberOfBedRooms { get; set; }
+		public bool CheckDates { get; set; }
+		public DateTime ArrivalDate { get; set; }
+		public int Nights { get; set; }
+		public string Room1 { get; set; }
+		public string Room2 { get; set; }
+		public string Room3 { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
         
@@ -206,7 +217,7 @@ namespace triperoo.apis.endpoints.location
 
             try
             {
-                response = _hotelService.ReturnHotelsByLocationId(request.Locale, request.CurrencyCode, request.City, request.Country, request.ArrivalDate, request.Nights, request.Room1, request.Room2, request.Room3);
+                response = _hotelService.ReturnHotelsByLocationId(request.Locale, request.CurrencyCode, request.City, request.ArrivalDate, request.Nights, request.Room1, request.Room2, request.Room3);
             }
 			catch (Exception ex)
 			{
@@ -252,7 +263,7 @@ namespace triperoo.apis.endpoints.location
 
 			try
 			{
-				response = _hotelService.ReturnHotelsByProximity(request.Locale, request.CurrencyCode, request.Longitude, request.Latitude, request.Radius);
+                response = _hotelService.ReturnHotelsByProximity(request.Locale, request.CurrencyCode, request.Longitude, request.Latitude, request.Radius, request.PropertyCategory, request.MinRate, request.MaxRate, request.MinStarRating, request.MaxStarRating, request.NumberOfBedRooms, request.CheckDates, request.ArrivalDate, request.Nights, request.Room1, request.Room2, request.Room3);
 			}
 			catch (Exception ex)
 			{

@@ -153,6 +153,17 @@ namespace core.hotels.dtos
 		public string proximityUnit { get; set; }
 		public bool hotelInDestination { get; set; }
 		public string thumbNailUrl { get; set; }
+        public string imagelUrl 
+        { 
+            get 
+            {
+                if (!string.IsNullOrEmpty(thumbNailUrl))
+                {
+                    return thumbNailUrl.Replace("_t", "_b");
+                }
+                else { return null; }
+            } 
+        }
 		public string deepLink { get; set; }
 		public RoomRateDetailsList RoomRateDetailsList { get; set; }
 		public string address2 { get; set; }
