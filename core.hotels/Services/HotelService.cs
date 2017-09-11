@@ -57,7 +57,7 @@ namespace core.hotels.services
 		/// </summary>
 		public RoomAvailabilityDto ReturnRoomAvailability(int hotelId, string locale, string currencyCode, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3)
 		{
-			var url = _url + "/ean-services/rs/hotel/v3/list?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
+			var url = _url + "/ean-services/rs/hotel/v3/avail?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
 
 			var xml = "";
 
@@ -67,27 +67,28 @@ namespace core.hotels.services
 			xml += " <hotelId>" + hotelId + "</hotelId>";
 			xml += " <arrivalDate>" + arrivalDate.Month + "/" + arrivalDate.Day + "/" + arrivalDate.Year + "</arrivalDate>";
 			xml += " <departureDate>" + departureDate.Month + "/" + departureDate.Day + "/" + departureDate.Year + "</departureDate>";
-            xml += " <includeDetails>true</includeDetails>";
+			xml += " <includeDetails>true</includeDetails>";
+			xml += " <includeRoomImages>true</includeRoomImages>";
 			xml += " <RoomGroup>";
 
 			if (!string.IsNullOrEmpty(rooms1))
 			{
 				xml += "  <Room>";
-				xml += "   <numberOfAdults>2</numberOfAdults>";
+				xml += "   <numberOfAdults>" + rooms1 + "</numberOfAdults>";
 				xml += "  </Room>";
 			}
 
 			if (!string.IsNullOrEmpty(rooms2))
 			{
 				xml += "  <Room>";
-				xml += "   <numberOfAdults>2</numberOfAdults>";
+				xml += "   <numberOfAdults>" + rooms2 + "</numberOfAdults>";
 				xml += "  </Room>";
 			}
 
 			if (!string.IsNullOrEmpty(rooms3))
 			{
 				xml += "  <Room>";
-				xml += "   <numberOfAdults>2</numberOfAdults>";
+				xml += "   <numberOfAdults>" + rooms3 + "</numberOfAdults>";
 				xml += "  </Room>";
 			}
 

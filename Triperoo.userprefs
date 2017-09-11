@@ -1,13 +1,15 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="triperoo.apis/Endpoints/Location/Deals.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="core.hotels/DTOs/RoomAvailabilityDto.cs">
     <Files>
-      <File FileName="core.hotels/Services/HotelService.cs" Line="218" Column="71" />
-      <File FileName="triperoo.apis/Endpoints/Location/Hotels.cs" Line="61" Column="37" />
+      <File FileName="core.hotels/Services/HotelService.cs" Line="114" Column="60" />
+      <File FileName="triperoo.apis/Endpoints/Location/Hotels.cs" Line="143" Column="10" />
       <File FileName="core.hotels/DTOs/HotelAPIListDto.cs" Line="133" Column="41" />
       <File FileName="core.hotels/DTOs/HotelListDto.cs" Line="34" Column="49" />
-      <File FileName="core.hotels/DTOs/RoomAvailabilityDto.cs" Line="23" Column="6" />
+      <File FileName="core.hotels/DTOs/RoomAvailabilityDto.cs" Line="141" Column="33" />
       <File FileName="core.hotels/DTOs/HotelPriceDto.cs" Line="1" Column="1" />
-      <File FileName="triperoo.apis/Endpoints/Location/Deals.cs" Line="1" Column="1" />
+      <File FileName="triperoo.apis/Endpoints/Location/Deals.cs" Line="79" Column="1" />
+      <File FileName="core.places/Services/LocationService.cs" Line="188" Column="1" />
+      <File FileName="core.couchbase/CouchBaseHelper.cs" Line="40" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
