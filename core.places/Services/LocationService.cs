@@ -12,11 +12,11 @@ namespace core.places.services
     public class LocationService : ILocationService
     {
         private CouchBaseHelper _couchbaseHelper;
-		private readonly string _bucketName = "TriperooCommon";
-		private readonly string _tempBucketName = "TriperooCommonStaging";
+        private readonly string _bucketName = "TriperooCommon";
+        private readonly string _tempBucketName = "TriperooCommonStaging";
         private string _query;
-		private IVenueService _venueService;
-		private IContentService _contentService;
+        private IVenueService _venueService;
+        private IContentService _contentService;
 
         public LocationService()
         {
@@ -85,8 +85,9 @@ namespace core.places.services
 			}
 			*/
 
-            if (requiresUpdate){
-				UpdateLocation("location:" + result.RegionID, result, false);
+            if (requiresUpdate)
+            {
+                UpdateLocation("location:" + result.RegionID, result, false);
             }
 
             return result;
@@ -96,8 +97,8 @@ namespace core.places.services
         /// Attachs location photos
         /// </summary>
         public LocationDto AttachPhotos(string foreSquareId, LocationDto locationDto)
-		{
-			var foresquarePhotos = _venueService.UpdatePhotos(foreSquareId);
+        {
+            var foresquarePhotos = _venueService.UpdatePhotos(foreSquareId);
 
             if (foresquarePhotos != null)
             {
@@ -126,46 +127,46 @@ namespace core.places.services
         /// <param name="venueDto">Venue dto.</param>
         private LocationDto FindForesquareLocation(LocationDto locationDto, VenueDto venueDto)
         {
-			Venue firstLocation = null;
-			foreach (var v in venueDto.Response.Venues)
-			{
-				if (utilities.Common.DoesStringMatch(locationDto.RegionName, v.Name))
-				{
-					firstLocation = v;
-					break;
-				}
-			}
+            Venue firstLocation = null;
+            foreach (var v in venueDto.Response.Venues)
+            {
+                if (utilities.Common.DoesStringMatch(locationDto.RegionName, v.Name))
+                {
+                    firstLocation = v;
+                    break;
+                }
+            }
 
-			if (firstLocation != null)
-			{
-				locationDto.SourceData.ForesquareId = firstLocation.Id;
+            if (firstLocation != null)
+            {
+                locationDto.SourceData.ForesquareId = firstLocation.Id;
 
-				if (firstLocation.Location != null)
-				{
-				    locationDto.LocationCoordinates.Latitude = firstLocation.Location.Lat;
-					locationDto.LocationCoordinates.Longitude = firstLocation.Location.Lng;
-					locationDto.FormattedAddress = firstLocation.Location.FormattedAddress;
-				}
+                if (firstLocation.Location != null)
+                {
+                    locationDto.LocationCoordinates.Latitude = firstLocation.Location.Lat;
+                    locationDto.LocationCoordinates.Longitude = firstLocation.Location.Lng;
+                    locationDto.FormattedAddress = firstLocation.Location.FormattedAddress;
+                }
 
-				if (firstLocation.Categories != null)
-				{
-					foreach (var cat in firstLocation.Categories)
-					{
-						locationDto.Tags.Add(cat.ShortName);
-					}
-				}
+                if (firstLocation.Categories != null)
+                {
+                    foreach (var cat in firstLocation.Categories)
+                    {
+                        locationDto.Tags.Add(cat.ShortName);
+                    }
+                }
 
-				if (firstLocation.Contact != null)
-				{
-					locationDto.ContactDetails.facebook = firstLocation.Contact.Facebook;
-					locationDto.ContactDetails.facebookName = firstLocation.Contact.FacebookName;
-					locationDto.ContactDetails.facebookUsername = firstLocation.Contact.FacebookUsername;
-					locationDto.ContactDetails.formattedPhone = firstLocation.Contact.FormattedPhone;
-					locationDto.ContactDetails.instagram = firstLocation.Contact.Instagram;
-					locationDto.ContactDetails.phone = firstLocation.Contact.Phone;
-					locationDto.ContactDetails.twitter = firstLocation.Contact.Twitter;
-				}
-			}
+                if (firstLocation.Contact != null)
+                {
+                    locationDto.ContactDetails.facebook = firstLocation.Contact.Facebook;
+                    locationDto.ContactDetails.facebookName = firstLocation.Contact.FacebookName;
+                    locationDto.ContactDetails.facebookUsername = firstLocation.Contact.FacebookUsername;
+                    locationDto.ContactDetails.formattedPhone = firstLocation.Contact.FormattedPhone;
+                    locationDto.ContactDetails.instagram = firstLocation.Contact.Instagram;
+                    locationDto.ContactDetails.phone = firstLocation.Contact.Phone;
+                    locationDto.ContactDetails.twitter = firstLocation.Contact.Twitter;
+                }
+            }
 
             return locationDto;
         }
@@ -204,9 +205,26 @@ namespace core.places.services
             {
                 _couchbaseHelper.AddRecordToCouchbase(reference, dto, _tempBucketName);
             }
-			else
-			{
-				_couchbaseHelper.AddRecordToCouchbase(reference, dto, _bucketName);
+            else
+            {
+                _couchbaseHelper.AddRecordToCouchbase(reference, dto, _bucketName);
+            }
+        }
+
+
+        /// <summary>
+        /// Add Location
+        /// </summary>
+        public void AddLocation(LocationDto dto, bool isStaging)
+        {
+            string reference = Guid.NewGuid().ToString();
+            if (isStaging)
+            {
+                _couchbaseHelper.AddRecordToCouchbase(reference, dto, _tempBucketName);
+            }
+            else
+            {
+                _couchbaseHelper.AddRecordToCouchbase(reference, dto, _bucketName);
             }
         }
 
@@ -225,7 +243,8 @@ namespace core.places.services
 
             var location = ReturnLocationById(locationId);
 
-            location.Photos.PhotoList.Add(new PhotoList() {
+            location.Photos.PhotoList.Add(new PhotoList()
+            {
                 customerReference = customerReference,
                 prefix = "https://triperoostorage.blob.core.windows.net/",
                 suffix = containerName + "/" + newFileName,
@@ -233,7 +252,7 @@ namespace core.places.services
                 width = 0
             });
 
-			UpdateLocation("location:" + location.RegionID, location, false);
+            UpdateLocation("location:" + location.RegionID, location, false);
 
         }
 

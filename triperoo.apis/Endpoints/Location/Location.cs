@@ -7,13 +7,14 @@ using core.places.dtos;
 
 namespace triperoo.apis.endpoints.location
 {
-	#region Return Single Location By Id
+    #region Return Single Location By Id
 
-	/// <summary>
-	/// Request
-	/// </summary>
-	[Route("/v1/location/{id}", "GET")]
-	[Route("/v1/location/{id}", "PUT")]
+    /// <summary>
+    /// Request
+    /// </summary>
+    [Route("/v1/location/{id}", "GET")]
+    [Route("/v1/location/{id}", "PUT")]
+    [Route("/v1/location/", "POST")]
     public class LocationRequest
     {
         public int id { get; set; }
@@ -40,11 +41,11 @@ namespace triperoo.apis.endpoints.location
         }
     }
 
-	#endregion
+    #endregion
 
-	#region API logic
+    #region API logic
 
-	public class LocationApi : Service
+    public class LocationApi : Service
     {
         private readonly ILocationService _locationService;
 
@@ -56,14 +57,14 @@ namespace triperoo.apis.endpoints.location
             _locationService = locationService;
         }
 
-		#region Return Single Location By Id
+        #region Return Single Location By Id
 
-		/// <summary>
-		/// Return Single Location By Id
-		/// </summary>
-		public object Get(LocationRequest request)
+        /// <summary>
+        /// Return Single Location By Id
+        /// </summary>
+        public object Get(LocationRequest request)
         {
-			LocationDto response = null;
+            LocationDto response = null;
             string cacheName = "location:" + request.id;
 
             try
@@ -84,45 +85,67 @@ namespace triperoo.apis.endpoints.location
             return new HttpResult(response, HttpStatusCode.OK);
         }
 
-		#endregion
+        #endregion
 
-		#region Update Location Address By Id
+        #region Update Location Address By Id
 
-		/// <summary>
-		/// Update Location Address By Id
-		/// </summary>
-		public object Put(LocationRequest request)
-		{
-			LocationDto response = null;
-			string cacheName = "location:" + request.id;
+        /// <summary>
+        /// Update Location Address By Id
+        /// </summary>
+        public object Put(LocationRequest request)
+        {
+            LocationDto response = null;
+            string cacheName = "location:" + request.id;
 
-			try
-			{
-				response = Cache.Get<LocationDto>(cacheName);
+            try
+            {
+                response = Cache.Get<LocationDto>(cacheName);
 
-				if (response == null)
-				{
-					response = _locationService.ReturnLocationById(request.id);
-					base.Cache.Add(cacheName, response);
-				}
+                if (response == null)
+                {
+                    response = _locationService.ReturnLocationById(request.id);
+                    base.Cache.Add(cacheName, response);
+                }
 
-				response.FormattedAddress = request.Location.FormattedAddress;
-				response.Summary = request.Location.Summary;
-				response.LocationCoordinates = request.Location.LocationCoordinates;
-				response.ContactDetails = request.Location.ContactDetails;
-				response.Tags = request.Location.Tags;
+                response.FormattedAddress = request.Location.FormattedAddress;
+                response.Summary = request.Location.Summary;
+                response.LocationCoordinates = request.Location.LocationCoordinates;
+                response.ContactDetails = request.Location.ContactDetails;
+                response.Tags = request.Location.Tags;
                 _locationService.UpdateLocation(cacheName, response, true);
-			}
-			catch (Exception ex)
-			{
-				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
-			}
+            }
+            catch (Exception ex)
+            {
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+            }
 
-			return new HttpResult(HttpStatusCode.OK);
-		}
+            return new HttpResult(HttpStatusCode.OK);
+        }
 
-		#endregion
-	}
+        #endregion
+
+
+        #region Add Location Address By Id
+
+        /// <summary>
+        /// Add Location Address By Id
+        /// </summary>
+        public object Post(LocationRequest request)
+        {
+            try
+            {
+                _locationService.AddLocation(request.Location, true);
+            }
+            catch (Exception ex)
+            {
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+            }
+
+            return new HttpResult(HttpStatusCode.OK);
+        }
+
+        #endregion
+    }
 
     #endregion
 }

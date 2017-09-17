@@ -113,13 +113,16 @@ namespace triperoo.apis.endpoints.location
                     //base.Cache.Add(cacheName, response);
                 }
 
-                if (request.PageNumber > 0)
+                if (response != null)
                 {
-                    response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
-                }
-                else
-                {
-                    response = response.Take(request.PageSize).ToList();
+                    if (request.PageNumber > 0)
+                    {
+                        response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                    }
+                    else
+                    {
+                        response = response.Take(request.PageSize).ToList();
+                    }
                 }
             }
             catch (Exception ex)

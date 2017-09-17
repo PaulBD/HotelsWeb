@@ -9,7 +9,8 @@ namespace core.places.services
         LocationDto ReturnLocationById(int locationId);
         List<LocationDto> ReturnLocationsForAutocomplete(string searchValue);
         List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type);
-        void UpdateLocation(string reference, LocationDto dto, bool isStaging);
+		void UpdateLocation(string reference, LocationDto dto, bool isStaging);
+		void AddLocation(LocationDto dto, bool isStaging);
 		LocationDto AttachPhotos(string foreSquareId, LocationDto locationDto);
         void UploadPhoto(int locationId, Stream fileStream, string fileName, string contentType, string customerReference);
     }

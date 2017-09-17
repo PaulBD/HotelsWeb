@@ -100,7 +100,11 @@ namespace core.places.dtos
         {
             get
             {
-                return "/" + ParentRegionID + "/visit/" + ParentRegionNameLong.Replace("(", "").Replace(")","").Replace(",", "").Replace(" ", "-").Replace("&", "and").ToLower();
+                if ((ParentRegionID > 0) && (!string.IsNullOrEmpty(ParentRegionNameLong)))
+                {
+                    return "/" + ParentRegionID + "/visit/" + ParentRegionNameLong.Replace("(", "").Replace(")", "").Replace(",", "").Replace(" ", "-").Replace("&", "and").ToLower();
+                }
+                else { return null; }
             }
         }
 
