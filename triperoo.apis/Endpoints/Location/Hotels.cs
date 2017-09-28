@@ -1,4 +1,5 @@
 ﻿﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using core.hotels.dtos;
 using core.hotels.services;
@@ -12,21 +13,40 @@ namespace triperoo.apis.endpoints.location
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/location/{id}/hotels/{arrivalDate}/{nights}", "GET")]
+    [Route("/v1/location/{id}/hotels", "POST")]
 	public class HotelLocationRequest
 	{
 		public int Id { get; set; }
-		public DateTime ArrivalDate { get; set; }
-		public int Nights { get; set; }
-		public string City { get; set; }
 		public string Locale { get; set; }
 		public string CurrencyCode { get; set; }
-		public string Room1 { get; set; }
-		public string Room2 { get; set; }
-		public string Room3 { get; set; }
+		public string Location { get; set; }
+		public double Latitude { get; set; }
+		public double Longitude { get; set; }
+		public double Radius { get; set; }
+		public List<int> PropertyCategory { get; set; }
+		public float MinRate { get; set; }
+		public float MaxRate { get; set; }
+		public int MinStarRating { get; set; }
+		public int MaxStarRating { get; set; }
+		public int MinTripAdvisorRating { get; set; }
+		public int MaxTripAdvisorRating { get; set; }
+
+		public bool CheckDates { get; set; }
+		public DateTime ArrivalDate { get; set; }
+		public int Nights { get; set; }
+
+		public string Rooms1 { get; set; }
+		public string Rooms2 { get; set; }
+		public string Rooms3 { get; set; }
+
+		public List<string> FacilityList { get; set; }
+		public string SortBy { get; set; }
+		public int Exclude { get; set; }
+
 		public int PageSize { get; set; }
 		public int PageNumber { get; set; }
-	}
+
+    }
 
     /// <summary>
     /// Validator
@@ -46,63 +66,6 @@ namespace triperoo.apis.endpoints.location
 				RuleFor(r => r.Nights).NotNull().WithMessage("Supply a valid number of nights");
 				RuleFor(r => r.Locale).NotNull().WithMessage("Supply a valid locale");
 				RuleFor(r => r.CurrencyCode).NotNull().WithMessage("Supply a valid currency code");
-            });
-        }
-    }
-
-	#endregion
-
-    #region Hotels By Location Proximity
-
-    /// <summary>
-    /// Request
-    /// </summary>
-    [Route("/v1/location/{id}/hotels", "GET")]
-    public class HotelProximityRequest
-	{
-		public int Id { get; set; }
-		public double Latitude { get; set; }
-		public double Longitude { get; set; }
-		public double Radius { get; set; }
-		public string Locale { get; set; }
-		public string CurrencyCode { get; set; }
-		public int PropertyCategory { get; set; }
-        public float MinRate { get; set; }
-		public float MaxRate { get; set; }
-		public float MinStarRating { get; set; }
-		public float MaxStarRating { get; set; }
-		public int NumberOfBedRooms { get; set; }
-		public bool CheckDates { get; set; }
-		public DateTime ArrivalDate { get; set; }
-		public int Nights { get; set; }
-		public string Room1 { get; set; }
-		public string Room2 { get; set; }
-		public string Room3 { get; set; }
-        public int PageSize { get; set; }
-        public int PageNumber { get; set; }
-        
-    }
-
-    /// <summary>
-    /// Validator
-    /// </summary>
-    public class HotelProximityRequestValidator : AbstractValidator<HotelProximityRequest>
-    {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public HotelProximityRequestValidator()
-        {
-            // Get
-            RuleSet(ApplyTo.Get, () =>
-            {
-				RuleFor(r => r.Latitude).NotNull().WithMessage("Supply a valid location latitude");
-				RuleFor(r => r.Longitude).NotNull().WithMessage("Supply a valid location longitude");
-				RuleFor(r => r.Radius).NotNull().WithMessage("Supply a valid location distance");
-				RuleFor(r => r.Locale).NotNull().WithMessage("Supply a valid locale");
-				RuleFor(r => r.CurrencyCode).NotNull().WithMessage("Supply a valid currency code");
-                RuleFor(r => r.PageSize).GreaterThan(0).WithMessage("Invalid page size has been supplied");
-                RuleFor(r => r.PageNumber).GreaterThanOrEqualTo(0).WithMessage("Invalid page number has been supplied");
             });
         }
     }
@@ -211,13 +174,19 @@ namespace triperoo.apis.endpoints.location
         /// <summary>
         /// Get Hotels By location
         /// </summary>
-        public object Get(HotelLocationRequest request)
+        public object Post(HotelLocationRequest request)
 		{
 			var response = new HotelAPIListDto();
 
             try
             {
-                response = _hotelService.ReturnHotelsByLocationId(request.Locale, request.CurrencyCode, request.City, request.ArrivalDate, request.Nights, request.Room1, request.Room2, request.Room3);
+                if (request.Latitude == 0 && request.Longitude == 0 && request.Radius == 0)
+                {
+                    response = _hotelService.ReturnHotelsByLocationId(request.Locale, request.CurrencyCode, request.Location, request.PropertyCategory, request.MinRate, request.MaxRate, request.MinStarRating, request.MaxStarRating, request.MinTripAdvisorRating, request.MaxTripAdvisorRating, request.CheckDates, request.ArrivalDate, request.Nights, request.Rooms1, request.Rooms2, request.Rooms3, request.SortBy, request.Exclude);
+                }
+                else {
+					response = _hotelService.ReturnHotelsByProximity(request.Locale, request.CurrencyCode, request.Longitude, request.Latitude, request.Radius, request.PropertyCategory, request.MinRate, request.MaxRate, request.MinStarRating, request.MaxStarRating, request.MinTripAdvisorRating, request.MaxTripAdvisorRating, request.CheckDates, request.ArrivalDate, request.Nights, request.Rooms1, request.Rooms2, request.Rooms3, request.SortBy, request.Exclude);
+				}
             }
 			catch (Exception ex)
 			{
@@ -251,29 +220,6 @@ namespace triperoo.apis.endpoints.location
 		}
 
 		#endregion
-
-		#region Get Hotels By Location Proximity
-
-		/// <summary>
-		/// Get Hotels By location
-		/// </summary>
-		public object Get(HotelProximityRequest request)
-		{
-			var response = new HotelAPIListDto();
-
-			try
-			{
-                response = _hotelService.ReturnHotelsByProximity(request.Locale, request.CurrencyCode, request.Longitude, request.Latitude, request.Radius, request.PropertyCategory, request.MinRate, request.MaxRate, request.MinStarRating, request.MaxStarRating, request.NumberOfBedRooms, request.CheckDates, request.ArrivalDate, request.Nights, request.Room1, request.Room2, request.Room3);
-			}
-			catch (Exception ex)
-			{
-				throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
-			}
-
-			return new HttpResult(response, HttpStatusCode.OK);
-        }
-
-        #endregion
 
         #region Get Hotel By Id
 

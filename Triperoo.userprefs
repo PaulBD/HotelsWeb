@@ -1,12 +1,8 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="core.places/DTOs/LocationListDto.cs">
     <Files>
-      <File FileName="triperoo.apis/Endpoints/Location/Locations.cs" Line="103" Column="1" />
-      <File FileName="core.places/Services/LocationService.cs" Line="217" Column="34" />
-      <File FileName="triperoo.apis/Endpoints/Location/Location.cs" Line="137" Column="1" />
-      <File FileName="core.places/Services/ILocationService.cs" Line="13" Column="11" />
-      <File FileName="core.couchbase/CouchBaseHelper.cs" Line="65" Column="1" />
-      <File FileName="core.places/DTOs/LocationListDto.cs" Line="103" Column="39" />
+      <File FileName="core.places/Services/RestaurantService.cs" Line="30" Column="27" />
+      <File FileName="core.places/DTOs/LocationListDto.cs" Line="131" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
@@ -16,8 +12,6 @@
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Auth/Register.cs" relfile="triperoo.apis/Endpoints/Auth/Register.cs" line="71" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Customer/Customer.cs" relfile="triperoo.apis/Endpoints/Customer/Customer.cs" line="96" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Customer/Likes.cs" relfile="triperoo.apis/Endpoints/Customer/Likes.cs" line="61" column="1" />
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/core.places/Services/LocationService.cs" relfile="core.places/Services/LocationService.cs" line="219" column="1" />
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Location/Location.cs" relfile="triperoo.apis/Endpoints/Location/Location.cs" line="137" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

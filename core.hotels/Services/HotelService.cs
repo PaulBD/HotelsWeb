@@ -119,29 +119,89 @@ namespace core.hotels.services
 		/// <summary>
 		/// Return a list of hotels by proximity
 		/// </summary>
-		public HotelAPIListDto ReturnHotelsByProximity(string locale, string currencyCode, double longitude, double latitude, double radius, int propertyCategory, float minRate, float maxRate, float minStarRating, float maxStarRating, int numberOfBedRooms, bool checkDates, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3)
+		public HotelAPIListDto ReturnHotelsByProximity(string locale, string currencyCode, double longitude, double latitude, double radius, List<int> propertyCategory, float minRate, float maxRate, int minStarRating, int maxStarRating, int minTripAdvisorRating, int maxTripAdvisorRating, bool checkDates, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3, string sortBy, int exclude)
 		{
 			var url = _url + "/ean-services/rs/hotel/v3/list?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
 
 			var xml = "";
 
-			xml += "<HotelListRequest>";
 			xml += " <latitude>" + latitude + "</latitude>";
 			xml += " <longitude>" + longitude + "</longitude>";
 			xml += " <searchRadius>" + radius + "</searchRadius>";
 			xml += " <searchRadiusUnit>MI</searchRadiusUnit>";
-			xml += " <sort>PROXIMITY</sort>";
-			xml += " <numberOfResults>25</numberOfResults>"; 
+			xml += " <sort>" + sortBy + "</sort>";
+			//xml += " <numberOfResults>25</numberOfResults>"; 
             xml += " <includeDetails>true</includeDetails>";
 			xml += " <includeRoomImages>true</includeRoomImages>";
 
-            if (checkDates)
+			return ReturnHotels(url, xml, propertyCategory, minRate, maxRate, minStarRating, maxStarRating, minTripAdvisorRating, maxTripAdvisorRating, checkDates, arrivalDate, nights, rooms1, rooms2, rooms3, exclude);
+		}
+
+		#endregion
+
+		#region Get Hotel By Location Id
+
+		/// <summary>
+		/// Return Hotel List
+		/// </summary>
+		public HotelAPIListDto ReturnHotelsByLocationId(string locale, string currencyCode, string location, List<int> propertyCategory, float minRate, float maxRate, int minStarRating, int maxStarRating, int minTripAdvisorRating, int maxTripAdvisorRating, bool checkDates, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3, string sortBy, int exclude)
+        {
+            var departureDate = arrivalDate.AddDays(nights);
+
+            var url = _url + "/ean-services/rs/hotel/v3/list?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
+
+            var xml = "";
+
+            var locArray = location.Split(',');
+
+            xml += " <city>" + locArray[0].Trim() + "</city>";
+            xml += " <country>" + locArray[locArray.Length - 1].Trim() + "</country>";
+
+            xml += " <arrivalDate>" + arrivalDate.Month + "/" + arrivalDate.Day + "/" + arrivalDate.Year + "</arrivalDate>";
+            xml += " <departureDate>" + departureDate.Month + "/" + departureDate.Day + "/" + departureDate.Year + "</departureDate>";
+			xml += " <sort>" + sortBy + "</sort>";
+			//xml += " <numberOfResults>25</numberOfResults>";
+			xml += " <includeDetails>true</includeDetails>";
+			xml += " <includeRoomImages>true</includeRoomImages>";
+
+			return ReturnHotels(url, xml, propertyCategory, minRate, maxRate, minStarRating, maxStarRating, minTripAdvisorRating, maxTripAdvisorRating, checkDates, arrivalDate, nights, rooms1, rooms2, rooms3, exclude);
+		}
+
+        #endregion
+
+		#region Security
+
+		private string CleanUpResult(string result)
+        {
+			result = result.Replace("&gt;", ">");
+			result = result.Replace("&lt;", "<");
+            return result.Replace("\"@", "\"");
+        }
+
+		#endregion
+
+		#region GetHotels
+
+        /// <summary>
+        /// Returns the hotels.
+        /// </summary>
+		private HotelAPIListDto ReturnHotels(string url, string xmlContent, List<int> propertyCategory, float minRate, float maxRate, int minStarRating, int maxStarRating, int minTripAdvisorRating, int maxTripAdvisorRating, bool checkDates, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3, int exclude)
+		{
+			var xml = "";
+
+			xml += "<HotelListRequest>";
+			xml += xmlContent;
+
+			if (checkDates)
 			{
 				var departureDate = arrivalDate.AddDays(nights);
 
-                if (propertyCategory > 0)
+                if (propertyCategory != null)
                 {
-                    xml += "<propertyCategory>" + propertyCategory + "</propertyCategory>";
+                    if (propertyCategory.Count > 0)
+                    {
+                        xml += "<propertyCategory>" + propertyCategory + "</propertyCategory>";
+                    }
                 }
 
 				if (minRate > 0)
@@ -164,10 +224,17 @@ namespace core.hotels.services
 					xml += "<maxStarRating>" + maxStarRating + "</maxStarRating>";
 				}
 
-				if (numberOfBedRooms > 0)
+				if (minTripAdvisorRating > 0)
 				{
-					xml += "<numberOfBedRooms>" + numberOfBedRooms + "</numberOfBedRooms>";
+					xml += "<minTripAdvisorRating>" + minTripAdvisorRating + "</minTripAdvisorRating>";
 				}
+
+				if (maxTripAdvisorRating > 0)
+				{
+					xml += "<maxTripAdvisorRating>" + maxTripAdvisorRating + "</maxTripAdvisorRating>";
+				}
+
+				// TODO: Add exclude
 
 				xml += " <arrivalDate>" + arrivalDate.Month + "/" + arrivalDate.Day + "/" + arrivalDate.Year + "</arrivalDate>";
 				xml += " <departureDate>" + departureDate.Month + "/" + departureDate.Day + "/" + departureDate.Year + "</departureDate>";
@@ -176,31 +243,43 @@ namespace core.hotels.services
 				if (!string.IsNullOrEmpty(rooms1))
 				{
 					xml += "  <Room>";
-					xml += "   <numberOfAdults>2</numberOfAdults>";
+					xml += "   <numberOfAdults>" + rooms1 + "</numberOfAdults>";
 					xml += "  </Room>";
 				}
 
 				if (!string.IsNullOrEmpty(rooms2))
 				{
-					xml += "  <Room>";
-					xml += "   <numberOfAdults>2</numberOfAdults>";
-					xml += "  </Room>";
+                    if (rooms2 != "0")
+                    {
+                        xml += "  <Room>";
+                        xml += "   <numberOfAdults>" + rooms2 + "</numberOfAdults>";
+                        xml += "  </Room>";
+                    }
 				}
 
 				if (!string.IsNullOrEmpty(rooms3))
 				{
-					xml += "  <Room>";
-					xml += "   <numberOfAdults>2</numberOfAdults>";
-					xml += "  </Room>";
+                    if (rooms3 != "0")
+                    {
+                        xml += "  <Room>";
+                        xml += "   <numberOfAdults>" + rooms3 + "</numberOfAdults>";
+                        xml += "  </Room>";
+                    }
 				}
 
 				xml += " </RoomGroup>";
+			}
+
+			xml += "<numberOfResults>200</numberOfResults>";
+
+            if (exclude > 0)
+            {
+                xml += "<exclude>" + exclude + "</exclude>";
             }
 
 			xml += "</HotelListRequest>";
-			url += xml;
 
-			var message = new HttpRequestMessage(HttpMethod.Get, url);
+			var message = new HttpRequestMessage(HttpMethod.Get, url + xml);
 
 			using (var client = new HttpClient())
 			{
@@ -218,88 +297,12 @@ namespace core.hotels.services
 
 		#endregion
 
-		#region Get Hotel By Location Id
-
-		/// <summary>
-		/// Return Hotel List
-		/// </summary>
-		public HotelAPIListDto ReturnHotelsByLocationId(string locale, string currencyCode, string city, DateTime arrivalDate, int nights, string rooms1, string rooms2, string rooms3)
-        {
-
-            var departureDate = arrivalDate.AddDays(nights);
-
-            var url = _url + "/ean-services/rs/hotel/v3/list?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
-
-            var xml = "";
-
-            xml += "<HotelListRequest>";
-            xml += " <city>" + city + "</city>";
-            xml += " <arrivalDate>" + arrivalDate.Month + "/" + arrivalDate.Day + "/" + arrivalDate.Year + "</arrivalDate>";
-            xml += " <departureDate>" + departureDate.Month + "/" + departureDate.Day + "/" + departureDate.Year + "</departureDate>";
-            xml += " <RoomGroup>";
-
-			if (!string.IsNullOrEmpty(rooms1))
-			{
-				xml += "  <Room>";
-				xml += "   <numberOfAdults>2</numberOfAdults>";
-				xml += "  </Room>";
-			}
-
-            if (!string.IsNullOrEmpty(rooms2))
-			{
-				xml += "  <Room>";
-				xml += "   <numberOfAdults>2</numberOfAdults>";
-				xml += "  </Room>";
-			}
-
-			if (!string.IsNullOrEmpty(rooms3))
-			{
-				xml += "  <Room>";
-				xml += "   <numberOfAdults>2</numberOfAdults>";
-				xml += "  </Room>";
-			}
-
-            xml += " </RoomGroup>";
-            xml += " <numberOfResults>25</numberOfResults>";
-            xml += "</HotelListRequest>";
-
-            url += xml;
-
-            var message = new HttpRequestMessage(HttpMethod.Get, url);
-
-            using (var client = new HttpClient())
-            {
-                var result = client.SendAsync(message).Result;
-
-                if (result.IsSuccessStatusCode)
-                {
-                    var r = CleanUpResult(result.Content.ReadAsStringAsync().Result);
-                    return JsonSerializer.DeserializeFromString<HotelAPIListDto>(r);
-                }
-            }
-
-            return null;
-		}
-
-        #endregion
-
 		#region Security
 
-		private string CleanUpResult(string result)
-        {
-			result = result.Replace("&gt;", ">");
-			result = result.Replace("&lt;", "<");
-            return result.Replace("\"@", "\"");
-        }
-
-        #endregion
-
-        #region Security
-
-        /// <summary>
-        /// Generate MD5 Hash
-        /// </summary>
-        private string MD5GenerateHash(string strInput)
+		/// <summary>
+		/// Generate MD5 Hash
+		/// </summary>
+		private string MD5GenerateHash(string strInput)
         {
             // Create a new instance of the MD5CryptoServiceProvider object.
             var md5Hasher = MD5.Create();
