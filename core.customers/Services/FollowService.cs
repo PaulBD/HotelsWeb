@@ -30,27 +30,39 @@ namespace core.customers.services
 
             var customer = _customerService.ReturnCustomerByToken(token);
 
-            customer.TriperooCustomers.Following.Add(
-                new CustomerFollowsDto{
-                 CustomerReference = reference,
-                DateAdded = DateTime.Now
-				});
+            var existingFriend = customer.TriperooCustomers.Following.FirstOrDefault(q => q.CustomerReference == reference);
 
-			customer.TriperooCustomers.Stats.FollowingCount += 1;
-			_customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
+            if (existingFriend == null)
+            {
+
+                customer.TriperooCustomers.Following.Add(
+                    new CustomerFollowsDto
+                    {
+                        CustomerReference = reference,
+                        DateAdded = DateTime.Now
+                    });
+
+			    customer.TriperooCustomers.Stats.FollowingCount += 1;
+                _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
+            }
 
             // Update the customer I want to follow showing that I'm following them
 			var followcustomer = _customerService.ReturnCustomerByReference(reference);
 
-			followcustomer.TriperooCustomers.FollowedBy.Add(
-				new CustomerFollowsDto
-				{
-					CustomerReference = reference,
-					DateAdded = DateTime.Now
-				});
+            var existingFollowFriend = followcustomer.TriperooCustomers.Following.FirstOrDefault(q => q.CustomerReference == customer.TriperooCustomers.CustomerReference);
 
-			followcustomer.TriperooCustomers.Stats.FollowerCount += 1;
-			_customerService.InsertUpdateCustomer(followcustomer.TriperooCustomers.CustomerReference, followcustomer.TriperooCustomers);
+            if (existingFriend == null)
+            {
+                followcustomer.TriperooCustomers.FollowedBy.Add(
+                    new CustomerFollowsDto
+                    {
+                    CustomerReference = customer.TriperooCustomers.CustomerReference,
+                        DateAdded = DateTime.Now
+                    });
+
+                followcustomer.TriperooCustomers.Stats.FollowerCount += 1;
+                _customerService.InsertUpdateCustomer(followcustomer.TriperooCustomers.CustomerReference, followcustomer.TriperooCustomers);
+            }
         }
 
         /// <summary>
@@ -102,7 +114,7 @@ namespace core.customers.services
 
 			var followcustomer = _customerService.ReturnCustomerByReference(reference);
 
-			var followFriend = followcustomer.TriperooCustomers.FollowedBy.FirstOrDefault(q => q.CustomerReference == reference);
+			var followFriend = followcustomer.TriperooCustomers.FollowedBy.FirstOrDefault(q => q.CustomerReference == customer.TriperooCustomers.CustomerReference);
 			followcustomer.TriperooCustomers.FollowedBy.Remove(followFriend);
 
 			followcustomer.TriperooCustomers.Stats.FollowerCount -= 1;

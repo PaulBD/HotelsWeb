@@ -69,27 +69,16 @@ namespace triperoo.apis.endpoints.location
 		/// </summary>
 		public object Get(HotelDealRequest request)
         {
-			string cacheName = "deals:hotels:" + request.Id;
-			string locationCacheName = "location:" + request.Id;
 			LocationDto locationResponse = new LocationDto();
             List<TravelzooDto> response = null;
 
             try
-			{
-				locationResponse = Cache.Get<LocationDto>(locationCacheName);
+            {
+                locationResponse = _locationService.ReturnLocationById(request.Id);
 
-				if (locationResponse == null)
-				{
-					locationResponse = _locationService.ReturnLocationById(request.Id);
-					base.Cache.Add(locationCacheName, locationResponse);
-				}
-
-                response = Cache.Get<List<TravelzooDto>>(cacheName);
-
-                if (response == null)
+                if (locationResponse != null)
                 {
                     response = _travelzooService.ReturnDeals(locationResponse.RegionName);
-                    //base.Cache.Add(cacheName, response);
                 }
 
                 if (response != null)

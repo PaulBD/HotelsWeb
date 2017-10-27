@@ -105,7 +105,7 @@ namespace triperoo.apis.endpoints.customer
 				var locationResponse = _locationService.ReturnLocationById(request.Location.Id);
 
 				locationResponse.Stats.LikeCount += 1;
-				_locationService.UpdateLocation("location:" + request.Location.Id, locationResponse, false);
+				_locationService.UpdateLocation(locationResponse, false);
 			}
 			catch (Exception ex)
 			{
@@ -136,7 +136,7 @@ namespace triperoo.apis.endpoints.customer
 				var locationResponse = _locationService.ReturnLocationById(request.LocationId);
 
 				locationResponse.Stats.LikeCount -= 1;
-				_locationService.UpdateLocation("location:" + request.LocationId, locationResponse, false);
+				_locationService.UpdateLocation(locationResponse, false);
 			}
 			catch (Exception ex)
 			{

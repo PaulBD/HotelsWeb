@@ -1,51 +1,54 @@
-﻿using core.places.dtos;
-using library.couchbase;
-using System.Collections.Generic;
+﻿using System;
+using core.places.dtos;
+using library.caching;
 
 namespace core.places.services
 {
-    public class AttractionService : IAttractionService
+    public class AttractionService: BaseService, IAttractionService
     {
-        private CouchBaseHelper _couchbaseHelper;
-        private readonly string _bucketName = "TriperooCommon";
+        private readonly string _bucketName = "TriperooAttractions";
         private string _query;
+        private readonly ICacheProvider _cache;
+        private readonly ILocationService _locationService;
 
-        public AttractionService()
+        public AttractionService(ICacheProvider cache, ILocationService locationService)
         {
-            _couchbaseHelper = new CouchBaseHelper();
-			_query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, url, formattedAddress, contactDetails, tags, photos, locationCoordinates, summary, stats FROM " + _bucketName;
-		}
-
-        /// <summary>
-        /// Return attractions by location Id
-        /// </summary>
-        public List<LocationDto> ReturnAttractionsByParentId(int parentLocationId)
-        {
-            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Point of Interest Shadow'";
-
-            return ProcessQuery(q);
-		}
-
-        /// <summary>
-        /// Return attractions by location Id and category
-        /// </summary>
-        public List<LocationDto> ReturnAttractionsByParentIdAndCategory(int parentLocationId, string category)
-        {
-            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Point of Interest Shadow' AND subClass = '" + category + "'";
-
-            return ProcessQuery(q);
+            _cache = cache;
+            _locationService = locationService;
+            _query = "SELECT BookingType, Commences, Destination,Duration,Introduction,Pricing, ProductCategories,ProductCode,ProductImage,ProductName,ProductStarRating, ProductText,ProductType,ProductURLs,Rank,Special,SpecialDescription,VoucherOption FROM " + _bucketName;
         }
 
-        /// <summary>
-        /// Process Query
-        /// </summary>
-        private List<LocationDto> ProcessQuery(string q)
-        {
-            var result = _couchbaseHelper.ReturnQuery<LocationDto>(q, _bucketName);
 
-            if (result.Count > 0)
+        public AttractionListDto ReturnAttractionsById(int id)
+        {
+            var location = _locationService.ReturnLocationById(id);
+
+            if (location != null)
             {
-                return result;
+                var locList = location.RegionNameLong.Split(',');
+
+                var country = locList[locList.Length - 1].Trim();
+
+                var cacheKey = "POI:" + location.RegionName.Replace(" ", "_").ToLower() + country.Replace(" ", "_").ToLower();
+
+                var attractionsList = _cache.Get<AttractionListDto>(cacheKey);
+
+                if (attractionsList != null)
+                {
+                    //return attractionsList;
+                }
+
+                var q = _query + " WHERE Destination.City = '" + location.RegionName + "' AND Destination.Country = '" + country + "' ORDER BY Rank";
+
+                /*var list = null;//ProcessAttractionQuery(q);
+
+                if (list != null)
+                {
+                    _cache.AddOrUpdate(cacheKey, list);
+                }
+                */
+
+                //return list;
             }
 
             return null;

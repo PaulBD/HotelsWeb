@@ -109,22 +109,12 @@ namespace triperoo.apis.endpoints.location
         {
             EventDto eventResponse = new EventDto();
             LocationDto locationResponse = new LocationDto();
-            string cacheName = "events:" + request.Id + ":" + request.CategoryName;
-            string locationCacheName = "location:" + request.Id;
 
             try
             {
-                locationResponse = Cache.Get<LocationDto>(locationCacheName);
+                locationResponse = _locationService.ReturnLocationById(request.Id);
 
-                if (locationResponse == null)
-                {
-                    locationResponse = _locationService.ReturnLocationById(request.Id);
-                    base.Cache.Add(locationCacheName, locationResponse);
-                }
-
-                eventResponse = Cache.Get<EventDto>(cacheName);
-
-                if (eventResponse == null)
+                if (locationResponse != null)
                 {
                     if (request.CategoryName == "all")
                     {
@@ -134,8 +124,6 @@ namespace triperoo.apis.endpoints.location
                     {
                         eventResponse = _eventService.ReturnEventsByLocation(locationResponse.RegionName, request.CategoryName, 12, request.PageNumber + 1);
                     }
-
-                    // base.Cache.Add(cacheName, response);
                 }
 
                 if (eventResponse.events != null)
@@ -172,14 +160,7 @@ namespace triperoo.apis.endpoints.location
 
 			try
 			{
-				eventResponse = Cache.Get<EventDto>(cacheName);
-
-				if (eventResponse == null)
-				{
-					eventResponse = _eventService.ReturnEventsByLocationName(request.Keyword, 12, request.PageNumber + 1);
-
-					// base.Cache.Add(cacheName, response);
-				}
+				eventResponse = _eventService.ReturnEventsByLocationName(request.Keyword, 12, request.PageNumber + 1);
 
 				if (eventResponse.events != null)
 				{

@@ -40,18 +40,15 @@ namespace core.customers.services
 
 			if (customer != null)
 			{
-				var foundLike = customer.TriperooCustomers.VisitedLocations.FirstOrDefault(q => q.RegionID == location.RegionID);
+				var visit = customer.TriperooCustomers.VisitedLocations.FirstOrDefault(q => q.RegionID == location.RegionID);
 
-				if (foundLike != null)
-				{
-					customer.TriperooCustomers.VisitedLocations.Remove(foundLike);
-				}
-
-				location.Id = customer.TriperooCustomers.Likes.Count + 1;
-				location.DateCreated = DateTime.Now;
-				customer.TriperooCustomers.VisitedLocations.Add(location);
-
-				_customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
+                if (visit == null)
+                {
+                    location.Id = customer.TriperooCustomers.VisitedLocations.Count + 1;
+                    location.DateCreated = DateTime.Now;
+                    customer.TriperooCustomers.VisitedLocations.Add(location);
+                    _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
+                }
 			}
 		}
 

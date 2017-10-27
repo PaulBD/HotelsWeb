@@ -65,17 +65,10 @@ namespace triperoo.apis.endpoints.location
         public object Get(LocationRequest request)
         {
             LocationDto response = null;
-            string cacheName = "location:" + request.id;
 
             try
             {
-                response = Cache.Get<LocationDto>(cacheName);
-
-                if (response == null)
-                {
-                    response = _locationService.ReturnLocationById(request.id);
-                    //base.Cache.Add(cacheName, response);
-                }
+                response = _locationService.ReturnLocationById(request.id);
             }
             catch (Exception ex)
             {
@@ -95,24 +88,17 @@ namespace triperoo.apis.endpoints.location
         public object Put(LocationRequest request)
         {
             LocationDto response = null;
-            string cacheName = "location:" + request.id;
 
             try
             {
-                response = Cache.Get<LocationDto>(cacheName);
-
-                if (response == null)
-                {
-                    response = _locationService.ReturnLocationById(request.id);
-                    base.Cache.Add(cacheName, response);
-                }
+                response = _locationService.ReturnLocationById(request.id);
 
                 response.FormattedAddress = request.Location.FormattedAddress;
                 response.Summary = request.Location.Summary;
                 response.LocationCoordinates = request.Location.LocationCoordinates;
                 response.ContactDetails = request.Location.ContactDetails;
                 response.Tags = request.Location.Tags;
-                _locationService.UpdateLocation(cacheName, response, true);
+                _locationService.UpdateLocation(response, true);
             }
             catch (Exception ex)
             {

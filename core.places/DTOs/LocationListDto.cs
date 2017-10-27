@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace core.places.dtos
 {
@@ -27,6 +28,7 @@ namespace core.places.dtos
 		public int width { get; set; }
 		public int height { get; set; }
         public string customerReference { get; set; }
+        public string photoReference { get; set; }
 	}
 
 	public class Photos
@@ -35,7 +37,7 @@ namespace core.places.dtos
         {
             PhotoList = new List<PhotoList>();
         }
-		public int PhotoCount { get; set; }
+        public int PhotoCount { get { if (PhotoList != null) { return PhotoList.Count; } else { return 0; } } }
 		public List<PhotoList> PhotoList { get; set; }
 	}
 
@@ -47,11 +49,11 @@ namespace core.places.dtos
 
 	public class SummaryDto
 	{
-		public string En { get; set; }
-		public string Fr { get; set; }
-		public string De { get; set; }
-		public string Es { get; set; }
-		public string It { get; set; }
+		public string en { get; set; }
+        public string fr { get; set; }
+		public string de { get; set; }
+		public string es { get; set; }
+		public string it { get; set; }
 	}
 
 	public class StatsDto
@@ -60,6 +62,70 @@ namespace core.places.dtos
 		public int ReviewCount { get; set; }
 		public double AverageReviewScore { get; set; }
 	}
+
+    public class Style
+    {
+        public string text { get; set; }
+    }
+
+    public class Styles
+    {
+        public List<Style> style { get; set; }
+    }
+
+    public class AveragePriceThreeCourseMeal
+    {
+        public string currency { get; set; }
+        public decimal text { get; set; }
+    }
+
+    public class AveragePriceMainCourse
+    {
+        public string currency { get; set; }
+        public decimal text { get; set; }
+    }
+
+    public class Pricing
+    {
+        public string PriceAUD { get; set; }
+        public string PriceNZD { get; set; }
+        public string PriceEUR { get; set; }
+        public string PriceGBP { get; set; }
+        public string PriceUSD { get; set; }
+        public string PriceCAD { get; set; }
+        public string PriceCHF { get; set; }
+        public string PriceNOK { get; set; }
+        public string PriceJPY { get; set; }
+        public string PriceSEK { get; set; }
+        public string PriceHKD { get; set; }
+        public string PriceSGD { get; set; }
+        public string PriceZAR { get; set; }
+    }
+
+	public class LocationDetail
+	{
+		public Styles styles { get; set; }
+		public string openHours { get; set; }
+		public AveragePriceThreeCourseMeal averagePriceThreeCourseMeal { get; set; }
+		public AveragePriceMainCourse averagePriceMainCourse { get; set; }
+
+        public string bookingUrl { get; set; }
+        public string productCode { get; set; }
+        public string productType { get; set; }
+        public string duration { get; set; }
+        public string iataCode { get; set; }
+        public string bookingType { get; set; }
+        public string voucherOption { get; set; }
+        public string productRating { get; set; }
+        public string productRatingUrl { get; set; }
+        public Pricing pricing { get; set; }
+	}
+
+    public class SuggestedActivity
+    {
+        public string regionName { get; set; }
+        public string regionUrl { get; set; }
+    }
 
 	public class LocationDto
     {
@@ -73,29 +139,33 @@ namespace core.places.dtos
             Summary = new SummaryDto();
             Stats = new StatsDto();
             LocationCoordinates = new LocationCoordinatesDto();
+            LocationDetail = new LocationDetail();
         }
 
+        public LocationDetail LocationDetail { get; set; }
         public string Doctype { get; set; }
         public string Image { get; set; }
-        public double Latitude { get; set; }
+        public double? Latitude { get; set; }
         public string LetterIndex { get; set; }
-        public int ListingPriority { get; set; }
-        public double Longitude { get; set; }
+        public int? ListingPriority { get; set; }
+        public double? Longitude { get; set; }
         public int ParentRegionID { get; set; }
         public string ParentRegionName { get; set; }
+        public string ParentRegionImage { get; set; }
         public string ParentRegionNameLong { get; set; }
         public string ParentRegionType { get; set; }
-        public int RegionID { get; set; }
+        public Int64 RegionID { get; set; }
 		public string RegionName { get; set; }
         public string CountryCode { get; set; }
 		public string StateProvinceCode { get; set; }
         public string RegionNameLong { get; set; }
         public string RegionType { get; set; }
         public string RelativeSignificance { get; set; }
-        public int SearchPriority { get; set; }
+        public int? SearchPriority { get; set; }
         public string SubClass { get; set; }
         public SummaryDto Summary { get; set; }
         public string Url { get; set; }
+        public SuggestedActivity suggestedActivity { get; set; }
         public string ParentUrl
         {
             get
@@ -121,10 +191,28 @@ namespace core.places.dtos
     {
         public LocationListDto()
         {
-            Locations = new List<LocationDto>();
+			Locations = new List<LocationDto>();
+			MapLocations = new List<MapLocationDto>();
+            Categories = new List<CategoryDto>();
         }
 
-        public IList<LocationDto> Locations { get; set; }
+		public IList<LocationDto> Locations { get; set; }
+		public IList<MapLocationDto> MapLocations { get; set; }
 		public int LocationCount { get; set; }
+        public IList<CategoryDto> Categories { get; set; }
+    }
+
+    public class MapLocationDto
+	{
+		public MapLocationDto()
+		{
+			LocationCoordinates = new LocationCoordinatesDto();
+		}
+
+		public string RegionName { get; set; }
+		public string SubClass { get; set; }
+		public LocationCoordinatesDto LocationCoordinates { get; set; }
+		public string Url { get; set; }
+		public string Image { get; set; }
     }
 }

@@ -47,15 +47,17 @@ namespace triperoo.apis.endpoints.location
     public class LocationPhotosApi : Service
     {
 		private readonly ILocationService _locationService;
-		private readonly ICustomerService _customerService;
+        private readonly ICustomerService _customerService;
+        private readonly IPhotoService _photoService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LocationPhotosApi(ILocationService locationService, ICustomerService customerService)
+        public LocationPhotosApi(ILocationService locationService, ICustomerService customerService, IPhotoService photoService)
         {
 			_locationService = locationService;
-			_customerService = customerService;
+            _customerService = customerService;
+            _photoService = photoService;
         }
 
 		#region Upload Photos
@@ -85,9 +87,10 @@ namespace triperoo.apis.endpoints.location
 
                 foreach (var f in files)
                 {
-                    _locationService.UploadPhoto(request.id, f.InputStream, f.FileName, f.ContentType, customer.TriperooCustomers.CustomerReference);
-                }
+                    var photo = _locationService.UploadPhoto(request.id, f.InputStream, f.FileName, f.ContentType, customer.TriperooCustomers.CustomerReference);
 
+                    _photoService.InsertNewPhoto(request.id, photo, customer.TriperooCustomers.CustomerReference);
+                }
             }
             catch (Exception ex)
             {

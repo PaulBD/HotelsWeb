@@ -12,13 +12,14 @@ namespace triperoo.apis.endpoints.customer
 	/// <summary>
 	/// Request
 	/// </summary>
-	[Route("/v1/customer/trip/{tripId}", "GET")]
-	[Route("/v1/customer/trip/{tripId}", "DELETE")]
-	[Route("/v1/customer/trip/", "POST")]
+    [Route("/v1/customer/{reference}/trip/{tripId}", "GET")]
+    [Route("/v1/customer/{reference}/trip/{tripId}", "DELETE")]
+    [Route("/v1/customer/{reference}/trip/", "POST")]
 	public class TripRequest
 	{
 		public int TripId { get; set; }
-		public TripDto Trip { get; set; }
+        public TripDto Trip { get; set; }
+        public string Reference { get; set; }
 	}
 
 	#endregion
@@ -30,7 +31,8 @@ namespace triperoo.apis.endpoints.customer
 	/// </summary>
 	[Route("/v1/customer/trips", "GET")]
 	public class CustomerTripsRequest
-	{
+    {
+        public string Reference { get; set; }
 	}
 
 	#endregion
@@ -49,25 +51,18 @@ namespace triperoo.apis.endpoints.customer
 			_tripService = tripService;
 		}
 
-		#region Return Customer Trips By Token
+        #region Return Customer Trips By Customer Reference
 
-		/// <summary>
-		/// Return Customer Trips By Token
-		/// </summary>
-		public object Get(CustomerTripsRequest request)
+        /// <summary>
+        /// Return Customer Trips By Customer Reference
+        /// </summary>
+        public object Get(CustomerTripsRequest request)
 		{
 			var response = new List<TripDto>();
 
 			try
 			{
-				var token = Request.Headers.Get("token");
-
-				if (token == null)
-				{
-					throw HttpError.Unauthorized("You are unauthorized to access this page");
-				}
-
-				response = _tripService.ReturnTripsByToken(token);
+                response = _tripService.ReturnTripsByCustomerReference(request.Reference);
 
 				if (response == null)
 				{
@@ -95,18 +90,11 @@ namespace triperoo.apis.endpoints.customer
 
 			try
 			{
-				var token = Request.Headers["token"];
-
-				if (token == null)
-				{
-					throw HttpError.Unauthorized("You are unauthorized to access this page");
-				}
-
-				response = _tripService.ReturnTripById(request.TripId, token);
+                response = _tripService.ReturnTripByCustomerReferenceAndId(request.Reference, request.TripId);
 
 				if (response == null)
 				{
-					throw HttpError.NotFound("Customer details cannot be found");
+					throw HttpError.NotFound("Trip details cannot be found");
 				}
 			}
 			catch (Exception ex)

@@ -65,30 +65,21 @@ namespace triperoo.apis.endpoints.location
 		/// </summary>
 		public object Get(ParentRestaurantRequest request)
         {
-            string cacheName = "restaurants:" + request.Id + request.CategoryName;
             LocationListDto response = null;
 
             try
             {
-                response = Cache.Get<LocationListDto>(cacheName);
+                response = new LocationListDto();
 
-                if (response == null)
+                response = _restaurantService.ReturnRestaurantsByParentId(request.Id);
+                response.LocationCount = response.Locations.Count;
+
+                if (!string.IsNullOrEmpty(request.CategoryName))
                 {
-                    response = new LocationListDto();
-
-                    if (!string.IsNullOrEmpty(request.CategoryName))
-                    {
-                        response.Locations = _restaurantService.ReturnRestaurantsByParentIdAndCategory(request.Id, request.CategoryName);
-                    }
-                    else
-                    {
-                        response.Locations = _restaurantService.ReturnRestaurantsByParentId(request.Id);
-					}
-
-					response.LocationCount = response.Locations.Count;
-                    //base.Cache.Add(cacheName, response);
+                    response.Locations = response.Locations.Where(q => q.SubClass.ToLower() == request.CategoryName.ToLower()).ToList();
+                    response.MapLocations = response.MapLocations.Where(q => q.SubClass.ToLower() == request.CategoryName.ToLower()).ToList();
                 }
-                
+
                 if (response.LocationCount > request.PageSize)
                 {
                     response.Locations = response.Locations.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();

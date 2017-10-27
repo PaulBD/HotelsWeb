@@ -42,6 +42,7 @@ namespace triperoo.apis.endpoints.review
 
     public class ReviewApi : Service
     {
+        private readonly IVisitedService _visitedService;
         private readonly IReviewService _reviewService;
         private readonly ICustomerService _customerService;
         private readonly ILocationService _locationService;
@@ -49,11 +50,12 @@ namespace triperoo.apis.endpoints.review
         /// <summary>
         /// Constructor
         /// </summary>
-        public ReviewApi(IReviewService reviewService, ICustomerService customerService, ILocationService locationService)
+        public ReviewApi(IReviewService reviewService, ICustomerService customerService, ILocationService locationService, IVisitedService visitedService)
         {
             _reviewService = reviewService;
             _customerService = customerService;
             _locationService = locationService;
+            _visitedService = visitedService;
 
         }
 
@@ -120,7 +122,7 @@ namespace triperoo.apis.endpoints.review
                 if (location.Stats.ReviewCount > 0)
                 {
                     location.Stats.ReviewCount += 1;
-                    location.Stats.AverageReviewScore = (location.Stats.AverageReviewScore + request.Review.StarRating) / location.Stats.ReviewCount;
+                    location.Stats.AverageReviewScore = (Convert.ToDouble(location.Stats.AverageReviewScore) + Convert.ToDouble(request.Review.StarRating)) / Convert.ToDouble(location.Stats.ReviewCount);
                 }
 				else
 				{
@@ -128,12 +130,22 @@ namespace triperoo.apis.endpoints.review
                     location.Stats.AverageReviewScore = request.Review.StarRating;
                 }
 
-                var key = "location:" + location.RegionID;
-                _locationService.UpdateLocation(key, location, false);
-                base.Cache.Add(key, location);
+                _locationService.UpdateLocation(location, false);
 
                 customer.TriperooCustomers.Stats.ReviewCount += 1;
                 _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
+
+                _visitedService.InsertNewVisitedLocation(token, new CustomerLocationDto(){
+                    DateCreated = DateTime.Now,
+                    Image = location.Image,
+                    Latitude = location.LocationCoordinates.Latitude,
+                    Longitude = location.LocationCoordinates.Longitude,
+                    RegionID = location.RegionID,
+                    RegionName = location.RegionName,
+                    RegionNameLong = location.RegionNameLong,
+                    SubClass = location.SubClass,
+                    Url = location.Url
+                });
             }
             catch (Exception ex)
             {

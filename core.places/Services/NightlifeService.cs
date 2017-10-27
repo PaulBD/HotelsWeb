@@ -5,19 +5,23 @@ using System.Text.RegularExpressions;
 using library.foursquare.services;
 using System.Linq;
 using System;
+using library.caching;
 
 namespace core.places.services
 {
-    public class NightlifeService : INightlifeService
+    public class NightlifeService : BaseService, INightlifeService
     {
         private CouchBaseHelper _couchbaseHelper;
         private readonly string _bucketName = "TriperooCommon";
 		private string _query;
 		private ILocationService _loctionService;
 		private IVenueService _venueService;
+		private readonly ICacheProvider _cache;
 
-        public NightlifeService()
-        {
+        public NightlifeService(ICacheProvider cache)
+		{
+			_cache = cache;
+
 			_couchbaseHelper = new CouchBaseHelper();
 			_loctionService = new LocationService();
 			_venueService = new VenueService();
@@ -27,50 +31,85 @@ namespace core.places.services
         /// <summary>
         /// Return nightlife by location Id
         /// </summary>
-        public List<LocationDto> ReturnNightlifeByParentId(int parentLocationId)
-        {
-            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Nightlife Shadow'";
+        public LocationListDto ReturnNightlifeByParentId(int parentLocationId)
+		{
+			var cacheKey = "Nightlife:" + parentLocationId;
 
-			var result = ProcessQuery(q);
+			var nightlifeList = _cache.Get<LocationListDto>(cacheKey);
 
-			if (result == null)
+			if (nightlifeList != null)
 			{
-				return PopulateNightlife(parentLocationId, null);
+				return nightlifeList;
 			}
 
-			return result;
+            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Nightlife Shadow'";
+
+			var list = ProcessQuery(q);
+
+			if (list == null)
+			{
+				list.Locations = PopulateNightlife(parentLocationId, null);
+			}
+
+			if (list != null)
+			{
+				_cache.AddOrUpdate(cacheKey, list);
+			}
+
+			return list;
         }
 
         /// <summary>
         /// Return nightlife by location Id and category
         /// </summary>
-        public List<LocationDto> ReturnNightlifeByParentIdAndCategory(int parentLocationId, string category)
-        {
-            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Nightlife Shadow' AND subClass = '" + category + "'";
+        public LocationListDto ReturnNightlifeByParentIdAndCategory(int parentLocationId, string category)
+		{
+			var cacheKey = "Nightlife:" + parentLocationId + category;
 
-			var result = ProcessQuery(q);
+			var nightlifeList = _cache.Get<LocationListDto>(cacheKey);
 
-			if (result == null)
+			if (nightlifeList != null)
 			{
-				return PopulateNightlife(parentLocationId, category);
+				return nightlifeList;
 			}
 
-			return result;
-        }
+            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Nightlife Shadow'";
 
-        /// <summary>
-        /// Process Query
-        /// </summary>
-        private List<LocationDto> ProcessQuery(string q)
-        {
-            var result = _couchbaseHelper.ReturnQuery<LocationDto>(q, _bucketName);
+			if (category.Contains(","))
+			{
+				string[] cat = category.Split(',');
 
-            if (result.Count > 0)
-            {
-                return result;
-            }
+				q += " AND (";
+				for (var i = 0; i < cat.Length; i++)
+				{
+					q += "LOWER(subClass) = '" + cat[i].Replace("-and-", " & ").Replace("-", " ") + "'";
 
-            return null;
+					if (i < cat.Length - 1)
+					{
+						q += " OR ";
+					}
+				}
+
+				q += ")";
+			}
+			else
+			{
+				q += " AND LOWER(subClass) = '" + category.Replace("-and-", " & ").Replace("-", " ") + "'";
+			}
+
+			var list = ProcessQuery(q);
+
+			if (list == null)
+			{
+				list.Locations = PopulateNightlife(parentLocationId, null);
+			}
+
+			if (list != null)
+			{
+				_cache.AddOrUpdate(cacheKey, list);
+			}
+
+			return list;
         }
 
 		private List<LocationDto> PopulateNightlife(int parentLocationId, string category)
@@ -116,7 +155,7 @@ namespace core.places.services
 							ParentRegionNameLong = location.RegionNameLong,
 							LetterIndex = venue.Name.ToLower().Substring(0, 3),
 							LocationCoordinates = new LocationCoordinatesDto { Latitude = venue.Location.Lat, Longitude = venue.Location.Lng },
-							Url = "/" + id + "/visit-location/" + StripValues(venue.Name),
+							//Url = "/" + id + "/visit-location/" + StripValues(venue.Name),
 							SourceData = new SourceData { ForesquareId = venue.Id },
 							ContactDetails = new ContactDetails
 							{
@@ -140,7 +179,7 @@ namespace core.places.services
 
 						dto = _loctionService.AttachPhotos(venue.Id, dto);
 
-						_loctionService.UpdateLocation("location:" + id, dto, false);
+						_loctionService.UpdateLocation(dto, false);
 
 						if (dto.SubClass.ToLower() == category)
 						{

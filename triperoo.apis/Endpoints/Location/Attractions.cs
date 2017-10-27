@@ -14,24 +14,24 @@ namespace triperoo.apis.endpoints.locations
     /// Request
     /// </summary>
     [Route("/v1/location/{id}/attractions", "GET")]
-    public class ParentAttractionRequest
+    public class AttractionsRequest
     {
         public int Id { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
-		public string CategoryName { get; set; }
-		public string Name { get; set; }
+        public string CategoryName { get; set; }
+        public string Name { get; set; }
     }
 
     /// <summary>
     /// Validator
     /// </summary>
-    public class ParentAttractionRequestValidator : AbstractValidator<ParentAttractionRequest>
+    public class ParentAttractionValidator : AbstractValidator<AttractionsRequest>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ParentAttractionRequestValidator()
+        public ParentAttractionValidator()
         {
             // Get
             RuleSet(ApplyTo.Get, () =>
@@ -59,53 +59,39 @@ namespace triperoo.apis.endpoints.locations
             _attractionService = attractionService;
         }
 
-		#region Return Attractions by Location Id
+        #region Return Attractions by Location Id
 
-		/// <summary>
-		/// Return Attractions by Location Id
-		/// </summary>
-		public object Get(ParentAttractionRequest request)
+        /// <summary>
+        /// Return Attractions by Location Id
+        /// </summary>
+        public object Get(AttractionsRequest request)
         {
-            string cacheName = "attractions:" + request.Id;
-
-            if (!string.IsNullOrEmpty(request.CategoryName))
-            {
-                cacheName += request.CategoryName;
-            }
-
-            LocationListDto response = null;
+            AttractionListDto response = null;
 
             try
             {
-                response = Cache.Get<LocationListDto>(cacheName);
+                response = new AttractionListDto();
 
-                if (response == null)
+                response = _attractionService.ReturnAttractionsById(request.Id);
+                response.LocationCount = response.Attractions.Count;
+
+                if (!string.IsNullOrEmpty(request.CategoryName))
                 {
-                    response = new LocationListDto();
-
-                    if (!string.IsNullOrEmpty(request.CategoryName))
-                    {
-                        response.Locations = _attractionService.ReturnAttractionsByParentIdAndCategory(request.Id, request.CategoryName);
-                    }
-                    else
-                    {
-                        response.Locations = _attractionService.ReturnAttractionsByParentId(request.Id);
-                    }
-
-                    response.LocationCount = response.Locations.Count;
-                   // Cache.Add(cacheName, response, new DateTime().AddHours(24));
+                    response.Attractions = response.Attractions.Where(q => q.ProductCategories.ProductCategory.Any(e => e.Category.Trim().ToLower() == request.CategoryName.Trim().ToLower())).ToList();
+                    //response.Attractions = response.Attractions.Where(q => q.ProductCategories.ProductCategory.FirstOrDefault(q => q.Category.Trim().ToLower() == request.CategoryName.Trim().ToLower())).ToList();
+                    //response.MapLocations = response.MapLocations.Where(q => q.SubClass.ToLower() == request.CategoryName.ToLower()).ToList();
                 }
 
                 if (!string.IsNullOrEmpty(request.Name))
                 {
-                    var list = response.Locations.Where(q => q.RegionName.ToLower().Contains(request.Name.ToLower())).ToList();
-                    response.Locations = list;
-					response.LocationCount = list.Count;
+                    var list = response.Attractions.Where(q => q.ProductName.en.ToLower().Contains(request.Name.ToLower())).ToList();
+                    response.Attractions = list;
+                    response.LocationCount = list.Count;
                 }
 
                 if (response.LocationCount > request.PageSize)
                 {
-                    response.Locations = response.Locations.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                    response.Attractions = response.Attractions.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
                 }
             }
             catch (Exception ex)

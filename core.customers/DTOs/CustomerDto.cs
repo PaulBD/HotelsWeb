@@ -28,20 +28,10 @@ namespace core.customers.dtos
 		public string Bio { get; set; }
     }
 
-    public class TripDto
+    public class CustomerTripDto
     {
         public int Id { get; set; }
-        public TripDto()
-        {
-            Bookmarks = new List<CustomerLocationDto>();
-        }
-        public int RegionId { get; set; }
-        public string RegionName { get; set; }
-		public string ListName { get; set; }
-		public string Description { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public List<CustomerLocationDto> Bookmarks { get; set; }
+        public string Type {get { return "Trip"; } }
 		public DateTime DateCreated { get; set; }
 		public string Url { get; set; }
         public bool IsArchived { get; set; }
@@ -51,9 +41,11 @@ namespace core.customers.dtos
     {
         public int Id { get; set; }
         public string SubClass { get; set; }
-        public int RegionID { get; set; }
+        public Int64 RegionID { get; set; }
         public string Image { get; set; }
         public string Url { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public string RegionName { get; set; }
         public string RegionNameLong { get; set; }
         public DateTime DateCreated { get; set; }
@@ -74,17 +66,37 @@ namespace core.customers.dtos
         public DateTime DateAdded { get; set; }
     }
 
+    public class PhotoList
+    {
+        public string url { get; set; }
+        public string photoReference { get; set; }
+        public int regionID { get; set; }
+        public int likeCount { get; set; }
+        public string[] likedBy { get; set; }
+    }
+
+    public class CustomerPhotos
+    {
+        public CustomerPhotos()
+        {
+            PhotoList = new List<PhotoList>();
+        }
+        public int PhotoCount { get { if (PhotoList != null) { return PhotoList.Count; } else { return 0; } } }
+        public List<PhotoList> PhotoList { get; set; }
+    }
+
     public class Customer
     {
         public Customer()
         {
             Profile = new ProfileDto();
-            Trips = new List<TripDto>();
+            Trips = new List<CustomerTripDto>();
 			Likes = new List<CustomerLocationDto>();
 			VisitedLocations = new List<CustomerLocationDto>();
 			Following = new List<CustomerFollowsDto>();
 			FollowedBy = new List<CustomerFollowsDto>();
 			Stats = new StatsDto();
+            CustomerPhotos = new CustomerPhotos();
         }
 
         public bool IsFacebookSignup { get; set; }
@@ -96,12 +108,13 @@ namespace core.customers.dtos
 		public DateTime LastLoginDate { get; set; }
         public DateTime? DateUpdate { get; set; }
         public ProfileDto Profile { get; set; }
-		public List<TripDto> Trips { get; set; }
+        public List<CustomerTripDto> Trips { get; set; }
 		public List<CustomerLocationDto> VisitedLocations { get; set; }
 		public List<CustomerLocationDto> Likes { get; set; }
 		public List<CustomerFollowsDto> Following { get; set; }
 		public List<CustomerFollowsDto> FollowedBy { get; set; }
 		public StatsDto Stats { get; set; }
+        public CustomerPhotos CustomerPhotos { get; set; }
     }
 
     public class CustomerDto

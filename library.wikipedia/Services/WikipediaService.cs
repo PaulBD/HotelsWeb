@@ -7,7 +7,7 @@ using ServiceStack.Text;
 
 namespace library.wikipedia.services
 {
-    public class ContentService : IContentService
+    public class WikipediaService : IWikipediaService
     {
 		public string ReturnContentByLocation(string venueName)
 		{

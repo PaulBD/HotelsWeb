@@ -5,70 +5,144 @@ using library.foursquare.services;
 using System.Linq;
 using System;
 using System.Text.RegularExpressions;
+using library.caching;
 
 namespace core.places.services
 {
-    public class RestaurantService : IRestaurantService
+    public class RestaurantService : BaseService, IRestaurantService
     {
         private CouchBaseHelper _couchbaseHelper;
         private readonly string _bucketName = "TriperooCommon";
-        private string _query;
+		private string _query;
+		private string _foodTypeQuery;
 		private ILocationService _loctionService;
-		private IVenueService _venueService;
+        private IVenueService _venueService;
+        private library.zomato.services.IRestaurantService _restaurantService;
+		private readonly ICacheProvider _cache;
 
-        public RestaurantService()
-        {
+		public RestaurantService(ICacheProvider cache)
+		{
+			_cache = cache;
+
             _couchbaseHelper = new CouchBaseHelper();
             _loctionService = new LocationService();
             _venueService = new VenueService();
-            _query = "SELECT photos, doctype, image, letterIndex, listingPriority, locationCoordinates as locationCoordinates, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, summary.en as summary, url FROM " + _bucketName;
+            _restaurantService = new library.zomato.services.RestaurantService();
+            _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, url, formattedAddress, contactDetails, tags, photos, locationCoordinates, summary, stats, locationDetail FROM " + _bucketName;
+            _foodTypeQuery = "SELECT subClass as CategoryNameFriendly FROM " + _bucketName;
+		}
+
+        public List<CategoryDto> ReturnCategoryList(int parentLocationId)
+		{
+			var q = _foodTypeQuery + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Restaurant' AND subClass != '' GROUP BY subClass ORDER BY subClass";
+			
+            var result = _couchbaseHelper.ReturnQuery<CategoryDto>(q, _bucketName);
+
+			if (result.Count > 0)
+			{
+				return result;
+			}
+
+			return null;
         }
 
         /// <summary>
         /// Return restaurants by location Id
         /// </summary>
-        public List<LocationDto> ReturnRestaurantsByParentId(int parentLocationId)
+        public LocationListDto ReturnRestaurantsByParentId(int parentLocationId)
         {
-            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Restaurant Shadow'";
+            var cacheKey = "Restaurants:" + parentLocationId;
 
-            var result = ProcessQuery(q);
+            var restaurantList = _cache.Get<LocationListDto>(cacheKey);
 
-            if (result == null)
+            if (restaurantList != null)
             {
-                return PopulateRestaurants(parentLocationId, null);
+                return restaurantList;
             }
 
-            return result;
+            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Restaurant'";
+
+			var list =  ProcessQuery(q);
+
+
+            if (list.Locations.Count == 0)
+            {
+                list.Locations = PopulateZomatoRestaurants(34.052235, -118.243683);
+            }
+
+			if (list != null)
+			{
+				_cache.AddOrUpdate(cacheKey, list);
+			}
+
+            return list;
         }
 
         /// <summary>
         /// Return restaurants by location Id and category
         /// </summary>
-        public List<LocationDto> ReturnRestaurantsByParentIdAndCategory(int parentLocationId, string category)
-        {
-            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Restaurant Shadow' AND subClass = '" + category + "'";
+        public LocationListDto ReturnRestaurantsByParentIdAndCategory(int parentLocationId, string category)
+		{
+			var cacheKey = "Restaurants:" + parentLocationId + category;
 
-			var result = ProcessQuery(q);
+			var restaurantList = _cache.Get<LocationListDto>(cacheKey);
 
-			if (result == null)
+			if (restaurantList != null)
 			{
-				return PopulateRestaurants(parentLocationId, category);
+				return restaurantList;
 			}
 
-            return result;
+            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = 'Restaurant'";
 
+            if (category.Contains(","))
+            {
+                string[] cat = category.Split(',');
+
+                q += " AND (";
+                for (var i = 0; i < cat.Length; i++)
+                {
+                    q += "LOWER(subClass) = '" + cat[i].Replace("-and-", " & ").Replace("-", " ") + "'";
+
+                    if (i < cat.Length - 1)
+                    {
+                        q += " OR ";
+                    }
+                }
+
+                q += ")";
+            }
+            else {
+                q += " AND LOWER(subClass) = '" + category.Replace("-and-", " & ").Replace("-", " ") + "'";
+            }
+
+			var list = ProcessQuery(q);
+
+			if (list.Locations.Count == 0)
+            {
+                list.Locations = PopulateZomatoRestaurants(34.052235, -118.243683);
+			}
+
+			if (list != null)
+			{
+				_cache.AddOrUpdate(cacheKey, list);
+			}
+
+			return list;
         }
 
-        /// <summary>
-        /// Process Query
-        /// </summary>
-        private List<LocationDto> ProcessQuery(string q)
+        private List<LocationDto> PopulateZomatoRestaurants(double latitude, double longitude)
         {
-            var result = _couchbaseHelper.ReturnQuery<LocationDto>(q, _bucketName);
-
-            if (result.Count > 0)
+            var location = new List<LocationDto>();
+            var result = _restaurantService.ReturnRestaurantByLocation(latitude, longitude);
+            foreach(var restaurant in result.nearby_restaurants)
             {
-                return result;
+                var reference = "Zom:" + restaurant.restaurant.id;
+                var dto = new LocationDto{
+                   
+                };
+
+                location.Add(dto);
+                _couchbaseHelper.AddRecordToCouchbase(reference, dto, _bucketName);
             }
 
             return null;
@@ -105,7 +179,7 @@ namespace core.places.services
 
                         LocationDto dto = new LocationDto
                         {
-                            Doctype = "restaurantList",
+                            Doctype = "Foresquare",
                             RegionID = int.Parse(id),
                             RegionType = "Restaurant Shadow",
                             SubClass = vanueCategory,
@@ -117,7 +191,7 @@ namespace core.places.services
                             ParentRegionNameLong = location.RegionNameLong,
                             LetterIndex = venue.Name.ToLower().Substring(0, 3),
                             LocationCoordinates = new LocationCoordinatesDto { Latitude = venue.Location.Lat, Longitude = venue.Location.Lng },
-                            Url = "/" + id + "/visit-location/" + StripValues(venue.Name),
+                            Url = "/" + id + "/visit-location/" + StripValues(venue.Name).ToLower(),
                             SourceData = new SourceData { ForesquareId = venue.Id },
                             ContactDetails = new ContactDetails
                             {
@@ -141,12 +215,9 @@ namespace core.places.services
 
 						dto = _loctionService.AttachPhotos(venue.Id, dto);
 
-                        _loctionService.UpdateLocation("location:" + id, dto, false);
+                        //_couchbaseHelper.AddRecordToCouchbase("Rest-FQ-:" + id, dto, _bucketName);
 
-                        if (dto.SubClass.ToLower() == category)
-                        {
-                            result.Add(dto);
-                        }
+                        result.Add(dto);
                     }
                 }
             }

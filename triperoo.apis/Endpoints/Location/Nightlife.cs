@@ -65,29 +65,20 @@ namespace triperoo.apis.endpoints.location
 		/// </summary>
 		public object Get(ParentNightlifeRequest request)
         {
-            string cacheName = "nightlife:" + request.Id + request.CategoryName;
             LocationListDto response = null;
 
             try
             {
-                response = Cache.Get<LocationListDto>(cacheName);
+                response = new LocationListDto();
 
-                if (response == null)
-                {
-                    response = new LocationListDto();
+				response = _nightlifeService.ReturnNightlifeByParentId(request.Id);
+				response.LocationCount = response.Locations.Count;
 
-                    if (!string.IsNullOrEmpty(request.CategoryName))
-                    {
-                        response.Locations = _nightlifeService.ReturnNightlifeByParentIdAndCategory(request.Id, request.CategoryName);
-                    }
-                    else
-                    {
-                        response.Locations = _nightlifeService.ReturnNightlifeByParentId(request.Id);
-					}
-
-					response.LocationCount = response.Locations.Count;
-                    //base.Cache.Add(cacheName, response);
-                }
+				if (!string.IsNullOrEmpty(request.CategoryName))
+				{
+					response.Locations = response.Locations.Where(q => q.SubClass.ToLower() == request.CategoryName.ToLower()).ToList();
+					response.MapLocations = response.MapLocations.Where(q => q.SubClass.ToLower() == request.CategoryName.ToLower()).ToList();
+				}
 
                 if (response.LocationCount > request.PageSize)
                 {

@@ -1,18 +1,29 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="core.places/DTOs/LocationListDto.cs">
+  <MonoDevelop.Ide.Workbench>
     <Files>
-      <File FileName="core.places/Services/RestaurantService.cs" Line="30" Column="27" />
-      <File FileName="core.places/DTOs/LocationListDto.cs" Line="131" Column="1" />
+      <File FileName="triperoo.apis/Endpoints/Customer/Trips.cs" Line="97" Column="36" />
+      <File FileName="core.customers/Services/TripService.cs" Line="53" Column="116" />
+      <File FileName="core.customers/Services/ActivityService.cs" Line="103" Column="46" />
+      <File FileName="triperoo.apis/Endpoints/Customer/Activity.cs" Line="93" Column="17" />
+      <File FileName="core.customers/DTOs/Trip.cs" Line="24" Column="36" />
+      <File FileName="core.couchbase/CouchBaseConfig.cs" Line="1" Column="14" />
+      <File FileName="library.azure/Services/StorageService.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Triperoo" expanded="True">
+            <Node name="Core" expanded="True" />
+            <Node name="libraries" expanded="True" />
+            <Node name="triperoo.apis" expanded="True" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/endpoints/review/Reviews.cs" relfile="triperoo.apis/endpoints/review/Reviews.cs" line="92" column="1" />
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Auth/Register.cs" relfile="triperoo.apis/Endpoints/Auth/Register.cs" line="71" column="1" />
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Customer/Customer.cs" relfile="triperoo.apis/Endpoints/Customer/Customer.cs" line="96" column="1" />
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/BackendApp/triperoo.apis/Endpoints/Customer/Likes.cs" relfile="triperoo.apis/Endpoints/Customer/Likes.cs" line="61" column="1" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.triperoo.apis PreferredExecutionTarget="MonoDevelop.Default" />

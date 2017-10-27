@@ -105,13 +105,7 @@ namespace triperoo.apis.endpoints.location
 
             try
             {
-                response = Cache.Get<List<LocationDto>>(cacheName);
-
-                if (response == null)
-                {
-                    response = _locationService.ReturnLocationByParentId(request.parentLocationId, request.Type);
-                    //base.Cache.Add(cacheName, response);
-                }
+                response = _locationService.ReturnLocationByParentId(request.parentLocationId, request.Type);
 
                 if (response != null)
                 {
@@ -148,19 +142,11 @@ namespace triperoo.apis.endpoints.location
             try
             {
                 string search = request.SearchValue.ToLower();
-                string cacheName = "searchLocations:" + search.Substring(0, 3);
 
-                result = Cache.Get<List<LocationDto>>(cacheName);
-
-                if (result == null)
-                {
-                    result = _locationService.ReturnLocationsForAutocomplete(search.Substring(0, 3));
-                }
+                result = _locationService.ReturnLocationsForAutocomplete(search.Substring(0, 3));
 
                 if (result.Count > 0)
                 {
-                    base.Cache.Add(cacheName, result);
-
                     if (request.SearchType.ToLower() == "all")
                     {
                         response.Locations = result.Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).ToList().Take(10).ToList();

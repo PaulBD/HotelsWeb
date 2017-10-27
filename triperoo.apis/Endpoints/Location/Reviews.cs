@@ -107,14 +107,7 @@ namespace triperoo.apis.endpoints.location
 
             try
 			{
-				response = Cache.Get<ReviewListDto>(cacheName);
-
-
-				if (response == null)
-				{
-                    response = new ReviewListDto();
-					response.ReviewDto = _reviewService.ReturnReviewsByLocationId(request.Id);
-				}
+				response.ReviewDto = _reviewService.ReturnReviewsByLocationId(request.Id);
 
 				var tags = request.Tags;
 
@@ -170,14 +163,7 @@ namespace triperoo.apis.endpoints.location
 
 			try
 			{
-				response = Cache.Get<ReviewListDto>(cacheName);
-
-				if (response == null)
-				{
-                    response = new ReviewListDto();
-                    response.ReviewDto = _reviewService.ReturnReviewsByType(request.Type);
-				}
-
+				response.ReviewDto = _reviewService.ReturnReviewsByType(request.Type);
 				response.ReviewCount = response.ReviewDto.Count;
 
 				if (request.PageNumber > 0)

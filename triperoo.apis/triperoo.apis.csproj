@@ -107,19 +107,15 @@
     <Compile Include="Endpoints\Auth\Register.cs" />
     <Compile Include="Endpoints\Auth\AuthorizeFacebook.cs" />
     <Compile Include="Endpoints\Auth\Authorize.cs" />
-    <Compile Include="Endpoints\Cache\Cache.cs" />
     <Compile Include="Endpoints\Customer\Newsletter.cs" />
     <Compile Include="Endpoints\Flight\Flights.cs" />
     <Compile Include="Endpoints\Airport\AirportHotels.cs" />
-    <Compile Include="Endpoints\Location\Nightlife.cs" />
-    <Compile Include="Endpoints\Location\Restaurants.cs" />
-    <Compile Include="Endpoints\Location\Attractions.cs" />
     <Compile Include="Endpoints\Location\Locations.cs" />
     <Compile Include="Endpoints\Location\Events.cs" />
     <Compile Include="Endpoints\Location\Weather.cs" />
     <Compile Include="Endpoints\Question\Question.cs" />
     <Compile Include="Endpoints\Review\Review.cs" />
-    <Compile Include="Endpoints\Customer\Bookmarks.cs" />
+    <Compile Include="Endpoints\Customer\Activity.cs" />
     <Compile Include="Endpoints\Customer\Customer.cs" />
     <Compile Include="Endpoints\Location\Location.cs" />
     <Compile Include="Global.asax.cs">
@@ -140,6 +136,9 @@
     <Compile Include="Endpoints\Customer\Reviews.cs" />
     <Compile Include="Endpoints\Location\Hotels.cs" />
     <Compile Include="Endpoints\Location\Photos.cs" />
+    <Compile Include="Endpoints\Customer\Photos.cs" />
+    <Compile Include="Endpoints\Customer\Visited.cs" />
+    <Compile Include="Endpoints\Location\Content.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -176,6 +175,10 @@
     <ProjectReference Include="..\library.weather\library.weather.csproj">
       <Project>{2d10c643-cd6c-4bfc-bca5-71da19abb93d}</Project>
       <Name>library.weather</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\library.caching\library.caching.csproj">
+      <Project>{082A4D85-C12F-44F6-8569-12B59C6D2A06}</Project>
+      <Name>library.caching</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

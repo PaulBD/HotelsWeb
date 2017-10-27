@@ -95,20 +95,12 @@ namespace triperoo.apis.endpoints.location
 		public object Put(LikeLocationRequest request)
 		{
 			LocationDto response = null;
-			string cacheName = "location:" + request.id;
 
 			try
 			{
-				response = Cache.Get<LocationDto>(cacheName);
-
-				if (response == null)
-				{
-					response = _locationService.ReturnLocationById(request.id);
-					base.Cache.Add(cacheName, response);
-				}
-
+				response = _locationService.ReturnLocationById(request.id);
                 response.Stats.LikeCount += 1;
-				_locationService.UpdateLocation(cacheName, response, false);
+				_locationService.UpdateLocation(response, false);
 			}
 			catch (Exception ex)
 			{
@@ -128,20 +120,12 @@ namespace triperoo.apis.endpoints.location
 		public object Put(UnLikeLocationRequest request)
 		{
 			LocationDto response = null;
-			string cacheName = "location:" + request.id;
 
 			try
 			{
-				response = Cache.Get<LocationDto>(cacheName);
-
-				if (response == null)
-				{
-					response = _locationService.ReturnLocationById(request.id);
-					base.Cache.Add(cacheName, response);
-				}
-
+				response = _locationService.ReturnLocationById(request.id);
 				response.Stats.LikeCount -= 1;
-				_locationService.UpdateLocation(cacheName, response, false);
+				_locationService.UpdateLocation(response, false);
 			}
 			catch (Exception ex)
 			{

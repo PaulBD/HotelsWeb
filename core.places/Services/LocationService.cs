@@ -6,6 +6,7 @@ using library.foursquare.dtos;
 using library.wikipedia.services;
 using System.IO;
 using System;
+using System.Configuration;
 
 namespace core.places.services
 {
@@ -16,14 +17,14 @@ namespace core.places.services
         private readonly string _tempBucketName = "TriperooCommonStaging";
         private string _query;
         private IVenueService _venueService;
-        private IContentService _contentService;
+        private IWikipediaService _contentService;
 
         public LocationService()
         {
+            _contentService = new WikipediaService();
             _venueService = new VenueService();
-            _contentService = new ContentService();
             _couchbaseHelper = new CouchBaseHelper();
-            _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, url, formattedAddress, contactDetails, tags, photos, locationCoordinates, summary, stats FROM " + _bucketName;
+            _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, url, formattedAddress, contactDetails, tags, photos, locationCoordinates, summary, stats, locationDetail, suggestedActivity FROM " + _bucketName;
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace core.places.services
             /*
             if (result.Summary != null)
             {
-                if (string.IsNullOrEmpty(result.Summary.En))
+                if (string.IsNullOrEmpty(result.Summary.en))
                 {
                     var wikipediaResult = _contentService.ReturnContentByLocation(result.RegionName);
 
@@ -58,7 +59,7 @@ namespace core.places.services
                     {
                         if (!wikipediaResult.Contains("From a page move") && !wikipediaResult.Contains("This is a redirect"))
                         {
-                            result.Summary.En = wikipediaResult;
+                            result.Summary.en = wikipediaResult;
                             requiresUpdate = true;
                         }
                     }
@@ -83,11 +84,12 @@ namespace core.places.services
 
                 }
 			}
-			*/
+            */
+			
 
             if (requiresUpdate)
             {
-                UpdateLocation("location:" + result.RegionID, result, false);
+                UpdateLocation(result, false);
             }
 
             return result;
@@ -102,8 +104,7 @@ namespace core.places.services
 
             if (foresquarePhotos != null)
             {
-                locationDto.Photos.PhotoCount = foresquarePhotos.response.photos.count;
-
+                
                 foreach (var item in foresquarePhotos.response.photos.items)
                 {
                     locationDto.Photos.PhotoList.Add(new PhotoList
@@ -176,7 +177,7 @@ namespace core.places.services
         /// </summary>
         public List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type)
         {
-            var q = _query + " WHERE parentRegionID = " + parentLocationId;
+            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = '" + type + "'";
 
             return ProcessQuery(q);
         }
@@ -199,8 +200,10 @@ namespace core.places.services
         /// <summary>
         /// Update Location
         /// </summary>
-        public void UpdateLocation(string reference, LocationDto dto, bool isStaging)
-        {
+        public void UpdateLocation(LocationDto dto, bool isStaging)
+        { 
+            var reference = "location:" + dto.RegionID;
+
             if (isStaging)
             {
                 _couchbaseHelper.AddRecordToCouchbase(reference, dto, _tempBucketName);
@@ -231,29 +234,40 @@ namespace core.places.services
         /// <summary>
         /// Uploads the photo.
         /// </summary>
-        public void UploadPhoto(int locationId, Stream fileStream, string fileName, string contentType, string customerReference)
+        public PhotoList UploadPhoto(int locationId, Stream fileStream, string fileName, string contentType, string customerReference)
         {
             string containerName = "customerimages";
             var dateStamp = DateTime.Now.Year + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "_" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
 
             var newFileName = customerReference.Replace("customer:", "") + "/" + dateStamp + "-" + fileName;
             // Store URL against Location with User Id / Name
-            var storage = new library.azure.services.StorageService();
-            storage.UploadToStorage(containerName, fileStream, newFileName, contentType);
 
-            var location = ReturnLocationById(locationId);
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["UseAzure"]))
+            {
+                var storage = new library.azure.services.StorageService();
+                storage.UploadToStorage(containerName, fileStream, newFileName, contentType);
+            }
 
-            location.Photos.PhotoList.Add(new PhotoList()
+            var photo = new PhotoList()
             {
                 customerReference = customerReference,
                 prefix = "https://triperoostorage.blob.core.windows.net/",
                 suffix = containerName + "/" + newFileName,
                 height = 0,
-                width = 0
-            });
+                width = 0,
+                photoReference = System.Guid.NewGuid().ToString()
+            };
 
-            UpdateLocation("location:" + location.RegionID, location, false);
+            if (locationId > 0)
+            {
+                var location = ReturnLocationById(locationId);
 
+                location.Photos.PhotoList.Add(photo);
+
+                UpdateLocation(location, false);
+            }
+
+            return photo;
         }
 
     }

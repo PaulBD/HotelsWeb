@@ -2,6 +2,7 @@
 using library.couchbase;
 using System;
 using System.Collections.Generic;
+using core.places.dtos;
 
 namespace core.customers.services
 {
@@ -110,5 +111,6 @@ namespace core.customers.services
             
             return newsletter;
         }
+
     }
 }

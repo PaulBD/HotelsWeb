@@ -2,7 +2,7 @@
 
 namespace library.wikipedia.services
 {
-    public interface IContentService
+    public interface IWikipediaService
     {
         string ReturnContentByLocation(string venueName);
     }

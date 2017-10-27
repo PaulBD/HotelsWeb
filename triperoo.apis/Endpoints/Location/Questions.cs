@@ -70,13 +70,7 @@ namespace triperoo.apis.endpoints.location
 
             try
 			{
-				response = Cache.Get<QuestionListDto>(cacheName);
-
-                if (response == null)
-				{
-					response = new QuestionListDto();
-                    response.QuestionDto = _questionService.ReturnQuestionsByLocationId(request.Id);
-                }
+				response.QuestionDto = _questionService.ReturnQuestionsByLocationId(request.Id);
 
                 if (response.QuestionDto != null)
                 {

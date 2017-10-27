@@ -65,20 +65,6 @@ namespace triperoo.apis.endpoints.review
             QuestionDto response = new QuestionDto();
             try
             {
-				var token = Request.Headers["token"];
-
-				if (string.IsNullOrEmpty(token))
-				{
-					return new HttpResult("Token not found", HttpStatusCode.Unauthorized);
-				}
-
-				var customer = _customerService.ReturnCustomerByToken(token);
-
-				if (customer == null)
-				{
-					return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
-				}
-
                 response = _questionService.ReturnFullQuestionById("question:" + request.Id);
 			}
 			catch (Exception ex)

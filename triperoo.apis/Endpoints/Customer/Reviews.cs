@@ -4,6 +4,7 @@ using ServiceStack;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 
 namespace triperoo.apis.endpoints.customer
 {
@@ -15,7 +16,9 @@ namespace triperoo.apis.endpoints.customer
 	[Route("/v1/customer/{customerId}/reviews", "GET")]
 	public class ReviewsRequest
 	{
-		public string customerId { get; set; }
+        public string customerId { get; set; }
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
 	}
 
 	#endregion
@@ -24,14 +27,14 @@ namespace triperoo.apis.endpoints.customer
 
 	public class ReviewApi : Service
 	{
-		private readonly IReviewService _reviewService;
+        private readonly IReviewService _reviewService;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		public ReviewApi(IReviewService reviewService)
 		{
-			_reviewService = reviewService;
+            _reviewService = reviewService;
 		}
 
 		#region Get all reviews by customer
@@ -45,14 +48,16 @@ namespace triperoo.apis.endpoints.customer
 
 			try
 			{
-				var token = Request.Headers.Get("token");
-
-				if (token == null)
-				{
-					throw HttpError.Unauthorized("You are unauthorized to access this page");
-				}
-
 				response = _reviewService.ReturnReviewsByCustomer(request.customerId);
+
+                if (request.PageNumber > 0)
+                {
+                    response = response.Skip(request.PageSize * request.PageNumber).Take(request.PageSize).ToList();
+                }
+                else
+                {
+                    response = response.Take(request.PageSize).ToList();
+                }
 			}
 			catch (Exception ex)
 			{

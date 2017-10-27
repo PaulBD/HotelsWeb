@@ -37,7 +37,9 @@ namespace library.couchbase
                 {
                     var queryRequest = new Couchbase.N1QL.QueryRequest().Statement(query);
 
-                    return bucket.Query<T>(queryRequest).Rows;
+                    var result = bucket.Query<T>(queryRequest);
+
+                    return result.Rows;
                 }
             }
         }

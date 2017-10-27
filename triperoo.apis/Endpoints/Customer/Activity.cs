@@ -7,30 +7,30 @@ using System.Net;
 
 namespace triperoo.apis.endpoints.customer
 {
-    #region Bookmark Endpoint
+    #region Activity Endpoint
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/customer/trips/{tripId}/bookmark/{locationId}", "GET")]
-    [Route("/v1/customer/trips/{tripId}/bookmark/{locationId}", "DELETE")]
-    [Route("/v1/customer/trips/{tripId}/bookmark", "POST")]
-    public class BookmarkRequest
+    [Route("/v1/customer/trips/{tripId}/activity/{locationId}", "GET")]
+    [Route("/v1/customer/trips/{tripId}/activity/{locationId}", "DELETE")]
+    [Route("/v1/customer/trips/{tripId}/activity", "POST")]
+    public class ActivityRequest
     {
 		public int LocationId { get; set; }
 		public int TripId { get; set; }
-        public CustomerLocationDto Location { get; set; }
+        public ActivityDto Activity { get; set; }
     }
 
     #endregion
 
-    #region Bookmarks Endpoint
+    #region Activities Endpoint
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/customer/trips/{tripId}/bookmarks", "GET")]
-    public class CustomerBookmarksRequest
+    [Route("/v1/customer/trips/{tripId}/activities", "GET")]
+    public class CustomerActivitiesRequest
 	{
 		public int TripId { get; set; }
     }
@@ -39,26 +39,26 @@ namespace triperoo.apis.endpoints.customer
 
     #region API logic
 
-    public class BookmarkApi : Service
+    public class ActivityApi : Service
     {
-        private readonly IBookmarkService _bookmarkService;
+        private readonly IActivityService _activityService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public BookmarkApi(IBookmarkService bookmarkService)
+        public ActivityApi(IActivityService activityService)
         {
-            _bookmarkService = bookmarkService;
+            _activityService = activityService;
         }
 
-		#region Return Bookmarks By Token
+		#region Return Activities By Token
 
 		/// <summary>
-		/// Return Bookmarks By Token
+        /// Return Activities By Token
 		/// </summary>
-		public object Get(CustomerBookmarksRequest request)
+        public object Get(CustomerActivitiesRequest request)
         {
-            var response = new List<CustomerLocationDto>();
+            var response = new List<ActivityDto>();
 
             try
             {
@@ -69,7 +69,7 @@ namespace triperoo.apis.endpoints.customer
 					throw HttpError.Unauthorized("You are unauthorized to access this page");
                 }
 
-                response = _bookmarkService.ReturnBookmarksByToken(token, request.TripId);
+                response = _activityService.ReturnActivitiesByToken(token, request.TripId);
 
                 if (response == null)
 				{
@@ -86,14 +86,14 @@ namespace triperoo.apis.endpoints.customer
 
 		#endregion
 
-		#region Return Bookmark By Id
+		#region Return Activity By Location & Trip Id
 
 		/// <summary>
-		/// Return Bookmark By Location & Trip Id
+		/// Return Activity By Location & Trip Id
 		/// </summary>
-		public object Get(BookmarkRequest request)
+		public object Get(ActivityRequest request)
         {
-            var response = new CustomerLocationDto();
+            var response = new ActivityDto();
 
             try
 			{
@@ -104,7 +104,7 @@ namespace triperoo.apis.endpoints.customer
 					throw HttpError.Unauthorized("You are unauthorized to access this page");
                 }
 
-                response = _bookmarkService.ReturnBookmarkByLocationId(request.LocationId, request.TripId, token);
+                response = _activityService.ReturnActivityByLocationId(request.LocationId, request.TripId, token);
 
                 if (response == null)
 				{
@@ -121,12 +121,12 @@ namespace triperoo.apis.endpoints.customer
 
 		#endregion
 
-		#region Insert Bookmark
+        #region Insert Activity
 
 		/// <summary>
-		/// Insert New Bookmark
+        /// Insert New Activity
 		/// </summary>
-		public object Post(BookmarkRequest request)
+        public object Post(ActivityRequest request)
         {
             try
 			{
@@ -137,7 +137,7 @@ namespace triperoo.apis.endpoints.customer
 					throw HttpError.Unauthorized("You are unauthorized to access this page");
                 }
 
-                _bookmarkService.InsertNewBookmark(token, request.TripId, request.Location);
+                _activityService.InsertNewActivity(token, request.TripId, request.Activity);
             }
             catch (Exception ex)
             {
@@ -149,12 +149,12 @@ namespace triperoo.apis.endpoints.customer
 
 		#endregion
 
-		#region Archive Existing Bookmark
+		#region Archive Existing Activity
 
 		/// <summary>
-		/// Archive Existing Bookmark
+        /// Archive Existing Activity
 		/// </summary>
-		public object Delete(BookmarkRequest request)
+		public object Delete(ActivityRequest request)
         {
             try
 			{
@@ -165,7 +165,7 @@ namespace triperoo.apis.endpoints.customer
 					throw HttpError.Unauthorized("You are unauthorized to access this page");
                 }
 
-                _bookmarkService.ArchiveBookmarkByLocationId(request.LocationId, request.TripId, token);
+                _activityService.ArchiveActivityByLocationId(request.LocationId, request.TripId, token);
             }
             catch (Exception ex)
             {

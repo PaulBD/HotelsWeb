@@ -229,18 +229,11 @@ namespace triperoo.apis.endpoints.location
         public object Get(HotelDetailRequest request)
 		{
 			string cacheName = "hotel:" + request.Id;
-			HotelDto response;
+			HotelDto response = new HotelDto();
 
 			try
 			{
-				response = Cache.Get<HotelDto>(cacheName);
-
-                if (response == null)
-                {
-                    response = new HotelDto();
-                    response = _hotelService.ReturnHotelById(request.HotelId, request.Locale, request.CurrencyCode);
-                    //TODO: Add to cache
-                }
+				response = _hotelService.ReturnHotelById(request.HotelId, request.Locale, request.CurrencyCode);
 			}
 			catch (Exception ex)
 			{

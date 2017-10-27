@@ -73,20 +73,13 @@ namespace triperoo.apis.endpoints.location
 
             try
 			{
-				locationResponse = Cache.Get<LocationDto>(locationCacheName);
-
-				if (locationResponse == null)
-				{
-					locationResponse = _locationService.ReturnLocationById(request.Id);
-					base.Cache.Add(locationCacheName, locationResponse);
-				}
+				locationResponse = _locationService.ReturnLocationById(request.Id);
 
                 response = Cache.Get<WeatherDto>(cacheName);
 
                 if (response == null)
                 {
-                    response = _weatherService.ReturnWeatherByLocation(locationResponse.Latitude, locationResponse.Longitude, request.Lang);
-                    //base.Cache.Add(cacheName, response);
+                    response = _weatherService.ReturnWeatherByLocation(Convert.ToDouble(locationResponse.LocationCoordinates.Latitude), Convert.ToDouble(locationResponse.LocationCoordinates.Longitude), request.Lang);
                 }
             }
             catch (Exception ex)
