@@ -1,22 +1,47 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="core.couchbase/BucketType.cs">
+    <Files>
+      <File FileName="packages/ServiceStack.Client.4.0.36/ServiceStack.Client.4.0.36.nupkg" />
+      <File FileName="triperoo.apis/Web.config" Line="110" Column="17" />
+      <File FileName="triperoo.apis/Endpoints/Location/Location.cs" Line="75" Column="1" />
+      <File FileName="core.places/Services/LocationService.cs" Line="190" Column="1" />
+      <File FileName="core.couchbase/CouchBaseHelper.cs" Line="24" Column="13" />
+      <File FileName="core.couchbase/CouchBaseConfig.cs" Line="14" Column="67" />
+      <File FileName="core.couchbase/CouchbaseConfigHelper.cs" Line="20" Column="24" />
+      <File FileName="core.couchbase/BucketType.cs" Line="1" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Triperoo" expanded="True">
-            <Node name="Core" expanded="True" />
-            <Node name="libraries" expanded="True" />
-            <Node name="triperoo.apis" expanded="True" selected="True">
+            <Node name="Core" expanded="True">
+              <Node name="core.places" expanded="True">
+                <Node name="Services" expanded="True" />
+                <Node name="Utilities" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="libraries" expanded="True">
+              <Node name="library.couchbase" expanded="True">
+                <Node name="Packages" expanded="True" />
+              </Node>
+              <Node name="library.wikipedia" expanded="True" />
+            </Node>
+            <Node name="triperoo.apis" expanded="True">
               <Node name="Packages" expanded="True" />
+              <Node name="Endpoints" expanded="True">
+                <Node name="Location" expanded="True" />
+              </Node>
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/core.couchbase/CouchBaseHelper.cs" relfile="core.couchbase/CouchBaseHelper.cs" line="51" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.triperoo.apis PreferredExecutionTarget="MonoDevelop.Default" />

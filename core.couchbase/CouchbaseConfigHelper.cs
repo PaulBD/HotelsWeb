@@ -25,7 +25,7 @@ namespace library.couchbase
         {
             get
             {
-                return ConfigurationManager.AppSettings["couchbase.bucketUserName"];
+                return ConfigurationManager.AppSettings["couchbase.bucketUsername"];
             }
         }
 

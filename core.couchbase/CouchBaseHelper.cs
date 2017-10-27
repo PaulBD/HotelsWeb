@@ -1,5 +1,9 @@
 ﻿using Couchbase;
 using System.Collections.Generic;
+using Couchbase.Configuration.Client;
+using System;
+using Couchbase.Authentication;
+using System.Configuration;
 
 namespace library.couchbase
 {
@@ -10,16 +14,21 @@ namespace library.couchbase
         /// </summary>
         public string CheckRecordExistsInDB(string key, string bucketName)
         {
-            using (var cluster = new Cluster(CouchbaseConfig.Initialize(bucketName)))
+            var cluster = new Cluster(new ClientConfiguration
             {
-                using (var bucket = cluster.OpenBucket(bucketName))
-                {
-                    var item = bucket.GetDocument<dynamic>(key);
+                Servers = new List<Uri> { new Uri(ConfigurationManager.AppSettings["couchbase.domain"]) }
+            });
 
-                    if (item.Success)
-                    {
-                        return item.Content;
-                    }
+            var authenticator = new PasswordAuthenticator(ConfigurationManager.AppSettings["couchbase.bucketUsername"], ConfigurationManager.AppSettings["couchbase.bucketPassword"]);
+            cluster.Authenticate(authenticator);
+
+            using (var bucket = cluster.OpenBucket(bucketName))
+            {
+                var item = bucket.GetDocument<dynamic>(key);
+
+                if (item.Success)
+                {
+                    return item.Content;
                 }
             }
 
@@ -31,16 +40,21 @@ namespace library.couchbase
         /// </summary>
         public List<T> ReturnQuery<T>(string query, string bucketName)
         {
-            using (var cluster = new Cluster(CouchbaseConfig.Initialize(bucketName)))
+            var cluster = new Cluster(new ClientConfiguration
             {
-                using (var bucket = cluster.OpenBucket(bucketName))
-                {
-                    var queryRequest = new Couchbase.N1QL.QueryRequest().Statement(query);
+                Servers = new List<Uri> { new Uri(ConfigurationManager.AppSettings["couchbase.domain"]) }
+            });
 
-                    var result = bucket.Query<T>(queryRequest);
+            var authenticator = new PasswordAuthenticator(ConfigurationManager.AppSettings["couchbase.bucketUsername"], ConfigurationManager.AppSettings["couchbase.bucketPassword"]);
+            cluster.Authenticate(authenticator);
 
-                    return result.Rows;
-                }
+            using (var bucket = cluster.OpenBucket(bucketName))
+            {
+                var queryRequest = new Couchbase.N1QL.QueryRequest().Statement(query);
+
+                var result = bucket.Query<T>(queryRequest);
+
+                return result.Rows;
             }
         }
 
@@ -49,12 +63,17 @@ namespace library.couchbase
         /// </summary>
         public void AddRecordToCouchbase(string key, string content, string factualId, string bucketName)
         {
-            using (var cluster = new Cluster(CouchbaseConfig.Initialize(bucketName)))
+            var cluster = new Cluster(new ClientConfiguration
             {
-                using (var bucket = cluster.OpenBucket(bucketName))
-                {
-                    bucket.Upsert(key, content);
-                }
+                Servers = new List<Uri> { new Uri(ConfigurationManager.AppSettings["couchbase.domain"]) }
+            });
+
+            var authenticator = new PasswordAuthenticator(ConfigurationManager.AppSettings["couchbase.bucketUsername"], ConfigurationManager.AppSettings["couchbase.bucketPassword"]);
+            cluster.Authenticate(authenticator);
+
+            using (var bucket = cluster.OpenBucket(bucketName))
+            {
+                bucket.Upsert(key, content);
             }
         }
 
@@ -63,12 +82,17 @@ namespace library.couchbase
         /// </summary>
         public void AddRecordToCouchbase(string key, object json, string bucketName)
         {
-            using (var cluster = new Cluster(CouchbaseConfig.Initialize(bucketName)))
+            var cluster = new Cluster(new ClientConfiguration
             {
-                using (var bucket = cluster.OpenBucket(bucketName))
-                {
-                    bucket.Upsert(key, json);
-                }
+                Servers = new List<Uri> { new Uri(ConfigurationManager.AppSettings["couchbase.domain"]) }
+            });
+
+            var authenticator = new PasswordAuthenticator(ConfigurationManager.AppSettings["couchbase.bucketUsername"], ConfigurationManager.AppSettings["couchbase.bucketPassword"]);
+            cluster.Authenticate(authenticator);
+
+            using (var bucket = cluster.OpenBucket(bucketName))
+            {
+                bucket.Upsert(key, json);
             }
 		}
     }

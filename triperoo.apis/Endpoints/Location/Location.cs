@@ -4,6 +4,10 @@ using ServiceStack;
 using ServiceStack.FluentValidation;
 using core.places.services;
 using core.places.dtos;
+using Couchbase;
+using System.Collections.Generic;
+using Couchbase.Configuration.Client;
+using Couchbase.Authentication;
 
 namespace triperoo.apis.endpoints.location
 {
@@ -68,6 +72,8 @@ namespace triperoo.apis.endpoints.location
 
             try
             {
+
+
                 response = _locationService.ReturnLocationById(request.id);
             }
             catch (Exception ex)

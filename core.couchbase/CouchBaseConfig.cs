@@ -16,18 +16,18 @@ namespace library.couchbase
 
             var bucketConfigs = new Dictionary<string, BucketConfiguration>();
 
-
-                bucketConfigs.Add(bucketName, new BucketConfiguration
+            bucketConfigs.Add(bucketName, new BucketConfiguration
+            {
+                BucketName = bucketName,
+                Username = CouchbaseConfigHelper.Instance.BucketUsername,
+                UseSsl = CouchbaseConfigHelper.Instance.UseSSL,
+                Password = CouchbaseConfigHelper.Instance.BucketPassword,
+                PoolConfiguration = new PoolConfiguration
                 {
-                    BucketName = bucketName,
-                    UseSsl = CouchbaseConfigHelper.Instance.UseSSL,
-                    Password = CouchbaseConfigHelper.Instance.BucketPassword,
-                    PoolConfiguration = new PoolConfiguration
-                    {
-                        MaxSize = 10,
-                        MinSize = 5
-                    }
-                });
+                    MaxSize = 10,
+                    MinSize = 5
+                }
+            });
 
             config.BucketConfigs = bucketConfigs;
 

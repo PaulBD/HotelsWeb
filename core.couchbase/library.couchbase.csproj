@@ -56,9 +56,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BucketType.cs" />
-    <Compile Include="CouchBaseConfig.cs" />
-    <Compile Include="CouchbaseConfigHelper.cs" />
     <Compile Include="CouchBaseHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
