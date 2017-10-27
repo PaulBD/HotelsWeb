@@ -1,21 +1,14 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
   <MonoDevelop.Ide.Workbench>
-    <Files>
-      <File FileName="triperoo.apis/Endpoints/Customer/Trips.cs" Line="97" Column="36" />
-      <File FileName="core.customers/Services/TripService.cs" Line="53" Column="116" />
-      <File FileName="core.customers/Services/ActivityService.cs" Line="103" Column="46" />
-      <File FileName="triperoo.apis/Endpoints/Customer/Activity.cs" Line="93" Column="17" />
-      <File FileName="core.customers/DTOs/Trip.cs" Line="24" Column="36" />
-      <File FileName="core.couchbase/CouchBaseConfig.cs" Line="1" Column="14" />
-      <File FileName="library.azure/Services/StorageService.cs" Line="1" Column="1" />
-    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Triperoo" expanded="True">
             <Node name="Core" expanded="True" />
             <Node name="libraries" expanded="True" />
-            <Node name="triperoo.apis" expanded="True" selected="True" />
+            <Node name="triperoo.apis" expanded="True" selected="True">
+              <Node name="Packages" expanded="True" />
+            </Node>
           </Node>
         </State>
       </Pad>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>core.places</RootNamespace>
     <AssemblyName>core.places</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -140,11 +140,11 @@
     </ProjectReference>
     <ProjectReference Include="..\library.wikipedia\library.wikipedia.csproj">
       <Project>{9DAA9E24-01CC-4105-8638-6918C8C86A5F}</Project>
-      <Name>library.wikipedia</Name>
+      <Name>library.azure</Name>
     </ProjectReference>
     <ProjectReference Include="..\library.azure\library.azure.csproj">
       <Project>{9DAA9E24-01CC-4105-8638-6918C8C86A5F}</Project>
-      <Name>library.wikipedia</Name>
+      <Name>library.azure</Name>
     </ProjectReference>
     <ProjectReference Include="..\library.caching\library.caching.csproj">
       <Project>{082A4D85-C12F-44F6-8569-12B59C6D2A06}</Project>
@@ -152,7 +152,7 @@
     </ProjectReference>
     <ProjectReference Include="..\library.wikipedia\library.wikipedia.csproj">
       <Project>{9DAA9E24-01CC-4105-8638-6918C8C86A5F}</Project>
-      <Name>library.wikipedia</Name>
+      <Name>library.azure</Name>
     </ProjectReference>
     <ProjectReference Include="..\library.zomato\library.zomato.csproj">
       <Project>{AAA59B2B-6EAA-4E76-AE61-D92FB4CA9B97}</Project>
