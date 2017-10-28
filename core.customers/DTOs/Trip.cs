@@ -5,18 +5,19 @@ namespace core.customers.dtos
 {
     public class TripDetails
     {
-        public int regionID { get; set; }
-        public string regionName { get; set; }
-        public string regionUrl { get; set; }
-        public string image { get; set; }
-        public int tripStart { get; set; }
-        public int tripEnd { get; set; }
-        public int tripLength { get; set; }
-        public int adults { get; set; }
-        public int children { get; set; }
-        public string type { get; set; }
-        public string tripPace { get; set; }
-        public List<string> tags { get; set; }
+        public int RegionID { get; set; }
+        public string RegionName { get; set; }
+        public string RegionUrl { get; set; }
+        public string Image { get; set; }
+        public string Description { get; set; }
+        public string TripStart { get; set; }
+        public string TripEnd { get; set; }
+        public double TripLength { get; set; }
+        public int Adults { get; set; }
+        public int Children { get; set; }
+        public string Type { get; set; }
+        public string TripPace { get; set; }
+        public List<string> Tags { get; set; }
     }
 
     public class ActivityDto
@@ -29,7 +30,11 @@ namespace core.customers.dtos
         public string LengthValue { get; set; }
         public int RegionID { get; set; }
         public string RegionName { get; set; }
-        public string RegionUrl { get; set; }
+        public string RegionNameLong { get; set; }
+        public string Image { get; set; }
+        public string Url { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public string TravelType { get; set; }
         public DateTime DateCreated { get; set; }
         public bool IsArchived { get; set; }
@@ -46,7 +51,7 @@ namespace core.customers.dtos
         public int Id { get; set; }
         public string CustomerReference { get; set; }
         public string Url { get; set; }
-        public string Type { get; set; }
+        public string Type { get { return "trip"; } }
         public string TripName { get; set; }
         public bool IsArchived { get; set; }
         public TripDetails TripDetails { get; set; }

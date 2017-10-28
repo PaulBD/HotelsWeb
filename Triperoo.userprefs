@@ -1,20 +1,27 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="core.couchbase/BucketType.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="core.customers/Services/TripService.cs">
     <Files>
-      <File FileName="packages/ServiceStack.Client.4.0.36/ServiceStack.Client.4.0.36.nupkg" />
-      <File FileName="triperoo.apis/Web.config" Line="110" Column="17" />
-      <File FileName="triperoo.apis/Endpoints/Location/Location.cs" Line="75" Column="1" />
+      <File FileName="triperoo.apis/Endpoints/Location/Location.cs" Line="74" Column="14" />
       <File FileName="core.places/Services/LocationService.cs" Line="190" Column="1" />
-      <File FileName="core.couchbase/CouchBaseHelper.cs" Line="24" Column="13" />
-      <File FileName="core.couchbase/CouchBaseConfig.cs" Line="14" Column="67" />
-      <File FileName="core.couchbase/CouchbaseConfigHelper.cs" Line="20" Column="24" />
-      <File FileName="core.couchbase/BucketType.cs" Line="1" Column="1" />
+      <File FileName="core.couchbase/CouchBaseHelper.cs" Line="59" Column="1" />
+      <File FileName="triperoo.apis/Endpoints/Customer/Trips.cs" Line="65" Column="1" />
+      <File FileName="core.customers/Services/TripService.cs" Line="122" Column="1" />
+      <File FileName="core.customers/Services/CustomerService.cs" Line="50" Column="1" />
+      <File FileName="core.customers/DTOs/Trip.cs" Line="48" Column="44" />
+      <File FileName="triperoo.apis/Endpoints/Customer/Activity.cs" Line="140" Column="1" />
+      <File FileName="core.customers/Services/ActivityService.cs" Line="31" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Triperoo" expanded="True">
             <Node name="Core" expanded="True">
+              <Node name="core.customers" expanded="True">
+                <Node name="DTOs" expanded="True" />
+                <Node name="Services" expanded="True">
+                  <Node name="TripService.cs" selected="True" />
+                </Node>
+              </Node>
               <Node name="core.places" expanded="True">
                 <Node name="Services" expanded="True" />
                 <Node name="Utilities" expanded="True" />
@@ -29,6 +36,7 @@
             <Node name="triperoo.apis" expanded="True">
               <Node name="Packages" expanded="True" />
               <Node name="Endpoints" expanded="True">
+                <Node name="Customer" expanded="True" />
                 <Node name="Location" expanded="True" />
               </Node>
             </Node>
@@ -40,7 +48,8 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/core.couchbase/CouchBaseHelper.cs" relfile="core.couchbase/CouchBaseHelper.cs" line="51" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/Customer/Trips.cs" relfile="triperoo.apis/Endpoints/Customer/Trips.cs" line="120" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/Customer/Activity.cs" relfile="triperoo.apis/Endpoints/Customer/Activity.cs" line="133" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

@@ -2,6 +2,7 @@
 using library.couchbase;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace core.customers.services
 {
@@ -50,7 +51,7 @@ namespace core.customers.services
             if (customer != null)
             {
                 tripId = customer.TriperooCustomers.Trips.Count + 1;
-                var url = customer.TriperooCustomers.Profile.ProfileUrl + "/trips/" + trip.Id + "/" + trip.TripName.Replace(" ", "-").ToLower();
+                var url = customer.TriperooCustomers.Profile.ProfileUrl + "/trips/" + tripId + "/" + trip.TripName.Replace(" ", "-").ToLower();
                 trip.Id = tripId;
                 trip.Url = url;
                 trip.CustomerReference = customer.TriperooCustomers.CustomerReference;
@@ -63,6 +64,13 @@ namespace core.customers.services
                 });
 				_customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
 
+
+                if ((!System.String.IsNullOrEmpty(trip.TripDetails.TripStart)) && (!System.String.IsNullOrEmpty(trip.TripDetails.TripEnd)))
+                {
+                    var dtStart = Convert.ToDateTime(trip.TripDetails.TripStart);
+                    var dtEnd = Convert.ToDateTime(trip.TripDetails.TripEnd);
+                    trip.TripDetails.TripLength = (dtEnd - dtStart).TotalDays;
+                }
                 //Insert into Trip
                 InsertUpdateTrip(customer.TriperooCustomers.CustomerReference, trip);
             }
@@ -112,7 +120,7 @@ namespace core.customers.services
         /// </summary>
         public TripDto ReturnTripByCustomerReferenceAndId(string customerReference, int tripId)
         {
-            var q = "SELECT id, customerReference, url, type, tripName, tripdetails, days FROM " + _bucketName + " WHERE customerReference = '" + customerReference + "' AND id = " + tripId;
+            var q = "SELECT id, customerReference, url, type, tripName, tripDetails, days FROM " + _bucketName + " WHERE customerReference = '" + customerReference + "' AND id = " + tripId;
             var result = ProcessQuery(q);
 
             if (result.Count > 0)
@@ -126,9 +134,13 @@ namespace core.customers.services
         /// <summary>
         /// Return Customer by reference
         /// </summary>
-        public List<TripDto> ReturnTripByCustomerReference(string customerReference)
+        public List<TripDto> ReturnTripsByCustomerReference(string customerReference)
         {
-            var q = "SELECT id, customerReference, url, type, tripName, tripdetails, days FROM " + _bucketName + " WHERE customerReference = '" + customerReference + "'";
+            if (!customerReference.Contains("customer"))
+            {
+                customerReference = "customer:" + customerReference;
+            }
+            var q = "SELECT id, customerReference, url, type, tripName, tripDetails, days FROM " + _bucketName + " WHERE customerReference = '" + customerReference + "' AND type = 'trip'";
             return ProcessQuery(q);
         }
 
@@ -147,20 +159,5 @@ namespace core.customers.services
 
             return null;
         }
-
-		/// <summary>
-		/// Return Trips by token
-		/// </summary>
-        public List<TripDto> ReturnTripsByCustomerReference(string customerReference)
-		{
-            var trips = ReturnTripByCustomerReference(customerReference);
-
-            if (trips != null)
-			{
-                return trips.Where(q => q.IsArchived == false).ToList();
-			}
-
-			return null;
-		}
     }
 }

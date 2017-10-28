@@ -29,7 +29,7 @@ namespace triperoo.apis.endpoints.customer
 	/// <summary>
 	/// Request
 	/// </summary>
-	[Route("/v1/customer/trips", "GET")]
+    [Route("/v1/customer/{reference}/trips", "GET")]
 	public class CustomerTripsRequest
     {
         public string Reference { get; set; }

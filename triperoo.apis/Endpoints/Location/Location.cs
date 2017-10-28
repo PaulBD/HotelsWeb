@@ -72,8 +72,6 @@ namespace triperoo.apis.endpoints.location
 
             try
             {
-
-
                 response = _locationService.ReturnLocationById(request.id);
             }
             catch (Exception ex)
