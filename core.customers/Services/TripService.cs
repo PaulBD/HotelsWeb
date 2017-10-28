@@ -120,6 +120,11 @@ namespace core.customers.services
         /// </summary>
         public TripDto ReturnTripByCustomerReferenceAndId(string customerReference, int tripId)
         {
+            if (!customerReference.Contains("customer"))
+            {
+                customerReference = "customer:" + customerReference;
+            }
+
             var q = "SELECT id, customerReference, url, type, tripName, tripDetails, days FROM " + _bucketName + " WHERE customerReference = '" + customerReference + "' AND id = " + tripId;
             var result = ProcessQuery(q);
 
@@ -140,6 +145,7 @@ namespace core.customers.services
             {
                 customerReference = "customer:" + customerReference;
             }
+
             var q = "SELECT id, customerReference, url, type, tripName, tripDetails, days FROM " + _bucketName + " WHERE customerReference = '" + customerReference + "' AND type = 'trip'";
             return ProcessQuery(q);
         }
