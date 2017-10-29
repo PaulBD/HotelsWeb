@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9DAA9E24-01CC-4105-8638-6918C8C86A5F}</ProjectGuid>
+    <ProjectGuid>{D10457F4-FF84-49AA-98E4-74D2C19D4DC3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>library.wikipedia</RootNamespace>
     <AssemblyName>library.wikipedia</AssemblyName>
@@ -46,10 +46,7 @@
     <Compile Include="Services\IWikipediaService.cs" />
     <Compile Include="DTOs\ContentDto.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-    <Folder Include="DTOs\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Scripts\jquery-2.1.1.min.js" />

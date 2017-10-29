@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace core.hotels.Services
+namespace core.hotels.services
 {
     public class RoomAvailabilityService
     {

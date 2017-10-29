@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\Work\TriperooBackend\triperoo.apis\bin\Release\PublishOutput</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/AutoMapper.dll">
+      <publishTime>06/26/2017 20:07:14</publishTime>
+    </File>
+    <File Include="bin/Common.Logging.Core.dll">
+      <publishTime>08/16/2017 06:51:46</publishTime>
+    </File>
+    <File Include="bin/Common.Logging.Core.pdb">
+      <publishTime>08/16/2017 06:51:46</publishTime>
+    </File>
+    <File Include="bin/Common.Logging.dll">
+      <publishTime>08/16/2017 06:51:42</publishTime>
+    </File>
+    <File Include="bin/Common.Logging.pdb">
+      <publishTime>08/16/2017 06:51:42</publishTime>
+    </File>
+    <File Include="bin/core.customers.dll">
+      <publishTime>10/29/2017 11:53:40</publishTime>
+    </File>
+    <File Include="bin/core.customers.dll.config">
+      <publishTime>10/29/2017 11:51:14</publishTime>
+    </File>
+    <File Include="bin/core.customers.pdb">
+      <publishTime>10/29/2017 11:53:40</publishTime>
+    </File>
+    <File Include="bin/core.deals.dll">
+      <publishTime>10/29/2017 10:10:47</publishTime>
+    </File>
+    <File Include="bin/core.deals.dll.config">
+      <publishTime>10/29/2017 09:02:49</publishTime>
+    </File>
+    <File Include="bin/core.deals.pdb">
+      <publishTime>10/29/2017 10:10:47</publishTime>
+    </File>
+    <File Include="bin/core.extras.dll">
+      <publishTime>10/29/2017 10:10:46</publishTime>
+    </File>
+    <File Include="bin/core.extras.pdb">
+      <publishTime>10/29/2017 10:10:46</publishTime>
+    </File>
+    <File Include="bin/core.flights.dll">
+      <publishTime>10/29/2017 10:10:46</publishTime>
+    </File>
+    <File Include="bin/core.flights.dll.config">
+      <publishTime>10/29/2017 09:05:32</publishTime>
+    </File>
+    <File Include="bin/core.flights.pdb">
+      <publishTime>10/29/2017 10:10:46</publishTime>
+    </File>
+    <File Include="bin/core.hotels.dll">
+      <publishTime>10/29/2017 10:10:47</publishTime>
+    </File>
+    <File Include="bin/core.hotels.dll.config">
+      <publishTime>10/29/2017 09:07:40</publishTime>
+    </File>
+    <File Include="bin/core.hotels.pdb">
+      <publishTime>10/29/2017 10:10:47</publishTime>
+    </File>
+    <File Include="bin/core.places.dll">
+      <publishTime>10/29/2017 11:53:39</publishTime>
+    </File>
+    <File Include="bin/core.places.dll.config">
+      <publishTime>10/29/2017 11:51:14</publishTime>
+    </File>
+    <File Include="bin/core.places.pdb">
+      <publishTime>10/29/2017 11:53:39</publishTime>
+    </File>
+    <File Include="bin/Couchbase.NetClient.dll">
+      <publishTime>01/01/0001 00:00:00</publishTime>
+    </File>
+    <File Include="bin/de/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/de/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/09/2017 23:17:02</publishTime>
+    </File>
+    <File Include="bin/de/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/de/System.Spatial.resources.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>10/28/2017 04:03:42</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.dll">
+      <publishTime>10/28/2017 04:03:42</publishTime>
+    </File>
+    <File Include="bin/Enyim.Caching.dll">
+      <publishTime>02/03/2015 23:07:08</publishTime>
+    </File>
+    <File Include="bin/Enyim.Caching.pdb">
+      <publishTime>02/03/2015 23:07:08</publishTime>
+    </File>
+    <File Include="bin/es/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/es/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/09/2017 23:17:04</publishTime>
+    </File>
+    <File Include="bin/es/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/es/System.Spatial.resources.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="bin/fr/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/fr/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/09/2017 23:17:04</publishTime>
+    </File>
+    <File Include="bin/fr/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/fr/System.Spatial.resources.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="bin/FuzzyString.dll">
+      <publishTime>10/28/2017 04:03:41</publishTime>
+    </File>
+    <File Include="bin/it/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/it/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/09/2017 23:17:04</publishTime>
+    </File>
+    <File Include="bin/it/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/it/System.Spatial.resources.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="bin/ja/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/ja/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/09/2017 23:17:04</publishTime>
+    </File>
+    <File Include="bin/ja/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/ja/System.Spatial.resources.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="bin/JWT.dll">
+      <publishTime>08/18/2017 13:04:58</publishTime>
+    </File>
+    <File Include="bin/ko/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/ko/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/09/2017 23:17:04</publishTime>
+    </File>
+    <File Include="bin/ko/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/ko/System.Spatial.resources.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="bin/library.azure.dll">
+      <publishTime>10/29/2017 10:10:45</publishTime>
+    </File>
+    <File Include="bin/library.caching.dll">
+      <publishTime>10/29/2017 11:53:39</publishTime>
+    </File>
+    <File Include="bin/library.caching.dll.config">
+      <publishTime>10/29/2017 11:51:13</publishTime>
+    </File>
+    <File Include="bin/library.common.dll">
+      <publishTime>10/29/2017 10:10:45</publishTime>
+    </File>
+    <File Include="bin/library.common.pdb">
+      <publishTime>10/29/2017 10:10:45</publishTime>
+    </File>
+    <File Include="bin/library.couchbase.dll">
+      <publishTime>10/29/2017 10:10:46</publishTime>
+    </File>
+    <File Include="bin/library.couchbase.dll.config">
+      <publishTime>10/28/2017 18:20:44</publishTime>
+    </File>
+    <File Include="bin/library.couchbase.pdb">
+      <publishTime>10/29/2017 10:10:46</publishTime>
+    </File>
+    <File Include="bin/library.events.dll">
+      <publishTime>10/29/2017 10:10:45</publishTime>
+    </File>
+    <File Include="bin/library.events.pdb">
+      <publishTime>10/29/2017 10:10:45</publishTime>
+    </File>
+    <File Include="bin/library.foursquare.dll">
+      <publishTime>10/29/2017 10:10:45</publishTime>
+    </File>
+    <File Include="bin/library.foursquare.pdb">
+      <publishTime>10/29/2017 10:10:45</publishTime>
+    </File>
+    <File Include="bin/library.weather.dll">
+      <publishTime>10/29/2017 10:10:47</publishTime>
+    </File>
+    <File Include="bin/library.weather.pdb">
+      <publishTime>10/29/2017 10:10:47</publishTime>
+    </File>
+    <File Include="bin/library.wikipedia.dll">
+      <publishTime>10/29/2017 10:10:46</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Data.Edm.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Data.OData.dll">
+      <publishTime>07/09/2017 23:17:02</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Data.Services.Client.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/Microsoft.WindowsAzure.Storage.dll">
+      <publishTime>11/24/2015 04:08:40</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>06/18/2017 13:57:10</publishTime>
+    </File>
+    <File Include="bin/ru/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/ru/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/09/2017 23:17:04</publishTime>
+    </File>
+    <File Include="bin/ru/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/ru/System.Spatial.resources.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.Client.dll">
+      <publishTime>01/15/2015 14:07:46</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.Common.dll">
+      <publishTime>01/15/2015 14:07:50</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.dll">
+      <publishTime>01/15/2015 14:08:06</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.Interfaces.dll">
+      <publishTime>01/15/2015 14:05:52</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.Redis.dll">
+      <publishTime>01/15/2015 04:27:36</publishTime>
+    </File>
+    <File Include="bin/ServiceStack.Text.dll">
+      <publishTime>01/15/2015 04:25:38</publishTime>
+    </File>
+    <File Include="bin/System.Spatial.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="bin/triperoo.apis.dll">
+      <publishTime>10/29/2017 11:53:41</publishTime>
+    </File>
+    <File Include="bin/triperoo.apis.pdb">
+      <publishTime>10/29/2017 11:53:41</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/09/2017 23:17:02</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/zh-Hans/System.Spatial.resources.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/Microsoft.Data.Edm.resources.dll">
+      <publishTime>07/09/2017 23:16:52</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/Microsoft.Data.OData.resources.dll">
+      <publishTime>07/09/2017 23:17:02</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/Microsoft.Data.Services.Client.resources.dll">
+      <publishTime>07/09/2017 23:17:32</publishTime>
+    </File>
+    <File Include="bin/zh-Hant/System.Spatial.resources.dll">
+      <publishTime>07/09/2017 23:17:14</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>10/28/2017 04:03:43</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>10/29/2017 10:07:01</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>10/29/2017 11:53:41</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

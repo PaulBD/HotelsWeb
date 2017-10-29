@@ -4,7 +4,8 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using core.hotels.dtos;
-using ServiceStack.Text; using library.couchbase;
+using ServiceStack.Text;
+using library.couchbase;
 
 namespace core.hotels.services
 {
@@ -23,7 +24,12 @@ namespace core.hotels.services
 
 		#region Get Hotel By Id
 
-		/// <summary>         /// Return a single hotel By id         /// </summary>         public HotelDto ReturnHotelById(int hotelId, string locale, string currencyCode)         {             var url = _url + "/ean-services/rs/hotel/v3/info?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
+		/// <summary>
+        /// Return a single hotel By id
+        /// </summary>
+        public HotelDto ReturnHotelById(int hotelId, string locale, string currencyCode)
+        {
+            var url = _url + "/ean-services/rs/hotel/v3/info?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
 
             var xml = "<HotelInformationRequest>";
             xml += "<hotelId>" + hotelId + "</hotelId>";

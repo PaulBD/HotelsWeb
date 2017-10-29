@@ -13,11 +13,11 @@ namespace core.hotels.services
     {
         private readonly HttpClient _client;
         private readonly string _affiliateId;
-        private readonly Common _common;
+        private readonly utility.Common _common;
 
         public HotelPriceService()
         {
-            _common = new Common();
+            _common = new utility.Common();
             _affiliateId = ConfigurationManager.AppSettings["hotels.laterooms.affiliateId"];
 
             _client = new HttpClient
