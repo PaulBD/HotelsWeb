@@ -1,0 +1,44 @@
+﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../triperoo.apis/Web.config">
+    <Files>
+      <File FileName="../core.couchbase/CouchBaseHelper.cs" Line="1" Column="7" />
+      <File FileName="../library.azure/Services/StorageService.cs" Line="2" Column="17" />
+      <File FileName="../core.places/Services/ContentService.cs" Line="1" Column="1" />
+      <File FileName="../core.couchbase/packages.config" Line="1" Column="1" />
+      <File FileName="../library.azure/packages.config" Line="1" Column="1" />
+      <File FileName="../library.caching/InMemoryCache.cs" Line="2" Column="7" />
+      <File FileName="../library.caching/packages.config" Line="1" Column="1" />
+      <File FileName="../core.hotels/Services/HotelService.cs" Line="7" Column="7" />
+      <File FileName="../core.hotels/packages.config" Line="1" Column="1" />
+      <File FileName="../core.customers/Services/AuthorizeService.cs" Line="4" Column="9" />
+      <File FileName="../core.customers/packages.config" Line="1" Column="1" />
+      <File FileName="../core.extras/DTOs/Parking/ParkingAvailabilityResponseDto.cs" Line="1" Column="7" />
+      <File FileName="../core.extras/Services/BaseService.cs" Line="2" Column="7" />
+      <File FileName="../core.flights/Services/FlightService.cs" Line="2" Column="7" />
+      <File FileName="../triperoo.apis/Global.asax.cs" Line="60" Column="76" />
+      <File FileName="../triperoo.apis/packages.config" Line="1" Column="1" />
+      <File FileName="../triperoo.apis/Web.config" Line="8" Column="56" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="TriperooWindows" expanded="True">
+            <Node name="Core" expanded="True" />
+            <Node name="libraries" expanded="True" />
+            <Node name="triperoo.apis" expanded="True">
+              <Node name="Global.asax" expanded="True" />
+              <Node name="Web.config" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.triperoo.apis PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>
