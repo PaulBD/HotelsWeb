@@ -63,11 +63,6 @@ namespace triperoo.apis.endpoints.customer
 			try
 			{
                 response = _tripService.ReturnTripsByCustomerReference(request.Reference);
-
-				if (response == null)
-				{
-					throw HttpError.NotFound("Customer details cannot be found");
-				}
 			}
 			catch (Exception ex)
 			{

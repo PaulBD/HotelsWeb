@@ -20,7 +20,7 @@ namespace triperoo.apis.endpoints.locations
         public int Id { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
-        public string CategoryName { get; set; }
+        public List<string> CategoryName { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
     }
@@ -68,7 +68,6 @@ namespace triperoo.apis.endpoints.locations
         /// </summary>
         public object Get(ParentContentRequest request)
         {
-
             LocationListDto response = null;
 
             try
@@ -78,23 +77,12 @@ namespace triperoo.apis.endpoints.locations
                 response = _contentService.ReturnContentByParentRegionId(request.Id, request.Type);
                 response.LocationCount = response.Locations.Count;
 
-                if (!string.IsNullOrEmpty(request.CategoryName))
+                if (request.CategoryName != null)
                 {
-                    if (request.CategoryName.Contains(","))
+                    if (request.CategoryName.Count > 0)
                     {
-                        //response.Locations = response.Locations.Join(request.CategoryName.Split(','), di => di.SubClass, si => si, (d, s) => new LocationDto() { d }).ToList();
-                        //response.MapLocations = response.MapLocations.Join(request.CategoryName.Split(','), di => di.SubClass, si => si, (d, s) => new { d }).ToList();
-
-                        var categorName = request.CategoryName.Replace("-and-", " & ").Replace("-", " ").ToLower();
-                        var categoryList = categorName.Split(',').ToList();
-
-                        response.Locations = response.Locations.Where(q => q.SubClass.ToLower().Any(cat => categoryList.Contains(cat.ToString()))).ToList();
-                        response.MapLocations = response.MapLocations.Where(q => q.SubClass.ToLower().Any(cat => categoryList.Contains(cat.ToString()))).ToList();
-                    
-                    }
-                    else {
-                        response.Locations = response.Locations.Where(q => q.SubClass.ToLower() == request.CategoryName.Replace("-and-"," & ").Replace("-", " ").ToLower()).ToList();
-                        response.MapLocations = response.MapLocations.Where(q => q.SubClass.ToLower() == request.CategoryName.ToLower()).ToList();
+                        response.Locations = response.Locations.Where(x => request.CategoryName.Contains(x.SubClass.Replace(" & ", "-and-").Replace(" ", "-").ToLower())).ToList();
+                        response.MapLocations = response.MapLocations.Where(x => request.CategoryName.Contains(x.SubClass.Replace(" & ", "-and-").Replace(" ", "-").ToLower())).ToList();
                     }
                 }
 

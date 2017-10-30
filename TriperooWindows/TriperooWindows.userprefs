@@ -1,5 +1,5 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="../triperoo.apis/Web.config">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../triperoo.apis/Endpoints/Location/Content.cs">
     <Files>
       <File FileName="../core.couchbase/CouchBaseHelper.cs" Line="1" Column="7" />
       <File FileName="../library.azure/Services/StorageService.cs" Line="2" Column="17" />
@@ -18,21 +18,10 @@
       <File FileName="../triperoo.apis/Global.asax.cs" Line="60" Column="76" />
       <File FileName="../triperoo.apis/packages.config" Line="1" Column="1" />
       <File FileName="../triperoo.apis/Web.config" Line="8" Column="56" />
+      <File FileName="../triperoo.apis/Endpoints/Customer/Trips.cs" Line="61" Column="1" />
+      <File FileName="../core.customers/Services/TripService.cs" Line="151" Column="1" />
+      <File FileName="../triperoo.apis/Endpoints/Location/Content.cs" Line="1" Column="1" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="TriperooWindows" expanded="True">
-            <Node name="Core" expanded="True" />
-            <Node name="libraries" expanded="True" />
-            <Node name="triperoo.apis" expanded="True">
-              <Node name="Global.asax" expanded="True" />
-              <Node name="Web.config" selected="True" />
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
