@@ -31,7 +31,7 @@ namespace core.places.services
 				{
 					Count = g.count,
                     CategoryNameFriendly = ReturnFriendlyName(g.subClass),
-                    CategoryName = g.subClass.Replace(" ", "-").Replace("&", "and").ToLower()
+                    CategoryName = g.subClass.Replace(" & ", "-and-").Replace(",", "0").Replace(" ", "-").ToLower()
 				}).ToList();
 
                 list.Categories = list.Categories.OrderByDescending(w => w.Count).ToList();

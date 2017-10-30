@@ -81,8 +81,8 @@ namespace triperoo.apis.endpoints.locations
                 {
                     if (request.CategoryName.Count > 0)
                     {
-                        response.Locations = response.Locations.Where(x => request.CategoryName.Contains(x.SubClass.Replace(" & ", "-and-").Replace(" ", "-").ToLower())).ToList();
-                        response.MapLocations = response.MapLocations.Where(x => request.CategoryName.Contains(x.SubClass.Replace(" & ", "-and-").Replace(" ", "-").ToLower())).ToList();
+                        response.Locations = response.Locations.Where(x => request.CategoryName.Contains(x.SubClass.Replace("0", ",").Replace(" & ", "-and-").Replace(" ", "-").ToLower())).ToList();
+                        response.MapLocations = response.MapLocations.Where(x => request.CategoryName.Contains(x.SubClass.Replace("0", ",").Replace(" & ", "-and-").Replace(" ", "-").ToLower())).ToList();
                     }
                 }
 

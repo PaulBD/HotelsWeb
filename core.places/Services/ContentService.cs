@@ -68,7 +68,7 @@ namespace core.places.services
                 q += " AND (";
                 for (var i = 0; i < cat.Length; i++)
                 {
-                    q += "LOWER(subClass) = '" + cat[i].Replace("-and-", " & ").Replace("-", " ") + "'";
+                    q += "LOWER(subClass) = '" + cat[i].Replace("0", ",").Replace("-and-", " & ").Replace("-", " ") + "'";
 
                     if (i < cat.Length - 1)
                     {
