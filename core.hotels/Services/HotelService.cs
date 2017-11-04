@@ -6,6 +6,7 @@ using System.Text;
 using core.hotels.dtos;
 using ServiceStack.Text;
 using library.couchbase;
+using System.Linq;
 
 namespace core.hotels.services
 {
@@ -294,7 +295,16 @@ namespace core.hotels.services
 				if (result.IsSuccessStatusCode)
 				{
 					var r = CleanUpResult(result.Content.ReadAsStringAsync().Result);
-					return JsonSerializer.DeserializeFromString<HotelAPIListDto>(r);
+					var jsonResult = JsonSerializer.DeserializeFromString<HotelAPIListDto>(r);
+
+                    if (exclude > 0)
+                    {
+                        jsonResult.hotelListResponse.hotelList.hotelSummary = jsonResult.hotelListResponse.hotelList.hotelSummary.Where(q => q.hotelId != exclude).ToList();
+                    }
+
+                    jsonResult.MapLocations = jsonResult.hotelListResponse.hotelList.hotelSummary.Select(x => new MapLocationDto { RegionName = x.name, LocationCoordinates = new LocationCoordinatesDto() { Latitude = x.latitude, Longitude = x.longitude}, SubClass = "", Url = "", Image = x.imagelUrl }).ToList();
+
+                    return jsonResult;
 				}
 			}
 

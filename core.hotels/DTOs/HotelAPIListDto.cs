@@ -201,7 +201,29 @@ namespace core.hotels.dtos
         public HotelAPIListDto()
         {
             hotelListResponse = new HotelListResponse();
+            MapLocations = new List<MapLocationDto>();
         }
-		public HotelListResponse hotelListResponse { get; set; }
+        public HotelListResponse hotelListResponse { get; set; }
+        public IList<MapLocationDto> MapLocations { get; set; }
 	}
+
+    public class MapLocationDto
+    {
+        public MapLocationDto()
+        {
+            LocationCoordinates = new LocationCoordinatesDto();
+        }
+
+        public string RegionName { get; set; }
+        public string SubClass { get; set; }
+        public LocationCoordinatesDto LocationCoordinates { get; set; }
+        public string Url { get; set; }
+        public string Image { get; set; }
+    }
+
+    public class LocationCoordinatesDto
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
 }

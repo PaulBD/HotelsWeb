@@ -17,6 +17,7 @@ namespace core.customers.dtos
         public int Children { get; set; }
         public string Type { get; set; }
         public string TripPace { get; set; }
+        public string PopulateTrip { get; set; }
         public List<string> Tags { get; set; }
     }
 
