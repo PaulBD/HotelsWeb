@@ -5,6 +5,11 @@ namespace core.customers.dtos
 {
     public class TripDetails
     {
+        public TripDetails()
+        {
+            TripSummary = new List<TripSummary>();
+        }
+
         public int RegionID { get; set; }
         public string RegionName { get; set; }
         public string RegionUrl { get; set; }
@@ -12,6 +17,7 @@ namespace core.customers.dtos
         public string Description { get; set; }
         public string TripStart { get; set; }
         public string TripEnd { get; set; }
+        public List<TripSummary> TripSummary { get; set; }
         public double TripLength { get; set; }
         public int Adults { get; set; }
         public int Children { get; set; }
@@ -21,17 +27,29 @@ namespace core.customers.dtos
         public List<string> Tags { get; set; }
     }
 
+    public class TripSummary 
+    {
+        public int Day { get; set; }
+        public string Date { get; set; }
+        public int Count { get; set; }
+        public int TotalDuration { get; set; }
+        
+    }
+
     public class ActivityDto
     {
         public int Id { get; set; }
         public int Day { get; set; }
+        public string VisitDate { get; set; }
         public string Type { get; set; }
         public int StartTime { get; set; }
-        public int Length { get; set; }
-        public string LengthValue { get; set; }
+        public string StartTimePeriod { get; set; }
+        public string Price { get; set; }
+        public string Length { get; set; }
         public int RegionID { get; set; }
         public string RegionName { get; set; }
         public string RegionNameLong { get; set; }
+        public string Address { get; set; }
         public string Image { get; set; }
         public string Url { get; set; }
         public double Latitude { get; set; }
