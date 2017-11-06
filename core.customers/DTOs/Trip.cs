@@ -52,6 +52,7 @@ namespace core.customers.dtos
         public string Address { get; set; }
         public string Image { get; set; }
         public string Url { get; set; }
+        public string BookingUrl { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string TravelType { get; set; }
@@ -65,6 +66,7 @@ namespace core.customers.dtos
         {
             TripDetails = new TripDetails();
             Days = new List<ActivityDto>();
+            TripExtras = new List<ActivityDto>();
         }
 
         public int Id { get; set; }
@@ -75,5 +77,6 @@ namespace core.customers.dtos
         public bool IsArchived { get; set; }
         public TripDetails TripDetails { get; set; }
         public List<ActivityDto> Days { get; set; }
+        public List<ActivityDto> TripExtras { get; set; }
     }
 }

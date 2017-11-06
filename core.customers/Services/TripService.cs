@@ -10,12 +10,14 @@ namespace core.customers.services
     {
 		private CouchBaseHelper _couchbaseHelper;
         private CustomerService _customerService;
+        private ActivityService _activityService;
         private readonly string _bucketName = "TriperooCustomers";
 
 		public TripService()
 		{
 			_couchbaseHelper = new CouchBaseHelper();
 			_customerService = new CustomerService();
+            _activityService = new ActivityService(_customerService, this);
 		}
 
         /// <summary>
@@ -58,21 +60,43 @@ namespace core.customers.services
 
                 // Insert into Customer
                 customer.TriperooCustomers.Trips.Add(new CustomerTripDto(){
-                    DateCreated = new System.DateTime(),
+                    DateCreated = new DateTime(),
                     Id = tripId,
                     Url = url
                 });
 				_customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
-
 
                 if ((!System.String.IsNullOrEmpty(trip.TripDetails.TripStart)) && (!System.String.IsNullOrEmpty(trip.TripDetails.TripEnd)))
                 {
                     var dtStart = Convert.ToDateTime(trip.TripDetails.TripStart);
                     var dtEnd = Convert.ToDateTime(trip.TripDetails.TripEnd);
                     trip.TripDetails.TripLength = (dtEnd - dtStart).TotalDays;
+
+                    for (var i = 0; i < trip.TripDetails.TripLength; i++)
+                    {
+                        trip.TripDetails.TripSummary.Add(new TripSummary
+                        {
+                            Count = 0,
+                            Day = i,
+                            TotalDuration = 0,
+                            Date = dtStart.AddDays(i).ToShortDateString()
+                        });
+                    }
                 }
+                var activity = new ActivityDto();
+
+                if (trip.Days.Count > 0)
+                {
+                    activity = trip.Days[0];
+                }
+
+                trip.Days.RemoveAt(0);
+
                 //Insert into Trip
                 InsertUpdateTrip(customer.TriperooCustomers.CustomerReference, trip);
+
+                //Insert new activity
+                _activityService.InsertNewActivity(token, trip.Id, activity);
             }
 
             return tripId;

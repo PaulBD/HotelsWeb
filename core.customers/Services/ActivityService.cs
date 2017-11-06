@@ -39,13 +39,121 @@ namespace core.customers.services
 
                 if (foundActivity == null)
                 {
-                    activity.Id = trip.Days.Count + 1;
+                    var isTravelActivity = activity.Type.ToLower() == "transfers & ground transport" || activity.Type.ToLower() == "hotel";
+
+                    if (isTravelActivity)
+                    {
+                        activity.Id = -1;
+                    }
+                    else
+                    {
+                        activity.Id = trip.Days.Count + 1;
+                    }
+
                     activity.DateCreated = DateTime.Now;
-                    trip.Days.Add(activity);
+
+                    var maxItems = 0;
+                    var totalDuration = 0;
+
+                    switch (trip.TripDetails.TripPace)
+                    {
+                        case "easy going":
+                            maxItems = 1;
+                            totalDuration = 120;
+                            break;
+                        case "balanced":
+                            maxItems = 2;
+                            totalDuration = 240;
+                            break;
+                        case "fast paced":
+                            maxItems = 3;
+                            totalDuration = 360;
+                            break;
+                    }
+
+                    if (!isTravelActivity)
+                    {
+                        var nextAvailableDay = trip.TripDetails.TripSummary.FirstOrDefault(q => q.TotalDuration >= 0 && q.TotalDuration < totalDuration && q.Count < maxItems);
+                        var startTimePeriod = ReturnStartTimePeriod(trip.Days, nextAvailableDay.Date);
+                        var activityLengthInMinutes = ReturnActivityLengthInMinutes(activity.Length);
+
+                        //TODO Do I need to revevailute next Available Day if duratation is full day??
+
+                        activity.Day = nextAvailableDay.Day;
+                        activity.VisitDate = nextAvailableDay.Date;
+                        activity.Length = activity.Length;
+                        activity.Price = activity.Price;
+                        activity.BookingUrl = activity.BookingUrl;
+                        activity.StartTimePeriod = startTimePeriod;
+
+                        trip.TripDetails.TripSummary.FirstOrDefault(q => q.Date == nextAvailableDay.Date).Count += 1;
+                        trip.TripDetails.TripSummary.FirstOrDefault(q => q.Date == nextAvailableDay.Date).TotalDuration += activityLengthInMinutes;
+
+                        trip.Days.Add(activity);
+                    }
+                    else
+                    {
+                        activity.Day = -1;
+                        activity.VisitDate = "";
+                        activity.Length = activity.Length;
+                        activity.Price = activity.Price;
+                        activity.BookingUrl = activity.BookingUrl;
+                        activity.StartTimePeriod = "";
+                        trip.TripExtras.Add(activity);
+                    }
                 }
 
                 _tripService.InsertUpdateTrip(customer.TriperooCustomers.CustomerReference, trip);
             }
+        }
+
+        private string ReturnStartTimePeriod(List<ActivityDto> days, string currentDate)
+        {
+            var selectedDay = days.Where(q => q.VisitDate == currentDate).ToList();
+
+            if (selectedDay != null)
+            {
+                if (selectedDay.Count == 0)
+                {
+                    return "AM";
+                }
+            }
+
+            return "PM";
+        }
+
+        private int ReturnActivityLengthInMinutes(string activityLength)
+        {
+            var activityMinutes = 120;
+
+            if (activityLength != null)
+            {
+                if (activityLength.Length > 0)
+                {
+                    var h = activityLength.ToLower().Split(' ');
+
+                    if (h.Length > 0)
+                    {
+                        activityMinutes = (Convert.ToInt32(h[0].Trim().Replace("h", "").Replace("hours", "").Replace("hour", "")) * 60);
+
+                        if (h.Length > 2)
+                        {
+                            activityMinutes += (Convert.ToInt32(h[2].Trim().Replace("m", "").Replace("minutes", "")));
+                        }
+                    }
+                    else {
+                        if (h.Contains("h") || h.Contains("hours") || h.Contains("hour"))
+                        {
+                            activityMinutes = (Convert.ToInt32(h[0].Trim().Replace("h", "").Replace("hours", "").Replace("hour", "")) * 60);
+                        }
+                        else {
+                            activityMinutes = (Convert.ToInt32(h[1].Trim().Replace("m", "").Replace("minutes", "")));
+                        }
+                    }
+                }
+            }
+
+            return activityMinutes;
         }
 
         /// <summary>

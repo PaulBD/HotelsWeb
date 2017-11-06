@@ -1,17 +1,21 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="../core.customers/Services/TripService.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../core.customers/DTOs/Trip.cs">
     <Files>
-      <File FileName="../core.customers/DTOs/Trip.cs" Line="13" Column="46" />
       <File FileName="../triperoo.apis/Endpoints/Location/Content.cs" Line="1" Column="1" />
       <File FileName="../triperoo.apis/Endpoints/Location/Hotels.cs" Line="1" Column="1" />
       <File FileName="../core.hotels/Services/IHotelService.cs" Line="1" Column="1" />
       <File FileName="../core.hotels/Services/HotelService.cs" Line="300" Column="1" />
-      <File FileName="../core.customers/Services/TripService.cs" Line="142" Column="25" />
+      <File FileName="../core.customers/Services/TripService.cs" Line="88" Column="1" />
+      <File FileName="../core.customers/Services/ActivityService.cs" Line="106" Column="28" />
+      <File FileName="../core.customers/DTOs/Trip.cs" Line="69" Column="15" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/core.customers/Services/TripService.cs" line="50" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/core.customers/Services/TripService.cs" line="88" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.triperoo.apis PreferredExecutionTarget="MonoDevelop.Default" />
