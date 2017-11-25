@@ -34,72 +34,86 @@ namespace core.customers.services
 
                 if (trip != null)
                 {
-                    foundActivity = trip.Days.FirstOrDefault(q => q.RegionID == activity.RegionID);
+                    var activities = trip.TripDetails.TripSummary.SelectMany(p => p.Activities);
+
+                    if (activities != null)
+                    {
+                        var l = activities.Where(c => c.RegionID == activity.RegionID);
+
+                        if (l.Any())
+                        {
+                            foundActivity = l.FirstOrDefault();
+                        }
+                    }
                 }
 
                 if (foundActivity == null)
                 {
-                    var isTravelActivity = activity.Type.ToLower() == "transfers & ground transport" || activity.Type.ToLower() == "hotel";
-
-                    if (isTravelActivity)
+                    if (!string.IsNullOrEmpty(activity.RegionName))
                     {
-                        activity.Id = -1;
-                    }
-                    else
-                    {
-                        activity.Id = trip.Days.Count + 1;
-                    }
+                        var isTravelActivity = activity.ActivityType.ToLower() == "transfers & ground transport" || activity.ActivityType.ToLower() == "hotel";
 
-                    activity.DateCreated = DateTime.Now;
+                        if (isTravelActivity)
+                        {
+                            activity.Id = -1;
+                        }
+                        else
+                        {
+                            activity.Id = trip.TripDetails.TripSummary.SelectMany(p => p.Activities).ToList().Count + 1;
+                        }
 
-                    var maxItems = 0;
-                    var totalDuration = 0;
+                        activity.DateCreated = DateTime.Now;
 
-                    switch (trip.TripDetails.TripPace)
-                    {
-                        case "easy going":
-                            maxItems = 1;
-                            totalDuration = 120;
-                            break;
-                        case "balanced":
-                            maxItems = 2;
-                            totalDuration = 240;
-                            break;
-                        case "fast paced":
-                            maxItems = 3;
-                            totalDuration = 360;
-                            break;
-                    }
+                        var maxItems = 0;
+                        var totalDuration = 0;
 
-                    if (!isTravelActivity)
-                    {
-                        var nextAvailableDay = trip.TripDetails.TripSummary.FirstOrDefault(q => q.TotalDuration >= 0 && q.TotalDuration < totalDuration && q.Count < maxItems);
-                        var startTimePeriod = ReturnStartTimePeriod(trip.Days, nextAvailableDay.Date);
+                        switch (trip.TripDetails.TripPace)
+                        {
+                            case "easy going":
+                                maxItems = 1;
+                                totalDuration = 120;
+                                break;
+                            case "balanced":
+                                maxItems = 2;
+                                totalDuration = 240;
+                                break;
+                            case "fast paced":
+                                maxItems = 3;
+                                totalDuration = 360;
+                                break;
+                        }
+
+                        TripSummary nextAvailableDay = null;
+
+                        if (activity.ActivityType == "Restaurants")
+                        {    
+                            nextAvailableDay = trip.TripDetails.TripSummary.FirstOrDefault(q => q.RestaurantCount == 0);
+                        }
+                        else {
+                            nextAvailableDay = trip.TripDetails.TripSummary.FirstOrDefault(q => q.TotalDuration >= 0 && q.TotalDuration < totalDuration && q.ActivitiesCount < maxItems);
+                        }
+
+                        var startTimePeriod = ReturnStartTimePeriod(trip.TripDetails.TripSummary, nextAvailableDay.Date);
                         var activityLengthInMinutes = ReturnActivityLengthInMinutes(activity.Length);
 
                         //TODO Do I need to revevailute next Available Day if duratation is full day??
 
                         activity.Day = nextAvailableDay.Day;
-                        activity.VisitDate = nextAvailableDay.Date;
-                        activity.Length = activity.Length;
+                        activity.Date = nextAvailableDay.Date;
+                        activity.Length = activityLengthInMinutes.ToString();
                         activity.Price = activity.Price;
                         activity.BookingUrl = activity.BookingUrl;
                         activity.StartTimePeriod = startTimePeriod;
 
-                        trip.TripDetails.TripSummary.FirstOrDefault(q => q.Date == nextAvailableDay.Date).Count += 1;
+                        if (activity.ActivityType == "Restaurants")
+                        {
+                            trip.TripDetails.TripSummary.FirstOrDefault(q => q.Date == nextAvailableDay.Date).RestaurantCount += 1;
+                        }
+                        else {
+                            trip.TripDetails.TripSummary.FirstOrDefault(q => q.Date == nextAvailableDay.Date).ActivitiesCount += 1;
+                        }
                         trip.TripDetails.TripSummary.FirstOrDefault(q => q.Date == nextAvailableDay.Date).TotalDuration += activityLengthInMinutes;
-
-                        trip.Days.Add(activity);
-                    }
-                    else
-                    {
-                        activity.Day = -1;
-                        activity.VisitDate = "";
-                        activity.Length = activity.Length;
-                        activity.Price = activity.Price;
-                        activity.BookingUrl = activity.BookingUrl;
-                        activity.StartTimePeriod = "";
-                        trip.TripExtras.Add(activity);
+                        trip.TripDetails.TripSummary.FirstOrDefault(q => q.Date == nextAvailableDay.Date).Activities.Add(activity);
                     }
                 }
 
@@ -107,9 +121,9 @@ namespace core.customers.services
             }
         }
 
-        private string ReturnStartTimePeriod(List<ActivityDto> days, string currentDate)
+        private string ReturnStartTimePeriod(List<TripSummary> summary, string currentDate)
         {
-            var selectedDay = days.Where(q => q.VisitDate == currentDate).ToList();
+            var selectedDay = summary.Where(q => q.Date == currentDate).ToList();
 
             if (selectedDay != null)
             {
@@ -169,7 +183,7 @@ namespace core.customers.services
 
                 if (list != null)
                 {
-                    return list.FirstOrDefault(q => q.RegionID == locationId);
+                    return list.SelectMany(p => p.Activities).FirstOrDefault(c => c.RegionID == locationId);
                 }
             }
 
@@ -189,7 +203,18 @@ namespace core.customers.services
 
                 if (existingTrip != null)
                 {
-                    existingTrip.Days.FirstOrDefault(q => q.RegionID == locationId).IsArchived = true;
+                    foreach(var t in existingTrip.TripDetails.TripSummary)
+                    {
+                        foreach (var s in t.Activities)
+                        {
+                            if (s.RegionID == locationId)
+                            {
+                                t.Activities.Remove(s);
+                            }
+                        }
+
+                    }
+
                     _tripService.InsertUpdateTrip(customer.TriperooCustomers.CustomerReference, existingTrip);
                 }
             }
@@ -198,7 +223,7 @@ namespace core.customers.services
         /// <summary>
         /// Return Activities by token
         /// </summary>
-        public List<ActivityDto> ReturnActivitiesByToken(string token, int tripId)
+        public List<TripSummary> ReturnActivitiesByToken(string token, int tripId)
         {
             var customer = _customerService.ReturnCustomerByToken(token);
 
@@ -208,7 +233,7 @@ namespace core.customers.services
 
                 if (existingTrip != null)
                 {
-                    return existingTrip.Days;
+                    return existingTrip.TripDetails.TripSummary;
                 }
             }
 

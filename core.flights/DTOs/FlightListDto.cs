@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using core.flights.utils;
 
 namespace core.flights.dtos
 {
@@ -108,24 +109,9 @@ namespace core.flights.dtos
 		public string airline { get; set; }
         public string airlineName 
         {
-            get 
+            get
             {
-                switch (airline)
-				{
-                    case "AA":
-                        return "American Airlines";
-                    case "AI":
-                        return "Air India";
-                    case "AY":
-                        return "Finnair";
-					case "BA":
-						return "British Airways";
-					case "KL":
-						return "KLM";
-                    case "UA":
-                        return "United Airlines";
-				}
-				return null;
+                return Common.ReturnAirlineName(airline);
             }
         }
 
@@ -227,6 +213,28 @@ namespace core.flights.dtos
 		public List<object> refresh { get; set; }
 		public object del { get; set; }
 		public List<string> all_airlines { get; set; }
+        public List<Airline> all_airlines_friendly {
+            get {
+                List<Airline> friendly = new List<Airline>();
+
+                foreach(var a in all_airlines)
+                {
+                    friendly.Add(new Airline {
+                        AirlineCode = a,
+                        AirlineName = Common.ReturnAirlineName(a)
+                    });
+                }
+
+                return friendly;
+            }
+        }
+
 		public int time { get; set; }
 	}
+
+    public class Airline 
+    {
+        public string AirlineCode { get; set; }
+        public string AirlineName { get; set; }
+    }
 }

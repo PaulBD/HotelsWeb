@@ -181,6 +181,8 @@
     <Compile Include="Endpoints\Customer\Photos.cs" />
     <Compile Include="Endpoints\Customer\Visited.cs" />
     <Compile Include="Endpoints\Location\Content.cs" />
+    <Compile Include="Endpoints\Email\WelcomeEmail.cs" />
+    <Compile Include="Endpoints\Email\Password.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -222,6 +224,13 @@
       <Project>{082A4D85-C12F-44F6-8569-12B59C6D2A06}</Project>
       <Name>library.caching</Name>
     </ProjectReference>
+    <ProjectReference Include="..\library.common\library.common.csproj">
+      <Project>{84B36479-F642-4A11-AC93-36C016765FD2}</Project>
+      <Name>library.common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Endpoints\Email\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

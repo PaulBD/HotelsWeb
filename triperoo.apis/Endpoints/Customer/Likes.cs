@@ -17,7 +17,7 @@ namespace triperoo.apis.endpoints.customer
 	[Route("/v1/customer/likes", "POST")]
 	public class LikeRequest
 	{
-		public int LocationId { get; set; }
+        public int LocationId { get; set; }
 		public CustomerLocationDto Location { get; set; }
 	}
 
@@ -102,7 +102,7 @@ namespace triperoo.apis.endpoints.customer
                     _customerLikeService.InsertNewLike(token, request.Location);
                 }
 
-				var locationResponse = _locationService.ReturnLocationById(request.Location.Id);
+				var locationResponse = _locationService.ReturnLocationById(request.Location.Id, request.Location.IsCity);
 
 				locationResponse.Stats.LikeCount += 1;
 				_locationService.UpdateLocation(locationResponse, false);
@@ -133,7 +133,7 @@ namespace triperoo.apis.endpoints.customer
                     _customerLikeService.ArchiveLikeByLocationId(request.LocationId, token);
                 }
 
-				var locationResponse = _locationService.ReturnLocationById(request.LocationId);
+				var locationResponse = _locationService.ReturnLocationById(request.LocationId, request.Location.IsCity);
 
 				locationResponse.Stats.LikeCount -= 1;
 				_locationService.UpdateLocation(locationResponse, false);

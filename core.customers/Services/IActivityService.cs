@@ -8,6 +8,6 @@ namespace core.customers.services
         void InsertNewActivity(string token, int tripId, ActivityDto activity);
         ActivityDto ReturnActivityByLocationId(int locationId, int tripId, string token);
         void ArchiveActivityByLocationId(int locationId, int tripId, string token);
-        List<ActivityDto> ReturnActivitiesByToken(string token, int tripId);
+        List<TripSummary> ReturnActivitiesByToken(string token, int tripId);
     }
 }

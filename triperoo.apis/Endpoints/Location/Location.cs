@@ -22,6 +22,7 @@ namespace triperoo.apis.endpoints.location
     public class LocationRequest
     {
         public int id { get; set; }
+        public bool isCity { get; set; }
         public LocationDto Location { get; set; }
 
     }
@@ -72,7 +73,7 @@ namespace triperoo.apis.endpoints.location
 
             try
             {
-                response = _locationService.ReturnLocationById(request.id);
+                response = _locationService.ReturnLocationById(request.id, request.isCity);
             }
             catch (Exception ex)
             {
@@ -95,7 +96,7 @@ namespace triperoo.apis.endpoints.location
 
             try
             {
-                response = _locationService.ReturnLocationById(request.id);
+                response = _locationService.ReturnLocationById(request.id, false);
 
                 response.FormattedAddress = request.Location.FormattedAddress;
                 response.Summary = request.Location.Summary;
@@ -124,7 +125,7 @@ namespace triperoo.apis.endpoints.location
         {
             try
             {
-                _locationService.AddLocation(request.Location, true);
+                _locationService.AddLocation(request.Location, request.isCity);
             }
             catch (Exception ex)
             {

@@ -74,7 +74,19 @@ namespace triperoo.apis.endpoints.locations
             {
                 response = new LocationListDto();
 
-                response = _contentService.ReturnContentByParentRegionId(request.Id, request.Type);
+                var requestType = request.Type;
+
+                switch (requestType)
+                {
+                    case "Regions":
+                    case "Multi-Regions":
+                        response = _contentService.ReturnContentByParentRegionId(request.Id);
+                        break;
+                    default:
+                        response = _contentService.ReturnContentByParentRegionId(request.Id, requestType);
+                        break;
+                }
+
                 response.LocationCount = response.Locations.Count;
 
                 if (request.CategoryName != null)

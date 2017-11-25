@@ -1,20 +1,28 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="../core.customers/DTOs/Trip.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../library.common/Email.cs">
     <Files>
-      <File FileName="../triperoo.apis/Endpoints/Location/Content.cs" Line="1" Column="1" />
-      <File FileName="../triperoo.apis/Endpoints/Location/Hotels.cs" Line="1" Column="1" />
-      <File FileName="../core.hotels/Services/IHotelService.cs" Line="1" Column="1" />
-      <File FileName="../core.hotels/Services/HotelService.cs" Line="300" Column="1" />
-      <File FileName="../core.customers/Services/TripService.cs" Line="88" Column="1" />
-      <File FileName="../core.customers/Services/ActivityService.cs" Line="106" Column="28" />
-      <File FileName="../core.customers/DTOs/Trip.cs" Line="69" Column="15" />
+      <File FileName="../core.customers/Services/TripService.cs" Line="80" Column="44" />
+      <File FileName="../core.customers/Services/ActivityService.cs" Line="108" Column="50" />
+      <File FileName="../core.customers/DTOs/Trip.cs" Line="40" Column="35" />
+      <File FileName="../triperoo.apis/Endpoints/auth/ForgotPassword.cs" Line="152" Column="18" />
+      <File FileName="../core.customers/Services/CustomerService.cs" Line="40" Column="1" />
+      <File FileName="../core.customers/Services/ICustomerService.cs" Line="11" Column="50" />
+      <File FileName="../triperoo.apis/Web.config" Line="143" Column="17" />
+      <File FileName="../library.common/Encryption.cs" Line="76" Column="34" />
+      <File FileName="../library.common/Email.cs" Line="31" Column="66" />
+      <File FileName="../library.common/IEmail.cs" Line="3" Column="28" />
+      <File FileName="../triperoo.apis/Endpoints/Email/WelcomeEmail.cs" Line="48" Column="1" />
+      <File FileName="../triperoo.apis/Endpoints/Email/Password.cs" Line="100" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/core.customers/Services/TripService.cs" line="50" column="1" />
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/core.customers/Services/TripService.cs" line="88" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/Location/Locations.cs" line="108" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/Question/Question.cs" line="89" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/auth/ForgotPassword.cs" line="63" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/Customer/Customer.cs" line="96" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/library.common/Email.cs" line="76" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

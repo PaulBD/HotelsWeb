@@ -45,6 +45,7 @@ namespace triperoo.apis.endpoints.flights
         public string StopOverTo { get; set; }
         public string Sort { get; set; }
         public string Asc { get; set; }
+        public string SelectedAirlines { get; set; }
         public int Offset { get; set; }
         public int Limit { get; set; }
         public int DirectFlightsOnly { get; set; }
@@ -98,7 +99,25 @@ namespace triperoo.apis.endpoints.flights
 
             try
             {
-                response = _flightService.ReturnFlights(request.FlyFrom, request.FlyTo, request.DateFrom, request.DateTo, request.ReturnFrom, request.ReturnTo, request.FlightType, request.PassengerTotal, request.AdultTotal, request.ChildTotal, request.InfantTotal, request.PriceFrom, request.PriceTo, request.DepartureTimeFrom, request.DepartureTimeTo, request.ArrivalTimeFrom, request.ArrivalTimeTo, request.ReturnDepartureTimeFrom, request.ReturnDepartureTimeTo, request.ReturnArrivalTimeFrom, request.ReturnArrivalTimeTo, request.StopOverFrom, request.StopOverTo, request.Sort, request.Asc, request.Offset, request.Limit, request.DirectFlightsOnly, request.Market, request.Currency, request.Locale);
+                var dateFrom = request.DateFrom;
+                var dateTo = request.DateTo;
+
+                var df = DateTime.Parse(dateFrom);
+                dateFrom = df.ToString("d");
+
+                var dt = DateTime.Parse(dateTo);
+                dateTo = dt.ToString("d");
+
+                var returnFrom = request.ReturnFrom;
+                var returnTo = request.ReturnTo;
+
+                var rf = DateTime.Parse(returnFrom);
+                returnFrom = rf.ToString("d");
+
+                var rt = DateTime.Parse(returnTo);
+                returnTo = rt.ToString("d");
+
+                response = _flightService.ReturnFlights(request.FlyFrom, request.FlyTo, dateFrom, dateTo, returnFrom, returnTo, request.FlightType, request.PassengerTotal, request.AdultTotal, request.ChildTotal, request.InfantTotal, request.PriceFrom, request.PriceTo, request.DepartureTimeFrom, request.DepartureTimeTo, request.ArrivalTimeFrom, request.ArrivalTimeTo, request.ReturnDepartureTimeFrom, request.ReturnDepartureTimeTo, request.ReturnArrivalTimeFrom, request.ReturnArrivalTimeTo, request.StopOverFrom, request.StopOverTo, request.Sort, request.Asc, request.SelectedAirlines, request.Offset, request.Limit, request.DirectFlightsOnly, request.Market, request.Currency, request.Locale);
             }
             catch (Exception ex)
             {

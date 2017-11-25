@@ -15,7 +15,8 @@ namespace triperoo.apis.endpoints.location
 	[Route("/v1/location/{id}/like", "PUT")]
 	public class LikeLocationRequest
 	{
-		public int id { get; set; }
+        public int id { get; set; }
+        public bool IsCity { get; set; }
 
 	}
 
@@ -48,7 +49,8 @@ namespace triperoo.apis.endpoints.location
 	[Route("/v1/location/{id}/unlike", "PUT")]
 	public class UnLikeLocationRequest
 	{
-		public int id { get; set; }
+        public int id { get; set; }
+        public bool IsCity { get; set; }
 
 	}
 
@@ -98,7 +100,7 @@ namespace triperoo.apis.endpoints.location
 
 			try
 			{
-				response = _locationService.ReturnLocationById(request.id);
+				response = _locationService.ReturnLocationById(request.id, request.IsCity);
                 response.Stats.LikeCount += 1;
 				_locationService.UpdateLocation(response, false);
 			}
@@ -123,7 +125,7 @@ namespace triperoo.apis.endpoints.location
 
 			try
 			{
-				response = _locationService.ReturnLocationById(request.id);
+				response = _locationService.ReturnLocationById(request.id, request.IsCity);
 				response.Stats.LikeCount -= 1;
 				_locationService.UpdateLocation(response, false);
 			}

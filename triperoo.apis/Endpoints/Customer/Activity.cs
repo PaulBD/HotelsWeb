@@ -58,7 +58,7 @@ namespace triperoo.apis.endpoints.customer
 		/// </summary>
         public object Get(CustomerActivitiesRequest request)
         {
-            var response = new List<ActivityDto>();
+            var response = new List<TripSummary>();
 
             try
             {

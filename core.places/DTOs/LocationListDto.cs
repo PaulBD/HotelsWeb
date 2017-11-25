@@ -149,7 +149,7 @@ namespace core.places.dtos
         public string LetterIndex { get; set; }
         public int? ListingPriority { get; set; }
         public double? Longitude { get; set; }
-        public int ParentRegionID { get; set; }
+        public Int64 ParentRegionID { get; set; }
         public string ParentRegionName { get; set; }
         public string ParentRegionImage { get; set; }
         public string ParentRegionNameLong { get; set; }

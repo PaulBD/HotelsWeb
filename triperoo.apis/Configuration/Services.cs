@@ -7,6 +7,7 @@ using core.extras.services;
 using library.weather.services;
 using core.deals.Services;
 using library.events.services;
+using library.common;
 
 namespace triperoo.apis.Configuration
 {
@@ -14,6 +15,7 @@ namespace triperoo.apis.Configuration
     {
         public static void Register(Container container)
         {
+            container.RegisterAutoWiredAs<Email, IEmail>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<LocationService, ILocationService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<ContentService, IContentService>().ReusedWithin(ReuseScope.Container);
             container.RegisterAutoWiredAs<WeatherService, IWeatherService>().ReusedWithin(ReuseScope.Container);

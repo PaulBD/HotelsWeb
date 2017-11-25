@@ -76,21 +76,27 @@ namespace core.customers.services
                     {
                         trip.TripDetails.TripSummary.Add(new TripSummary
                         {
-                            Count = 0,
+                            RestaurantCount = 0,
+                            ActivitiesCount = 0,
                             Day = i,
                             TotalDuration = 0,
-                            Date = dtStart.AddDays(i).ToShortDateString()
+                            Date = dtStart.AddDays(i).ToString("yyyy/MM/dd")
                         });
                     }
                 }
                 var activity = new ActivityDto();
 
-                if (trip.Days.Count > 0)
+                if (trip.TripDetails.TripSummary.Count > 0)
                 {
-                    activity = trip.Days[0];
+                    if (trip.TripDetails.TripSummary[0].Activities != null)
+                    {
+                        if (trip.TripDetails.TripSummary[0].Activities.Count > 0)
+                        {
+                            activity = trip.TripDetails.TripSummary[0].Activities[0];
+                            trip.TripDetails.TripSummary[0].Activities.RemoveAt(0);
+                        }
+                    }
                 }
-
-                trip.Days.RemoveAt(0);
 
                 //Insert into Trip
                 InsertUpdateTrip(customer.TriperooCustomers.CustomerReference, trip);
@@ -119,7 +125,7 @@ namespace core.customers.services
                     var existingCustomerTrip = customer.TriperooCustomers.Trips.FirstOrDefault(q => q.Id == tripId);
 
                     existingTrip.TripDetails = trip.TripDetails;
-                    existingTrip.Days = trip.Days;
+                    //existingTrip.Days = trip.Days;
                     existingTrip.TripName = trip.TripName;
                     existingTrip.Url = url;
                     InsertUpdateTrip(customer.TriperooCustomers.CustomerReference, existingTrip);

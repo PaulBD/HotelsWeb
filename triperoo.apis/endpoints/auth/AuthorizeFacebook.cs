@@ -12,12 +12,15 @@ namespace triperoo.apis.endpoints.auth
     /// <summary>
     /// Request
     /// </summary>
+    [Route("/v1/authorize/facebook", "GET")]
     [Route("/v1/authorize/facebook", "POST")]
     public class AuthorizeFacebookRequest
     {
+        public string AccessToken { get; set; }
         public string EmailAddress { get; set; }
         public int FacebookId { get; set; }
         public string Name { get; set; }
+        public string Token { get; set; }
         public string ImageUrl { get; set; }
 		public string CurrentCity { get; set; }
 		public int CurrentCityId { get; set; }
@@ -39,8 +42,6 @@ namespace triperoo.apis.endpoints.auth
                 RuleFor(r => r.EmailAddress).NotNull().WithMessage("Supply a valid email address");
                 RuleFor(r => r.FacebookId).NotNull().WithMessage("Supply a valid facebook id");
 				RuleFor(r => r.Name).NotNull().WithMessage("Supply a valid name");
-				RuleFor(r => r.CurrentCityId).GreaterThan(0).WithMessage("Supply a valid city");
-                RuleFor(r => r.CurrentCity).NotNull().WithMessage("Supply a valid city");
             });
         }
     }
@@ -62,6 +63,31 @@ namespace triperoo.apis.endpoints.auth
             _customerService = customerService;
             _authorizeService = authorizeService;
         }
+
+        #region Get Facebook Customer
+
+        /// <summary>
+        /// Get Customer
+        /// </summary>
+        public object Get(AuthorizeFacebookRequest request)
+        {
+            CustomerDto response = new CustomerDto();
+
+            try
+            {
+                var token = _authorizeService.AssignToken(request.EmailAddress, request.FacebookId.ToString());
+                response = _customerService.ReturnCustomerByToken(token);
+
+            }
+            catch (Exception ex)
+            {
+                throw new HttpError(ex.ToStatusCode(), "Error", ex.Message);
+            }
+
+            return new HttpResult(response, HttpStatusCode.OK);
+        }
+
+        #endregion
 
         #region Authorize Facebook Customer
 
@@ -95,10 +121,16 @@ namespace triperoo.apis.endpoints.auth
 				}
 
 				customer.TriperooCustomers.IsFacebookSignup = true;
-				customer.TriperooCustomers.FacebookId = request.FacebookId;
+                customer.TriperooCustomers.FacebookId = request.FacebookId;
+                customer.TriperooCustomers.AccessToken = request.AccessToken;
                 customer.TriperooCustomers.Profile.Name = request.Name;
-				customer.TriperooCustomers.Profile.CurrentLocation = request.CurrentCity;
-				customer.TriperooCustomers.Profile.CurrentLocationId = request.CurrentCityId;
+
+                if (!string.IsNullOrEmpty(request.CurrentCity))
+                {
+                    customer.TriperooCustomers.Profile.CurrentLocation = request.CurrentCity;
+                    customer.TriperooCustomers.Profile.CurrentLocationId = request.CurrentCityId;
+                }
+
                 customer.TriperooCustomers.Profile.EmailAddress = request.EmailAddress;
                 customer.TriperooCustomers.Token = token;
                 customer.TriperooCustomers.Profile.ImageUrl = request.ImageUrl;

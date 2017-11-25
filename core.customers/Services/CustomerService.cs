@@ -58,6 +58,17 @@ namespace core.customers.services
             return ProcessQuery(q);
         }
 
+
+        /// <summary>
+        /// Return Customer by encrypted guid
+        /// </summary>
+        public CustomerDto ReturnCustomerByEncryptedGuid(string encryptedGuid)
+        {
+            var customerGuid = "";
+
+            return ReturnCustomerByReference(encryptedGuid);
+        }
+
         /// <summary>
         /// Return Customer by email address & password
         /// </summary>

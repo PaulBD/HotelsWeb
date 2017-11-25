@@ -100,7 +100,7 @@ namespace triperoo.apis.endpoints.review
                     return new HttpResult("Customer not found" + token, HttpStatusCode.Unauthorized);
                 }
 
-				var location = _locationService.ReturnLocationById(request.Question.InventoryReference);
+				var location = _locationService.ReturnLocationById(request.Question.InventoryReference, true);
 
 				if (location == null)
 				{

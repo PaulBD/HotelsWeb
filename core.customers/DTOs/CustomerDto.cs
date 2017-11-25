@@ -49,6 +49,7 @@ namespace core.customers.dtos
         public string RegionName { get; set; }
         public string RegionNameLong { get; set; }
         public DateTime DateCreated { get; set; }
+        public bool IsCity { get; set; }
         public bool IsArchived { get; set; }
     }
 
@@ -101,6 +102,7 @@ namespace core.customers.dtos
 
         public bool IsFacebookSignup { get; set; }
         public int FacebookId { get; set; }
+        public string AccessToken { get; set; }
         public string Token { get; set; }
         public string Type { get { return "customer"; } }
         public string CustomerReference { get; set; }

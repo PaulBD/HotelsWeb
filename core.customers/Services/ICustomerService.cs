@@ -8,6 +8,7 @@ namespace core.customers.services
         NewsletterDto InsertNewsletter(NewsletterDto newsletter);
         CustomerDto InsertUpdateCustomer(string reference, Customer customer);
         CustomerDto ReturnCustomerByReference(string guid);
+        CustomerDto ReturnCustomerByEncryptedGuid(string encryptedGuid);
         CustomerDto ReturnCustomerByToken(string token);
         CustomerDto ReturnCustomerByEmailAddress(string emailAddress);
         CustomerDto ReturnCustomerByEmailAddressPassword(string emailAddress, string password);

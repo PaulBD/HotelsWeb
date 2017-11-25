@@ -27,21 +27,28 @@ namespace core.customers.dtos
         public List<string> Tags { get; set; }
     }
 
-    public class TripSummary 
+    public class TripSummary
     {
+        public TripSummary()
+        {
+            Activities = new List<ActivityDto>();
+        }
+
         public int Day { get; set; }
         public string Date { get; set; }
-        public int Count { get; set; }
+        public int RestaurantCount { get; set; }
+        public int ActivitiesCount { get; set; }
         public int TotalDuration { get; set; }
-        
+        public List<ActivityDto> Activities { get; set; }
+
     }
 
     public class ActivityDto
     {
         public int Id { get; set; }
         public int Day { get; set; }
-        public string VisitDate { get; set; }
-        public string Type { get; set; }
+        public string Date { get; set; }
+        public string ActivityType { get; set; }
         public int StartTime { get; set; }
         public string StartTimePeriod { get; set; }
         public string Price { get; set; }
@@ -49,24 +56,23 @@ namespace core.customers.dtos
         public int RegionID { get; set; }
         public string RegionName { get; set; }
         public string RegionNameLong { get; set; }
+        public string RegionType { get; set; }
         public string Address { get; set; }
         public string Image { get; set; }
         public string Url { get; set; }
         public string BookingUrl { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public string TravelType { get; set; }
         public DateTime DateCreated { get; set; }
-        public bool IsArchived { get; set; }
     }
+
+
 
     public class TripDto
     {
         public TripDto()
         {
             TripDetails = new TripDetails();
-            Days = new List<ActivityDto>();
-            TripExtras = new List<ActivityDto>();
         }
 
         public int Id { get; set; }
@@ -76,7 +82,5 @@ namespace core.customers.dtos
         public string TripName { get; set; }
         public bool IsArchived { get; set; }
         public TripDetails TripDetails { get; set; }
-        public List<ActivityDto> Days { get; set; }
-        public List<ActivityDto> TripExtras { get; set; }
     }
 }

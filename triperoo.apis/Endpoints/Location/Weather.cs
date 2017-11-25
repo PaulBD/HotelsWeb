@@ -18,6 +18,7 @@ namespace triperoo.apis.endpoints.location
     public class WeatherRequest
     {
         public int Id { get; set; }
+        public bool IsCity { get; set; }
         public string Lang { get; set; }
 
     }
@@ -73,7 +74,7 @@ namespace triperoo.apis.endpoints.location
 
             try
 			{
-				locationResponse = _locationService.ReturnLocationById(request.Id);
+				locationResponse = _locationService.ReturnLocationById(request.Id, request.IsCity);
 
                 response = Cache.Get<WeatherDto>(cacheName);
 

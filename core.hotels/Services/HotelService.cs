@@ -7,6 +7,8 @@ using core.hotels.dtos;
 using ServiceStack.Text;
 using library.couchbase;
 using System.Linq;
+using core.places.dtos;
+using core.places.services;
 
 namespace core.hotels.services
 {
@@ -17,6 +19,12 @@ namespace core.hotels.services
         private string _accountId = "406390";
         private string _url = "https://book.api.ean.com";
         private string _query;
+        private ILocationService _locationService;
+
+        public HotelService(ILocationService locationService)
+        {
+            _locationService = locationService;
+        }
 
         public string Authenticate()
         {
@@ -28,8 +36,9 @@ namespace core.hotels.services
 		/// <summary>
         /// Return a single hotel By id
         /// </summary>
-        public HotelDto ReturnHotelById(int hotelId, string locale, string currencyCode)
+        public HotelDto ReturnHotelById(int hotelId, string locale, string currencyCode, int locationId)
         {
+            var hotel = new HotelDto();
             var url = _url + "/ean-services/rs/hotel/v3/info?cid=" + _accountId + "&minorRev=99&apiKey=" + _apiKey + "&locale=" + locale + "&currencyCode=" + currencyCode + "&_type=json&sig=" + Authenticate() + "&xml=";
 
             var xml = "<HotelInformationRequest>";
@@ -48,12 +57,85 @@ namespace core.hotels.services
 				if (result.IsSuccessStatusCode)
 				{
 					var r = CleanUpResult(result.Content.ReadAsStringAsync().Result);
-					return JsonSerializer.DeserializeFromString<HotelDto>(r);
+                    hotel = JsonSerializer.DeserializeFromString<HotelDto>(r);
+
+                    CreateNewHotelRecord(hotel, locationId);
 				}
 			}
 
-			return null;
+            return hotel;
 		}
+
+        #endregion
+
+        #region Create Hotel Record
+
+        private void CreateNewHotelRecord(HotelDto hotel, int locationId)
+        {
+            var location = new LocationDto();
+            var hotelLocation = _locationService.ReturnLocationById(locationId, true);
+
+            if (hotelLocation != null)
+            {
+                location.Doctype = "Expedia";
+                location.SubClass = ReturnPropertyCategory(hotel.HotelInformationResponse.HotelSummary.propertyCategory);
+                location.LetterIndex = hotel.HotelInformationResponse.HotelSummary.name.Substring(0, 3);
+                location.RegionID = hotel.HotelInformationResponse.hotelId;
+                location.RegionName = hotel.HotelInformationResponse.HotelSummary.name;
+                location.FormattedAddress.Add(hotel.HotelInformationResponse.HotelSummary.address1);
+                location.FormattedAddress.Add(hotel.HotelInformationResponse.HotelSummary.city);
+                location.FormattedAddress.Add(hotel.HotelInformationResponse.HotelSummary.postalCode);
+                location.CountryCode = hotel.HotelInformationResponse.HotelSummary.countryCode;
+                location.Latitude = hotel.HotelInformationResponse.HotelSummary.latitude;
+                location.Longitude = hotel.HotelInformationResponse.HotelSummary.longitude;
+                location.LocationCoordinates = new places.dtos.LocationCoordinatesDto()
+                {
+                    Latitude = hotel.HotelInformationResponse.HotelSummary.latitude,
+                    Longitude = hotel.HotelInformationResponse.HotelSummary.longitude
+                };
+
+                var imageUrl = "";
+                var images = hotel.HotelInformationResponse.HotelImages.HotelImage.FirstOrDefault(q => q.heroImage == true);
+
+                if (images != null)
+                {
+                    imageUrl = images.highResolutionUrl;
+                }
+
+                location.Image = imageUrl;
+                location.Url = hotelLocation.Url + "/hotels/" + hotel.HotelInformationResponse.hotelId;
+
+                location.RegionNameLong = hotel.HotelInformationResponse.HotelSummary.name + ", " + hotelLocation.RegionName;
+                location.ParentRegionID = hotelLocation.RegionID;
+                location.ParentRegionType = hotelLocation.RegionType;
+                location.ParentRegionImage = hotelLocation.Image;
+                location.ParentRegionName = hotelLocation.RegionName;
+                location.ParentRegionNameLong = hotelLocation.RegionNameLong;
+
+                _locationService.UpdateLocation(location, false, "hotel:" + hotel.HotelInformationResponse.hotelId);
+            }
+        }
+
+        private string ReturnPropertyCategory(int propertyCategory)
+        {
+            switch (propertyCategory)
+            {
+                case 1:
+                    return "Hotel";
+                case 2:
+                    return "Suite";
+                case 3:
+                    return "Resort";
+                case 4:
+                    return "Vacation Rental";
+                case 5:
+                    return "Bed & Breakfast";
+                case 6:
+                    return "All Inclusive";
+            }
+
+            return "Unknown";
+        }
 
 		#endregion
 
@@ -302,7 +384,7 @@ namespace core.hotels.services
                         jsonResult.hotelListResponse.hotelList.hotelSummary = jsonResult.hotelListResponse.hotelList.hotelSummary.Where(q => q.hotelId != exclude).ToList();
                     }
 
-                    jsonResult.MapLocations = jsonResult.hotelListResponse.hotelList.hotelSummary.Select(x => new MapLocationDto { RegionName = x.name, LocationCoordinates = new LocationCoordinatesDto() { Latitude = x.latitude, Longitude = x.longitude}, SubClass = "", Url = "", Image = x.imagelUrl }).ToList();
+                    jsonResult.MapLocations = jsonResult.hotelListResponse.hotelList.hotelSummary.Select(x => new dtos.MapLocationDto { RegionName = x.name, LocationCoordinates = new dtos.LocationCoordinatesDto() { Latitude = x.latitude, Longitude = x.longitude}, SubClass = "", Url = "", Image = x.imagelUrl }).ToList();
 
                     return jsonResult;
 				}

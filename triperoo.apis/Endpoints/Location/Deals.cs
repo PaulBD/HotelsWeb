@@ -11,28 +11,29 @@ using core.places.dtos;
 
 namespace triperoo.apis.endpoints.location
 {
-    #region Return Hotel Deals By Location Id
+    #region Return Deals By Location Id
 
     /// <summary>
     /// Request
     /// </summary>
-    [Route("/v1/location/{id}/deals/hotels")]
-    public class HotelDealRequest : Service
+    [Route("/v1/location/{id}/deals")]
+    public class DealRequest : Service
     {
         public int Id { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
+        public bool Exclude { get; set; }
     }
 
     /// <summary>
     /// Validator
     /// </summary>
-    public class HotelDealRequestValidator : AbstractValidator<HotelDealRequest>
+    public class DealRequestValidator : AbstractValidator<DealRequest>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public HotelDealRequestValidator()
+        public DealRequestValidator()
         {
             // Get
             RuleSet(ApplyTo.Get, () =>
@@ -62,23 +63,29 @@ namespace triperoo.apis.endpoints.location
             _travelzooService = travelzooService;
         }
 
-		#region Return Hotel Deals By Location Id
+		#region Return Deals By Location Id
 
 		/// <summary>
 		/// Return Hotel Deals By Location Id
 		/// </summary>
-		public object Get(HotelDealRequest request)
+		public object Get(DealRequest request)
         {
 			LocationDto locationResponse = new LocationDto();
             List<TravelzooDto> response = null;
 
             try
             {
-                locationResponse = _locationService.ReturnLocationById(request.Id);
+                locationResponse = _locationService.ReturnLocationById(request.Id, true);
 
                 if (locationResponse != null)
                 {
-                    response = _travelzooService.ReturnDeals(locationResponse.RegionName);
+                    if (request.Exclude)
+                    {
+                        response = _travelzooService.ReturnDealsExcludeLocation(locationResponse.RegionName);
+                    }
+                    else {
+                        response = _travelzooService.ReturnDeals(locationResponse.RegionName);
+                    }
                 }
 
                 if (response != null)

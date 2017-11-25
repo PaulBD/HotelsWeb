@@ -112,7 +112,7 @@ namespace triperoo.apis.endpoints.location
 
             try
             {
-                locationResponse = _locationService.ReturnLocationById(request.Id);
+                locationResponse = _locationService.ReturnLocationById(request.Id, true);
 
                 if (locationResponse != null)
                 {

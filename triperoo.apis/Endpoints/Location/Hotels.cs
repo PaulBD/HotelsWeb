@@ -233,7 +233,7 @@ namespace triperoo.apis.endpoints.location
 
 			try
 			{
-				response = _hotelService.ReturnHotelById(request.HotelId, request.Locale, request.CurrencyCode);
+				response = _hotelService.ReturnHotelById(request.HotelId, request.Locale, request.CurrencyCode, request.Id);
 			}
 			catch (Exception ex)
 			{

@@ -21,6 +21,7 @@ namespace core.customers.dtos
         public string Comment { get; set; }
         public List<string> Tags { get; set; }
         public bool IsArchived { get; set; }
+        public bool IsCity { get; set; }
 		public DateTime DateCreated { get; set; }
 		public DateTime DateArchived { get; set; }
         public PlaceDto Place { get; set; }

@@ -118,6 +118,10 @@
       <Project>{96A89DBF-00FE-4079-AE95-195824745C91}</Project>
       <Name>library.couchbase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\core.places\core.places.csproj">
+      <Project>{C84790F7-37B6-459E-B2D9-57CF8281E171}</Project>
+      <Name>core.places</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -40,12 +40,25 @@ namespace core.places.services
         /// <summary>
         /// Return a location by Id
         /// </summary>
-        public LocationDto ReturnLocationById(int locationId)
+        public LocationDto ReturnLocationById(int locationId, bool isCity)
         {
             bool requiresUpdate = false;
+            var result = new LocationDto();
             var q = _query + " WHERE regionID = " + locationId;
 
-            var result = ProcessQuery(q)[0];
+            if (isCity)
+            {
+                q += " AND (regionType != 'Restaurants' AND regionType != 'Hotels' AND regionType != 'Attractions')";
+            }
+
+            var r = ProcessQuery(q);
+
+            if (r == null)
+            {
+                return result;
+            }
+
+            result = r[0];
 
             // Wikepedia
             /*
@@ -202,8 +215,14 @@ namespace core.places.services
         /// </summary>
         public void UpdateLocation(LocationDto dto, bool isStaging)
         { 
-            var reference = "location:" + dto.RegionID;
+            UpdateLocation(dto, isStaging, "location:" + dto.RegionID);
+        }
 
+        /// <summary>
+        /// Update Location
+        /// </summary>
+        public void UpdateLocation(LocationDto dto, bool isStaging, string reference)
+        {
             if (isStaging)
             {
                 _couchbaseHelper.AddRecordToCouchbase(reference, dto, _tempBucketName);
@@ -260,7 +279,7 @@ namespace core.places.services
 
             if (locationId > 0)
             {
-                var location = ReturnLocationById(locationId);
+                var location = ReturnLocationById(locationId, false);
 
                 location.Photos.PhotoList.Add(photo);
 

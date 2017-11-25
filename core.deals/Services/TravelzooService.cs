@@ -23,6 +23,20 @@ namespace core.deals.Services
             return ProcessQuery(q);
         }
 
+        public List<TravelzooDto> ReturnDealsExcludeLocation(string location)
+        {
+            var q = _query + " WHERE location != '" + location + "'";
+
+            return ProcessQuery(q);
+        }
+
+        public List<TravelzooDto> ReturnTopDeals()
+        {
+            var q = _query + " LIMIT 3";
+
+            return ProcessQuery(q);
+        }
+
         /// <summary>
         /// Process Query
         /// </summary>

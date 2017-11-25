@@ -39,7 +39,7 @@ namespace core.customers.services
 
             if (item.regionID > 0)
             {
-                var location = _locationService.ReturnLocationById(item.regionID);
+                var location = _locationService.ReturnLocationById(item.regionID, false);
                 var locationItem = location.Photos.PhotoList.FirstOrDefault(q => q.photoReference == photoReference);
                 location.Photos.PhotoList.Remove(locationItem);
                 _locationService.UpdateLocation(location, false);

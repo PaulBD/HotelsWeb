@@ -21,18 +21,44 @@ namespace core.places.services
         /// <summary>
         /// Returns the content by parent region identifier.
         /// </summary>
-        public LocationListDto ReturnContentByParentRegionId(int parentLocationId, string contentType)
+        public LocationListDto ReturnContentByParentRegionId(int parentLocationId)
         {
-            var cacheKey = contentType + ":" + parentLocationId;
+            var cacheKey = parentLocationId.ToString();
 
-            var attractionsList = _cache.Get<LocationListDto>(cacheKey);
+            var contentList = _cache.Get<LocationListDto>(cacheKey);
 
-            if (attractionsList != null)
+            if (contentList != null)
             {
-                return attractionsList;
+                return contentList;
             }
 
-            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND LOWER(regionType) = '" + contentType.ToLower().Replace("-", " ") + "' ORDER BY Rank";
+            var q = _query + " WHERE parentRegionID = " + parentLocationId + " ORDER BY Rank";
+
+            var list = ProcessQuery(q);
+
+            if (list != null)
+            {
+                _cache.AddOrUpdate(cacheKey, list);
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// Returns the content by parent region identifier.
+        /// </summary>
+        public LocationListDto ReturnContentByParentRegionId(int parentLocationId, string contentType)
+        {
+            var cacheKey = contentType.Replace(" ", "-").Replace("(", "").Replace(")", "") + ":" + parentLocationId;
+
+            var contentList = _cache.Get<LocationListDto>(cacheKey);
+
+            if (contentList != null)
+            {
+                return contentList;
+            }
+
+            var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND LOWER(regionType) = '" + contentType.ToLower() + "' ORDER BY Rank";
 
             var list = ProcessQuery(q);
 
@@ -52,11 +78,11 @@ namespace core.places.services
         {
             var cacheKey = "POI:" + parentLocationId + category;
 
-            var attractionsList = _cache.Get<LocationListDto>(cacheKey);
+            var contentList = _cache.Get<LocationListDto>(cacheKey);
 
-            if (attractionsList != null)
+            if (contentList != null)
             {
-                return attractionsList;
+                return contentList;
             }
 
             var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = '" + contentType + "' ";
