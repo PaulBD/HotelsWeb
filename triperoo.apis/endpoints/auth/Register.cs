@@ -4,6 +4,7 @@ using ServiceStack;
 using ServiceStack.FluentValidation;
 using core.customers.services;
 using core.customers.dtos;
+using library.common;
 
 namespace triperoo.apis.endpoints.auth
 {
@@ -19,7 +20,8 @@ namespace triperoo.apis.endpoints.auth
         public string Password { get; set; }
         public string Name { get; set; }
 		public string CurrentCity { get; set; }
-		public int CurrentCityId { get; set; }
+        public int CurrentCityId { get; set; }
+        public bool OptIn { get; set; }
     }
 
     /// <summary>
@@ -50,15 +52,17 @@ namespace triperoo.apis.endpoints.auth
     public class RegisterApi : Service
     {
         private readonly ICustomerService _customerService;
+        private readonly IEmailService _emailService;
         private readonly IAuthorizeService _authorizeService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public RegisterApi(ICustomerService customerService, IAuthorizeService authorizeService)
+        public RegisterApi(ICustomerService customerService, IAuthorizeService authorizeService, IEmailService emailService)
         {
             _customerService = customerService;
             _authorizeService = authorizeService;
+            _emailService = emailService;
         }
 
         #region Register Customer
@@ -85,9 +89,10 @@ namespace triperoo.apis.endpoints.auth
 				token = _authorizeService.AssignToken(request.EmailAddress, request.Password);
 
                 var customer = new Customer();
+                customer.OptIn = request.OptIn;     
                 customer.DateCreated = DateTime.Now;
                 customer.IsFacebookSignup = false;
-                customer.CustomerReference = "customer:" + guid;
+                customer.CustomerReference = guid;
                 customer.Profile.Name = request.Name;
 				customer.Profile.CurrentLocationId = request.CurrentCityId; //TODO: Fix this
 				customer.Profile.CurrentLocation = request.CurrentCity; //TODO: Fix this
@@ -95,15 +100,21 @@ namespace triperoo.apis.endpoints.auth
                 customer.Profile.Pass = request.Password;
                 customer.Token = token;
                 customer.LastLoginDate = DateTime.Now;
-                customer.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-").ToLower();
+
+                var url = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-");
+                customer.Profile.ProfileUrl = url.ToLower();;
 
                 _customerService.InsertUpdateCustomer(customer.CustomerReference, customer);
 
                 authorizationDto.Token = token;
+                authorizationDto.IsNewSignup = true;
+                authorizationDto.CurrentLocationId = request.CurrentCityId;
                 authorizationDto.UserImage = "";
 				authorizationDto.UserName = customer.Profile.Name;
-				authorizationDto.UserId = customer.CustomerReference.Replace("customer:", "");
-                authorizationDto.BaseUrl = "/profile/" + guid.ToLower() + "/" + customer.Profile.Name.Replace(" ", "-");
+                authorizationDto.UserId = customer.CustomerReference;
+                authorizationDto.BaseUrl = url.ToLower();
+
+                _emailService.SendWelcomeEmail(request.EmailAddress, request.Name, request.CurrentCity);
 
             }
             catch (Exception ex)

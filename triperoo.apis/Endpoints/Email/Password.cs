@@ -39,12 +39,12 @@ namespace triperoo.apis.endpoints.email
 
     public class ForgotPasswordApi : Service
     {
-        private readonly IEmail _emailService;
+        private readonly IEmailService _emailService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ForgotPasswordApi(IEmail emailService)
+        public ForgotPasswordApi(IEmailService emailService)
         {
             _emailService = emailService;
 

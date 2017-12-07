@@ -4,6 +4,7 @@ using ServiceStack;
 using ServiceStack.FluentValidation;
 using core.customers.services;
 using core.customers.dtos;
+using library.common;
 
 namespace triperoo.apis.endpoints.auth
 {
@@ -54,14 +55,16 @@ namespace triperoo.apis.endpoints.auth
     {
         private readonly ICustomerService _customerService;
         private readonly IAuthorizeService _authorizeService;
+        private readonly IEmailService _emailService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AuthorizeFacebookApi(ICustomerService customerService, IAuthorizeService authorizeService)
+        public AuthorizeFacebookApi(ICustomerService customerService, IAuthorizeService authorizeService, IEmailService emailService)
         {
             _customerService = customerService;
             _authorizeService = authorizeService;
+            _emailService = emailService;
         }
 
         #region Get Facebook Customer
@@ -100,6 +103,7 @@ namespace triperoo.apis.endpoints.auth
             string token = null;
             var authorizationDto = new AuthorizationDto();
             var customer = new CustomerDto();
+            bool isNewSignup = false;
 
             try
 			{
@@ -115,9 +119,12 @@ namespace triperoo.apis.endpoints.auth
                 }
 				else
 				{
+                    isNewSignup = true;
 					customer.TriperooCustomers.DateCreated = DateTime.Now;
-					customer.TriperooCustomers.CustomerReference = "customer:" + guid;
-					customer.TriperooCustomers.Profile.ProfileUrl = "/profile/" + guid.ToLower() + "/" + request.Name.Replace(" ", "-").ToLower();
+					customer.TriperooCustomers.CustomerReference = guid;
+
+                    var url = "/profile/" + guid.ToLower() + "/" + request.Name.Replace(" ", "-");
+                    customer.TriperooCustomers.Profile.ProfileUrl = url.ToLower();;
 				}
 
 				customer.TriperooCustomers.IsFacebookSignup = true;
@@ -139,10 +146,18 @@ namespace triperoo.apis.endpoints.auth
                 _customerService.InsertUpdateCustomer(customer.TriperooCustomers.CustomerReference, customer.TriperooCustomers);
 
                 authorizationDto.Token = token;
+                authorizationDto.CurrentLocationId = customer.TriperooCustomers.Profile.CurrentLocationId;
                 authorizationDto.UserImage = customer.TriperooCustomers.Profile.ImageUrl;
 				authorizationDto.UserName = customer.TriperooCustomers.Profile.Name;
-				authorizationDto.UserId = customer.TriperooCustomers.CustomerReference.Replace("customer:", "");
-                authorizationDto.BaseUrl = "/profile/" + customer.TriperooCustomers.CustomerReference.Replace("customer:", "") + "/" + request.Name.Replace(" ", "-").ToLower();
+				authorizationDto.UserId = customer.TriperooCustomers.CustomerReference;
+                var baseUrl = "/profile/" + customer.TriperooCustomers.CustomerReference + "/" + request.Name.Replace(" ", "-");
+                authorizationDto.BaseUrl = baseUrl.ToLower();;
+                authorizationDto.IsNewSignup = isNewSignup;
+
+                if (isNewSignup)
+                {
+                    _emailService.SendWelcomeEmail(request.EmailAddress, request.Name, request.CurrentCity);
+                }
             }
             catch (Exception ex)
             {

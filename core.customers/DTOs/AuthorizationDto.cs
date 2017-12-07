@@ -3,10 +3,12 @@
     public class AuthorizationDto
     {
         public string Token { get; set; }
+        public int CurrentLocationId { get; set; }
 		public string UserName { get; set; }
 		public string UserId { get; set; }
         public string UserImage { get; set; }
         public string BaseUrl { get; set; }
+        public bool IsNewSignup { get; set; }
 	}
 
 	public class TokenDto

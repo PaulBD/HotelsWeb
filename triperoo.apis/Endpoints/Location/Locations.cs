@@ -143,16 +143,26 @@ namespace triperoo.apis.endpoints.location
             {
                 string search = request.SearchValue.ToLower();
 
-                result = _locationService.ReturnLocationsForAutocomplete(search.Substring(0, 3));
+                result = _locationService.ReturnLocationsForAutocomplete(search.Substring(0, 3), request.SearchType.ToLower());
 
                 if (result.Count > 0)
                 {
                     if (request.SearchType.ToLower() == "all")
                     {
-                        response.Locations = result.Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).ToList().Take(10).ToList();
+                        response.Locations = result.Where(q => q.RegionNameLong.ToLower().StartsWith(search)).Where(q => q.RegionType != "airport").OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).ToList().Take(10).ToList();
                     }
-                    else {
-                        response.Locations = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).Take(10).ToList();
+                    else
+                    {
+                        if (request.SearchType.ToLower() == "airport")
+                        {
+                            result = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).ToList();
+                            result = result.Where(q => q.RegionName.ToLower().StartsWith(search) || q.AirportCode.ToLower().StartsWith(search)).ToList();
+                            response.Locations = result.OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).Take(10).ToList();
+                        }
+                        else
+                        {
+                            response.Locations = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).Take(10).ToList();
+                        }
                     }
                 }
             }

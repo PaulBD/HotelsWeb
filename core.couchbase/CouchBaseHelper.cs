@@ -61,7 +61,7 @@ namespace library.couchbase
         /// <summary>
         /// Add record to couchbase
         /// </summary>
-        public void AddRecordToCouchbase(string key, string content, string factualId, string bucketName)
+        public IOperationResult<string> AddRecordToCouchbase(string key, string content, string bucketName)
         {
             var cluster = new Cluster(new ClientConfiguration
             {
@@ -73,7 +73,7 @@ namespace library.couchbase
 
             using (var bucket = cluster.OpenBucket(bucketName))
             {
-                bucket.Upsert(key, content);
+                return bucket.Upsert(key, content);
             }
         }
 

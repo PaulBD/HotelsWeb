@@ -25,12 +25,12 @@ namespace triperoo.apis.endpoints.email
 
     public class WelcomeEmailApi : Service
     {
-        private readonly IEmail _emailService;
+        private readonly IEmailService _emailService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WelcomeEmailApi(IEmail emailService)
+        public WelcomeEmailApi(IEmailService emailService)
         {
             _emailService = emailService;
 

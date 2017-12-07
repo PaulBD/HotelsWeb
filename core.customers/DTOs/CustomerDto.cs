@@ -100,6 +100,7 @@ namespace core.customers.dtos
             CustomerPhotos = new CustomerPhotos();
         }
 
+        public bool OptIn { get; set; }
         public bool IsFacebookSignup { get; set; }
         public int FacebookId { get; set; }
         public string AccessToken { get; set; }

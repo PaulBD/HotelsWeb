@@ -111,11 +111,17 @@ namespace triperoo.apis.endpoints.flights
                 var returnFrom = request.ReturnFrom;
                 var returnTo = request.ReturnTo;
 
-                var rf = DateTime.Parse(returnFrom);
-                returnFrom = rf.ToString("d");
+                if (!string.IsNullOrEmpty(returnFrom))
+                {
+                    var rf = DateTime.Parse(returnFrom);
+                    returnFrom = rf.ToString("d");
+                }
 
-                var rt = DateTime.Parse(returnTo);
-                returnTo = rt.ToString("d");
+                if (!string.IsNullOrEmpty(returnTo))
+                {
+                    var rt = DateTime.Parse(returnTo);
+                    returnTo = rt.ToString("d");
+                }
 
                 response = _flightService.ReturnFlights(request.FlyFrom, request.FlyTo, dateFrom, dateTo, returnFrom, returnTo, request.FlightType, request.PassengerTotal, request.AdultTotal, request.ChildTotal, request.InfantTotal, request.PriceFrom, request.PriceTo, request.DepartureTimeFrom, request.DepartureTimeTo, request.ArrivalTimeFrom, request.ArrivalTimeTo, request.ReturnDepartureTimeFrom, request.ReturnDepartureTimeTo, request.ReturnArrivalTimeFrom, request.ReturnArrivalTimeTo, request.StopOverFrom, request.StopOverTo, request.Sort, request.Asc, request.SelectedAirlines, request.Offset, request.Limit, request.DirectFlightsOnly, request.Market, request.Currency, request.Locale);
             }

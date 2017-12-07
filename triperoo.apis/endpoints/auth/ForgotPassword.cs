@@ -5,6 +5,7 @@ using ServiceStack;
 using ServiceStack.FluentValidation;
 using core.customers.services;
 using core.customers.dtos;
+using library.common;
 
 namespace triperoo.apis.endpoints.auth
 {
@@ -44,13 +45,15 @@ namespace triperoo.apis.endpoints.auth
     public class ForgotPasswordRequestApi : Service
     {
         private readonly ICustomerService _customerService;
+        private readonly IEmailService _emailService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ForgotPasswordRequestApi(ICustomerService customerService)
+        public ForgotPasswordRequestApi(ICustomerService customerService, IEmailService emailService)
         {
             _customerService = customerService;
+            _emailService = emailService;
         }
 
         #region Send forgot password to Customer
@@ -71,7 +74,7 @@ namespace triperoo.apis.endpoints.auth
                     throw HttpError.NotFound("Email Address not found");
                 }
 
-                //TODO: Send password reset
+                _emailService.SendForgotPasswordReminder(response.TriperooCustomers.Profile.EmailAddress, response.TriperooCustomers.Profile.Name, response.TriperooCustomers.CustomerReference);
             }
             catch (Exception ex)
             {
@@ -124,13 +127,15 @@ namespace triperoo.apis.endpoints.auth
     public class UpdatePasswordRequestApi : Service
     {
         private readonly ICustomerService _customerService;
+        private readonly IEmailService _emailService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpdatePasswordRequestApi(ICustomerService customerService)
+        public UpdatePasswordRequestApi(ICustomerService customerService, IEmailService emailService)
         {
             _customerService = customerService;
+            _emailService = emailService;
         }
 
         #region Update Password
@@ -144,7 +149,7 @@ namespace triperoo.apis.endpoints.auth
 
             try
             {
-                response = _customerService.ReturnCustomerByEncryptedGuid(request.EncryptedGuid);
+                response = _customerService.ReturnCustomerByEncryptedGuid(System.Net.WebUtility.UrlDecode(request.EncryptedGuid));
 
                 if (response == null)
                 {

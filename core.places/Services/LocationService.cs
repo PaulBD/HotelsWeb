@@ -24,15 +24,21 @@ namespace core.places.services
             _contentService = new WikipediaService();
             _venueService = new VenueService();
             _couchbaseHelper = new CouchBaseHelper();
-            _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, url, formattedAddress, contactDetails, tags, photos, locationCoordinates, summary, stats, locationDetail, suggestedActivity FROM " + _bucketName;
+            _query = "SELECT doctype, image, letterIndex, listingPriority, locationCoordinates.latitude as latitude, locationCoordinates.longitude as longitude, parentRegionID, parentRegionName, parentRegionNameLong, parentRegionType, regionID, regionName, regionNameLong, regionType, relativeSignificance, searchPriority, stats.averageReviewScore as averageReviewScore, stats.likeCount as likeCount, stats.reviewCount as reviewCount, subClass, url, formattedAddress, contactDetails, tags, photos, locationCoordinates, summary, stats, locationDetail, suggestedActivity, airportCode, countryCode FROM " + _bucketName;
         }
 
         /// <summary>
         /// Return a list of places for autocomplete
         /// </summary>
-        public List<LocationDto> ReturnLocationsForAutocomplete(string searchValue)
+        public List<LocationDto> ReturnLocationsForAutocomplete(string searchValue, string searchType)
         {
-            var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'Neighborhood'  AND regionType != 'Point of Interest' AND regionType != 'Point of Interest Shadow' ORDER BY searchPriority DESC";
+            var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'Multi-City (Vicinity)' AND regionName NOT LIKE '%City Center%' AND regionType != 'Neighborhood'  AND regionType != 'Point of Interest' AND regionType != 'Point of Interest Shadow' ORDER BY searchPriority DESC";
+
+            if (searchType == "airport")
+            {
+                q = _query + " WHERE (letterIndex = '" + searchValue.Substring(0, 3) + "' OR LOWER(airportCode) = '" + searchValue.Substring(0, 3) + "') AND regionType == 'airport' ORDER BY searchPriority DESC";
+
+            }
 
             return ProcessQuery(q);
         }

@@ -58,6 +58,11 @@ namespace core.places.services
                 return contentList;
             }
 
+            if (contentType.ToLower() == "point-of-interest-shadow")
+            {
+                contentType = "Point of Interest Shadow";
+            }
+
             var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND LOWER(regionType) = '" + contentType.ToLower() + "' ORDER BY Rank";
 
             var list = ProcessQuery(q);

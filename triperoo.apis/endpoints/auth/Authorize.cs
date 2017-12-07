@@ -77,10 +77,15 @@ namespace triperoo.apis.endpoints.auth
                 }
 
                 authorizationDto.Token = token;
+                authorizationDto.IsNewSignup = false;
+                authorizationDto.CurrentLocationId = response.TriperooCustomers.Profile.CurrentLocationId;
                 authorizationDto.UserImage = response.TriperooCustomers.Profile.ImageUrl;
                 authorizationDto.UserName = response.TriperooCustomers.Profile.Name;
-                authorizationDto.UserId = response.TriperooCustomers.CustomerReference.Replace("customer:", "");
-                authorizationDto.BaseUrl = "/profile/" + response.TriperooCustomers.CustomerReference.Replace("customer:", "") + " / " + response.TriperooCustomers.Profile.Name.Replace(" ", "-");
+                authorizationDto.UserId = response.TriperooCustomers.CustomerReference;
+
+                var url = "/profile/" + response.TriperooCustomers.CustomerReference + " / " + response.TriperooCustomers.Profile.Name.Replace(" ", "-");
+
+                authorizationDto.BaseUrl = url.ToLower();
 
                 response.TriperooCustomers.LastLoginDate = DateTime.Now;
 				_customerService.InsertUpdateCustomer(response.TriperooCustomers.CustomerReference, response.TriperooCustomers);

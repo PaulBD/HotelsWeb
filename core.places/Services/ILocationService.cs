@@ -7,7 +7,7 @@ namespace core.places.services
     public interface ILocationService
     {
         LocationDto ReturnLocationById(int locationId, bool isCity);
-        List<LocationDto> ReturnLocationsForAutocomplete(string searchValue);
+        List<LocationDto> ReturnLocationsForAutocomplete(string searchValue, string searchType);
         List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type);
         void UpdateLocation(LocationDto dto, bool isStaging);
         void UpdateLocation(LocationDto dto, bool isStaging, string reference);

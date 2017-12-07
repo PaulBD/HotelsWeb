@@ -17,11 +17,12 @@
         public string RegionType { get; set; }
         public string RelativeSignificance { get; set; }
         public string SubClass { get; set; }
+        public string AirportCode { get; set; }
         public string RegionName
         {
             get
             {
-                return _regionName.Replace(" (county)", "");
+                return _regionName.Replace(" (county)", "").Replace("(", "").Replace(")", "");
             }
 
             set

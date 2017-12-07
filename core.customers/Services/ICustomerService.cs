@@ -12,8 +12,5 @@ namespace core.customers.services
         CustomerDto ReturnCustomerByToken(string token);
         CustomerDto ReturnCustomerByEmailAddress(string emailAddress);
         CustomerDto ReturnCustomerByEmailAddressPassword(string emailAddress, string password);
-
-        void SendCustomerForgotPasswordEmail(int id);
-        void SendCustomerWelcomeEmail(int id);
     }
 }

@@ -3,17 +3,23 @@ using library.couchbase;
 using System;
 using System.Collections.Generic;
 using core.places.dtos;
+using library.common;
+using System.Configuration;
 
 namespace core.customers.services
 {
     public class CustomerService : ICustomerService
     {
         private CouchBaseHelper _couchbaseHelper;
+        private EncryptionService _encryptionService;
+        protected string _password;
         private readonly string _bucketName = "TriperooCustomers";
 
         public CustomerService()
         {
             _couchbaseHelper = new CouchBaseHelper();
+            _encryptionService = new EncryptionService();
+            _password = ConfigurationManager.AppSettings["encryption.password"];
         }
 
         /// <summary>
@@ -31,11 +37,6 @@ namespace core.customers.services
         /// </summary>
         public CustomerDto ReturnCustomerByReference(string guid)
         {
-            if (!guid.Contains("customer"))
-            {
-                guid = "customer:" + guid;
-            }
-
             var q = "SELECT * FROM " + _bucketName + " WHERE customerReference = '" + guid + "'";
             return ProcessQuery(q);
         }
@@ -64,9 +65,9 @@ namespace core.customers.services
         /// </summary>
         public CustomerDto ReturnCustomerByEncryptedGuid(string encryptedGuid)
         {
-            var customerGuid = "";
+            var customerGuid = _encryptionService.DecryptText(encryptedGuid, _password);
 
-            return ReturnCustomerByReference(encryptedGuid);
+            return ReturnCustomerByReference(customerGuid);
         }
 
         /// <summary>
@@ -76,16 +77,6 @@ namespace core.customers.services
         {
             var q = "SELECT * FROM " + _bucketName + " WHERE profile.emailAddress = '" + emailAddress + "' AND profile.pass = '" + password + "'";
             return ProcessQuery(q);
-        }
-
-        public void SendCustomerForgotPasswordEmail(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SendCustomerWelcomeEmail(int id)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

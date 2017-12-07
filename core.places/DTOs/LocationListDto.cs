@@ -165,6 +165,7 @@ namespace core.places.dtos
         public string SubClass { get; set; }
         public SummaryDto Summary { get; set; }
         public string Url { get; set; }
+        public string AirportCode { get; set; }
         public SuggestedActivity suggestedActivity { get; set; }
         public string ParentUrl
         {
