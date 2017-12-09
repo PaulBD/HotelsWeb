@@ -1,22 +1,11 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="../core.customers/Services/CustomerService.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../core.flights/DTOs/FlightListDto.cs">
     <Files>
-      <File FileName="../core.places/Services/LocationService.cs" Line="43" Column="1" />
-      <File FileName="../triperoo.apis/Endpoints/Location/Location.cs" Line="1" Column="1" />
-      <File FileName="../triperoo.apis/Endpoints/Location/Locations.cs" Line="148" Column="1" />
-      <File FileName="../core.places/DTOs/AutocompleteDto.cs" Line="20" Column="34" />
-      <File FileName="../core.places/DTOs/LocationListDto.cs" Line="154" Column="54" />
-      <File FileName="../triperoo.apis/Endpoints/Flight/Flights.cs" Line="126" Column="1" />
-      <File FileName="../core.flights/Services/FlightService.cs" Line="49" Column="57" />
-      <File FileName="../triperoo.apis/Web.config" Line="31" Column="44" />
-      <File FileName="../core.flights/DTOs/FlightListDto.cs" Line="131" Column="18" />
-      <File FileName="../core.places/Services/ILocationService.cs" Line="10" Column="95" />
-      <File FileName="../triperoo.apis/Endpoints/auth/Authorize.cs" Line="88" Column="56" />
-      <File FileName="../triperoo.apis/Endpoints/auth/Register.cs" Line="115" Column="58" />
-      <File FileName="../triperoo.apis/Endpoints/auth/AuthorizeFacebook.cs" Line="154" Column="51" />
-      <File FileName="../triperoo.apis/Endpoints/auth/ForgotPassword.cs" Line="1" Column="1" />
-      <File FileName="../triperoo.apis/Endpoints/Customer/Customer.cs" Line="65" Column="1" />
-      <File FileName="../core.customers/Services/CustomerService.cs" Line="39" Column="10" />
+      <File FileName="../core.flights/Services/IFlightService.cs" Line="8" Column="27" />
+      <File FileName="../core.flights/Services/FlightService.cs" Line="39" Column="74" />
+      <File FileName="../triperoo.apis/Endpoints/Flight/Flights.cs" Line="139" Column="1" />
+      <File FileName="../triperoo.apis/Endpoints/Flight/Airports.cs" Line="10" Column="38" />
+      <File FileName="../core.flights/DTOs/FlightListDto.cs" Line="108" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
@@ -27,7 +16,6 @@
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/Customer/Customer.cs" line="96" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/library.common/Email.cs" line="76" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/auth/ForgotPassword.cs" line="152" column="1" />
-      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/Customer/Customer.cs" line="65" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

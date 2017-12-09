@@ -32,7 +32,7 @@ namespace core.places.services
         /// </summary>
         public List<LocationDto> ReturnLocationsForAutocomplete(string searchValue, string searchType)
         {
-            var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'Multi-City (Vicinity)' AND regionName NOT LIKE '%City Center%' AND regionType != 'Neighborhood'  AND regionType != 'Point of Interest' AND regionType != 'Point of Interest Shadow' ORDER BY searchPriority DESC";
+            var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'Multi-City (Vicinity)' AND regionName NOT LIKE '%City Center%' AND regionName NOT LIKE '%City Centre%' AND regionType != 'Multi-Region (within a country)' AND regionType != 'Neighborhood'  AND regionType != 'Point of Interest' AND regionType != 'Point of Interest Shadow' ORDER BY searchPriority DESC";
 
             if (searchType == "airport")
             {

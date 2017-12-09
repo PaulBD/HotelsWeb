@@ -80,6 +80,7 @@
     <Compile Include="Services\FlightService.cs" />
     <Compile Include="Services\IFlightService.cs" />
     <Compile Include="Utils\Common.cs" />
+    <Compile Include="DTOs\AirportLocationDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -183,6 +183,7 @@
     <Compile Include="Endpoints\Location\Content.cs" />
     <Compile Include="Endpoints\Email\WelcomeEmail.cs" />
     <Compile Include="Endpoints\Email\Password.cs" />
+    <Compile Include="Endpoints\Flight\Airports.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

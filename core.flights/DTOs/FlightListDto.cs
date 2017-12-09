@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using core.flights.utils;
 
 namespace core.flights.dtos
@@ -84,6 +85,12 @@ namespace core.flights.dtos
         public int dTime { get; set; }
         public string found_on { get; set; }
         public string airline { get; set; }
+        public string airlineName { 
+            get
+            {
+                return Common.ReturnAirlineName(airline);
+            }
+        }
         public string cityFrom { get; set; }
         public int aTime { get; set; }
     }
@@ -98,7 +105,7 @@ namespace core.flights.dtos
         public string deep_link { get; set; }
         public string mapIdto { get; set; }
         public double quality { get; set; }
-        public int nightsInDest { get; set; }
+        public int? nightsInDest { get; set; }
         public List<string> airlines { get; set; }
         public string id { get; set; }
         public bool facilitated_booking_available { get; set; }
@@ -125,6 +132,20 @@ namespace core.flights.dtos
         public string cityFrom { get; set; }
         public int aTime { get; set; }
         public List<Route> route { get; set; }
+        public List<Route> outboundRoutes { 
+            get
+            {
+                return route.Where(q => q.@return == 0).ToList();
+            }
+        }
+        public List<Route> inboundRoutes
+        {
+            get
+            {
+                return route.Where(q => q.@return == 1).ToList();
+            }
+        }
+
         public double distance { get; set; }
     }
 
