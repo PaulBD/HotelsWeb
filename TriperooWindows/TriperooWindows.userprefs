@@ -1,12 +1,45 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="../core.flights/DTOs/FlightListDto.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../core.hotels/DTOs/RoomAvailabilityDto.cs">
     <Files>
       <File FileName="../core.flights/Services/IFlightService.cs" Line="8" Column="27" />
-      <File FileName="../core.flights/Services/FlightService.cs" Line="39" Column="74" />
+      <File FileName="../core.flights/Services/FlightService.cs" Line="50" Column="1" />
       <File FileName="../triperoo.apis/Endpoints/Flight/Flights.cs" Line="139" Column="1" />
       <File FileName="../triperoo.apis/Endpoints/Flight/Airports.cs" Line="10" Column="38" />
-      <File FileName="../core.flights/DTOs/FlightListDto.cs" Line="108" Column="25" />
+      <File FileName="../core.flights/DTOs/FlightListDto.cs" Line="135" Column="26" />
+      <File FileName="../triperoo.apis/Endpoints/Location/Location.cs" Line="1" Column="1" />
+      <File FileName="../triperoo.apis/Endpoints/Location/Deals.cs" Line="87" Column="61" />
+      <File FileName="../core.deals/Services/ITravelzooService.cs" Line="8" Column="28" />
+      <File FileName="../core.deals/Services/TravelzooService.cs" Line="16" Column="118" />
+      <File FileName="../triperoo.apis/Endpoints/Airport/AirportParking.cs" Line="78" Column="1" />
+      <File FileName="../core.extras/Services/ParkingService.cs" Line="17" Column="1" />
+      <File FileName="../core.extras/Services/BaseService.cs" Line="19" Column="39" />
+      <File FileName="../core.extras/Services/IParkingService.cs" Line="8" Column="35" />
+      <File FileName="../triperoo.apis/Web.config" Line="31" Column="44" />
+      <File FileName="../triperoo.apis/Endpoints/Location/Hotels.cs" Line="179" Column="1" />
+      <File FileName="../triperoo.apis/Endpoints/Location/Content.cs" Line="79" Column="37" />
+      <File FileName="../core.places/Services/ContentService.cs" Line="68" Column="1" />
+      <File FileName="../core.hotels/DTOs/RoomAvailabilityDto.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="TriperooWindows" expanded="True">
+            <Node name="Core" expanded="True">
+              <Node name="core.hotels" expanded="True">
+                <Node name="DTOs" expanded="True">
+                  <Node name="RoomAvailabilityDto.cs" selected="True" />
+                </Node>
+              </Node>
+            </Node>
+            <Node name="triperoo.apis" expanded="True">
+              <Node name="Endpoints" expanded="True">
+                <Node name="Location" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
@@ -16,6 +49,7 @@
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/Customer/Customer.cs" line="96" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/library.common/Email.cs" line="76" column="1" />
       <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/auth/ForgotPassword.cs" line="152" column="1" />
+      <Breakpoint file="/Users/paulbillingtondykes/Documents/Personal/Triperoo/TriperooBackend/triperoo.apis/Endpoints/Airport/AirportParking.cs" line="78" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
