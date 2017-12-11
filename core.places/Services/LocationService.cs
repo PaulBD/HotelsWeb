@@ -67,7 +67,7 @@ namespace core.places.services
             result = r[0];
 
             // Wikepedia
-            /*
+
             if (result.Summary != null)
             {
                 if (string.IsNullOrEmpty(result.Summary.en))
@@ -103,7 +103,6 @@ namespace core.places.services
 
                 }
 			}
-            */
 			
 
             if (requiresUpdate)
