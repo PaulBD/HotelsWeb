@@ -1,5 +1,5 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="../triperoo.apis/Web.Release.config">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../triperoo.apis/Web.config">
     <Files>
       <File FileName="../core.flights/Services/IFlightService.cs" Line="8" Column="27" />
       <File FileName="../core.flights/Services/FlightService.cs" Line="50" Column="1" />
