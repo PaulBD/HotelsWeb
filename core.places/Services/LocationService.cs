@@ -68,6 +68,7 @@ namespace core.places.services
 
             // Wikepedia
 
+            /*
             if (result.Summary != null)
             {
                 if (string.IsNullOrEmpty(result.Summary.en))
@@ -109,6 +110,7 @@ namespace core.places.services
             {
                 UpdateLocation(result, false);
             }
+            */
 
             return result;
         }
