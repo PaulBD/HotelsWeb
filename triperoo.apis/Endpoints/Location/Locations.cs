@@ -156,12 +156,12 @@ namespace triperoo.apis.endpoints.location
                         if (request.SearchType.ToLower() == "airport")
                         {
                             result = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).ToList();
-                            result = result.Where(q => q.RegionName.ToLower().StartsWith(search) || q.AirportCode.ToLower().StartsWith(search)).ToList();
+                            result = result.Where(q => q.RegionName.ToLower().StartsWith(search.ToLower()) || q.AirportCode.ToLower().StartsWith(search.ToLower())).ToList();
                             response.Locations = result.OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).Take(10).ToList();
                         }
                         else
                         {
-                            response.Locations = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).Where(q => q.RegionNameLong.ToLower().StartsWith(search)).OrderBy(q => q.SearchPriority).OrderBy(q => q.ListingPriority).Take(10).ToList();
+                            response.Locations = result.Where(q => q.RegionType.ToLower() == request.SearchType.ToLower()).Where(q => q.RegionNameLong.ToLower().StartsWith(search.ToLower())).OrderBy(q => q.SearchPriority).Take(10).ToList();
                         }
                     }
                 }

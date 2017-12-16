@@ -7,6 +7,7 @@ using library.wikipedia.services;
 using System.IO;
 using System;
 using System.Configuration;
+using library.caching;
 
 namespace core.places.services
 {
@@ -18,9 +19,11 @@ namespace core.places.services
         private string _query;
         private IVenueService _venueService;
         private IWikipediaService _contentService;
+        private readonly ICacheProvider _cache;
 
-        public LocationService()
+        public LocationService(ICacheProvider cache)
         {
+            _cache = cache;
             _contentService = new WikipediaService();
             _venueService = new VenueService();
             _couchbaseHelper = new CouchBaseHelper();
@@ -32,7 +35,16 @@ namespace core.places.services
         /// </summary>
         public List<LocationDto> ReturnLocationsForAutocomplete(string searchValue, string searchType)
         {
-            var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND regionType != 'City (hide)' AND regionType != 'Multi-City (Vicinity)' AND regionName NOT LIKE '%City Center%' AND regionName NOT LIKE '%City Centre%' AND regionType != 'Multi-Region (within a country)' AND regionType != 'Neighborhood'  AND regionType != 'Point of Interest' AND regionType != 'Point of Interest Shadow' ORDER BY searchPriority DESC";
+            var cacheKey = searchValue.Substring(0, 3);
+
+            var contentList = _cache.Get<List<LocationDto>>(cacheKey);
+
+            if (contentList != null)
+            {
+                return contentList;
+            }
+
+            var q = _query + " WHERE letterIndex = '" + searchValue.Substring(0, 3) + "' AND searchPriority < 999 ORDER BY searchPriority DESC";
 
             if (searchType == "airport")
             {
@@ -40,7 +52,14 @@ namespace core.places.services
 
             }
 
-            return ProcessQuery(q);
+            var list = ProcessQuery(q);
+
+            if (list != null)
+            {
+                _cache.AddOrUpdate(cacheKey, list);
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -48,6 +67,15 @@ namespace core.places.services
         /// </summary>
         public LocationDto ReturnLocationById(int locationId, bool isCity)
         {
+            var cacheKey = locationId.ToString();
+
+            var location = _cache.Get<LocationDto>(cacheKey);
+
+            if (location != null)
+            {
+                return location;
+            }
+
             bool requiresUpdate = false;
             var result = new LocationDto();
             var q = _query + " WHERE regionID = " + locationId;
@@ -57,18 +85,11 @@ namespace core.places.services
                 q += " AND (regionType != 'Restaurants' AND regionType != 'Hotels' AND regionType != 'Attractions')";
             }
 
-            var r = ProcessQuery(q);
+            var list = ProcessQuery(q);
 
-            if (r == null)
-            {
-                return result;
-            }
-
-            result = r[0];
+            result = list[0];
 
             // Wikepedia
-
-            /*
             if (result.Summary != null)
             {
                 if (string.IsNullOrEmpty(result.Summary.en))
@@ -110,7 +131,11 @@ namespace core.places.services
             {
                 UpdateLocation(result, false);
             }
-            */
+
+            if (result != null)
+            {
+                _cache.AddOrUpdate(cacheKey, result);
+            }
 
             return result;
         }
@@ -197,9 +222,25 @@ namespace core.places.services
         /// </summary>
         public List<LocationDto> ReturnLocationByParentId(int parentLocationId, string type)
         {
+            var cacheKey = parentLocationId.ToString() + "_" + type;
+
+            var contentList = _cache.Get<List<LocationDto>>(cacheKey);
+
+            if (contentList != null)
+            {
+                return contentList;
+            }
+
             var q = _query + " WHERE parentRegionID = " + parentLocationId + " AND regionType = '" + type + "'";
 
-            return ProcessQuery(q);
+            var list = ProcessQuery(q);
+
+            if (list != null)
+            {
+                _cache.AddOrUpdate(cacheKey, list);
+            }
+
+            return list;
         }
 
         /// <summary>

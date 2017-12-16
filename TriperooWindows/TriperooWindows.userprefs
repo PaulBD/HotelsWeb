@@ -1,30 +1,13 @@
 ﻿<Properties StartupConfiguration="{96E27B2A-1968-48B6-9A6B-7C2435EC3123}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="../core.customers/Services/ActivityService.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../triperoo.apis/Web.config">
     <Files>
-      <File FileName="../core.flights/Services/IFlightService.cs" Line="8" Column="27" />
-      <File FileName="../core.flights/Services/FlightService.cs" Line="50" Column="1" />
-      <File FileName="../triperoo.apis/Endpoints/Flight/Flights.cs" Line="139" Column="1" />
-      <File FileName="../triperoo.apis/Endpoints/Flight/Airports.cs" Line="10" Column="38" />
-      <File FileName="../core.flights/DTOs/FlightListDto.cs" Line="135" Column="26" />
-      <File FileName="../triperoo.apis/Endpoints/Location/Location.cs" Line="1" Column="1" />
-      <File FileName="../triperoo.apis/Endpoints/Location/Deals.cs" Line="87" Column="61" />
-      <File FileName="../core.deals/Services/ITravelzooService.cs" Line="8" Column="28" />
-      <File FileName="../core.deals/Services/TravelzooService.cs" Line="16" Column="118" />
-      <File FileName="../triperoo.apis/Endpoints/Airport/AirportParking.cs" Line="78" Column="1" />
-      <File FileName="../core.extras/Services/ParkingService.cs" Line="17" Column="1" />
-      <File FileName="../core.extras/Services/BaseService.cs" Line="19" Column="39" />
-      <File FileName="../core.extras/Services/IParkingService.cs" Line="8" Column="35" />
-      <File FileName="../triperoo.apis/Web.config" Line="31" Column="44" />
-      <File FileName="../triperoo.apis/Endpoints/Location/Hotels.cs" Line="179" Column="1" />
-      <File FileName="../triperoo.apis/Endpoints/Location/Content.cs" Line="79" Column="37" />
-      <File FileName="../core.places/Services/ContentService.cs" Line="68" Column="1" />
-      <File FileName="../core.hotels/DTOs/RoomAvailabilityDto.cs" Line="1" Column="1" />
-      <File FileName="../core.places/Services/LocationService.cs" Line="113" Column="15" />
-      <File FileName="../triperoo.apis/Web.Release.config" Line="1" Column="1" />
-      <File FileName="../triperoo.apis/Endpoints/Customer/Trips.cs" Line="122" Column="1" />
-      <File FileName="../core.customers/Services/TripService.cs" Line="105" Column="1" />
-      <File FileName="../core.customers/Services/CustomerService.cs" Line="51" Column="1" />
-      <File FileName="../core.customers/Services/ActivityService.cs" Line="29" Column="1" />
+      <File FileName="../core.places/Services/LocationService.cs" Line="221" Column="50" />
+      <File FileName="../core.places/DTOs/AutocompleteDto.cs" Line="127" Column="20" />
+      <File FileName="../core.places/Services/ContentService.cs" Line="37" Column="1" />
+      <File FileName="../core.places/DTOs/LocationListDto.cs" Line="150" Column="21" />
+      <File FileName="../triperoo.apis/Endpoints/Location/Locations.cs" Line="146" Column="57" />
+      <File FileName="../core.customers/Services/PhotoService.cs" Line="13" Column="9" />
+      <File FileName="../triperoo.apis/Web.config" Line="8" Column="57" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

@@ -124,6 +124,10 @@
       <Project>{84b36479-f642-4a11-ac93-36c016765fd2}</Project>
       <Name>library.common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\library.caching\library.caching.csproj">
+      <Project>{082A4D85-C12F-44F6-8569-12B59C6D2A06}</Project>
+      <Name>library.caching</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

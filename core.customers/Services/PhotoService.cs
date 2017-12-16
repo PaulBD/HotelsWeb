@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using core.customers.dtos;
 using core.places.services;
+using library.caching;
 using library.couchbase;
 
 namespace core.customers.services
@@ -8,14 +9,16 @@ namespace core.customers.services
     public class PhotoService : IPhotoService
     {
         private CouchBaseHelper _couchbaseHelper;
-        private CustomerService _customerService;
-        private LocationService _locationService;
+        private ICustomerService _customerService;
+        private ILocationService _locationService;
+        private readonly ICacheProvider _cache;
 
-        public PhotoService()
+        public PhotoService(ICacheProvider cache)
         {
+            _cache = cache;
             _couchbaseHelper = new CouchBaseHelper();
             _customerService = new CustomerService();
-            _locationService = new LocationService();
+            _locationService = new LocationService(_cache);
         }
 
         /// <summary>

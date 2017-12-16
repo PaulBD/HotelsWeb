@@ -200,6 +200,7 @@ namespace core.places.dtos
 		public IList<LocationDto> Locations { get; set; }
 		public IList<MapLocationDto> MapLocations { get; set; }
 		public int LocationCount { get; set; }
+        public string DataSource { get; set; }
         public IList<CategoryDto> Categories { get; set; }
     }
 
